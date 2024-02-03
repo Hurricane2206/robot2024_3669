@@ -36,7 +36,7 @@ public:
             dMotor->Set(0);
             sMotor->Set(0);
         }
-        // motorPos = dMotor->GetPosition().GetValueAsDouble();
+        motorPos = dMotor->GetPosition().GetValue().value();
         // motorPosChange = polar<double>((motorPos-motorPosOld)*3.9*M_PI/6.75, angle);
         // motorPosOld = motorPos;
     }

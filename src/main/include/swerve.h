@@ -19,7 +19,7 @@ public:
                 fastest = speed;
             }
         }
-        complex<double> posChange = complex<double>(0, 0);
+        // complex<double> posChange = complex<double>(0, 0);
         for (Module module : modules){
             module.set(velocity/fastest, turnRate/fastest);
             // posChange += module.getPosChange();
