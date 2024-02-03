@@ -37,9 +37,9 @@ public:
             dMotor->Set(0);
             sMotor->Set(0);
         }
-        motorPos = dMotor->GetPosition().GetValueAsDouble();
-        motorPosChange = polar<double>((motorPos-motorPosOld)*3.9*M_PI/6.75, angle);
-        motorPosOld = motorPos;
+        motorPos = dMotor->GetPosition().GetValue().value();
+        // motorPosChange = polar<double>((motorPos-motorPosOld)*3.9*M_PI/6.75, angle);
+        // motorPosOld = motorPos;
     }
     complex<double> getVelocity(complex<double> rVector, double turnRate){
         return rVector+turnVector*turnRate;
@@ -47,8 +47,8 @@ public:
     complex<double> getPosChange(){
         return motorPosChange;
     }
-    double getMotorPos(){
-        return dMotor->GetPosition().GetValueAsDouble();
+    double get(){
+        return motorPos;
     }
 private:
     ctre::phoenix6::hardware::TalonFX *dMotor;
