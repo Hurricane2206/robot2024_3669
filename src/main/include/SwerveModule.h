@@ -51,6 +51,10 @@ public:
         return motorPosChg;
     }
 
+    double getMotorPos() {
+        return motorPos;
+    }
+
     complex<double> getVelocity(complex<double> rVector, double turnRate){
         return rVector+turnVector*turnRate;
     }
