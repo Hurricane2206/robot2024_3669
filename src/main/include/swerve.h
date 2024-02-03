@@ -25,9 +25,6 @@ public:
             // posChange += module.getPosChange();
         }
         // pos += posChange*polar<double>(0.25, angle);
-        // frc::SmartDashboard::PutNumber("motorPosChg", modules[0].motorPosChg);
-        // frc::SmartDashboard::PutNumber("Imaginary", modules[0].motorPosChange.imag());
-        frc::SmartDashboard::PutNumber("Motor1", modules[0].getMotorPosition());
     }
     // void setPos(complex<double> inputPos, double inputAngle){
     //     complex<double> posError = inputPos-pos;

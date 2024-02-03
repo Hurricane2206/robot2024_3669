@@ -38,6 +38,7 @@ public:
             sMotor->Set(0);
         }
         motorPos = dMotor->GetPosition().GetValue().value();
+        frc::SmartDashboard::PutNumber("Motors", motorPos);
         // motorPosChg = motorPos-motorPosOld;
         // modPosChange = complex<double>(motorPosChg, 0);
         // modPosChange = complex<double>(motorPosChg*3.9*M_PI/6.75, angle);
@@ -45,10 +46,6 @@ public:
     }
     complex<double> getVelocity(complex<double> rVector, double turnRate){
         return rVector+turnVector*turnRate;
-    }
-
-    double getMotorPosition() {
-        return motorPos;
     }
 
 private:
