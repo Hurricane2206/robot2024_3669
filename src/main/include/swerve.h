@@ -19,12 +19,14 @@ public:
                 fastest = speed;
             }
         }
-        // complex<double> posChange = complex<double>(0, 0);
+        complex<double> posChange = complex<double>(0, 0);
         for (Module module : modules){
             module.set(velocity/fastest, turnRate/fastest);
-            // posChange += module.getPosChange();
+            posChange += module.getPositionChange();
         }
-        // pos += posChange*polar<double>(0.25, angle);
+        pos += posChange*polar<double>(0.25, angle);
+        frc::SmartDashboard::PutNumber("posr", pos.real());
+        frc::SmartDashboard::PutNumber("posi", pos.imag());
     }
     // void setPos(complex<double> inputPos, double inputAngle){
     //     complex<double> posError = inputPos-pos;
@@ -44,6 +46,6 @@ private:
         Module{3, complex<double>(25, -17.75)},
         Module{4, complex<double>(-25, -17.75)}
     };
-    // complex<double> pos = complex<double>(0, 0);
+    complex<double> pos = complex<double>(0, 0);
     double angle;
 };
