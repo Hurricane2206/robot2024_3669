@@ -6,6 +6,7 @@
 #include <complex.h>
 #include <string>
 #include "angleMath.h"
+#include "units/angle.h"
 
 using namespace std;
 
@@ -37,17 +38,14 @@ public:
             dMotor->Set(0);
             sMotor->Set(0);
         }
-        motorPosChg = dMotor->GetPosition().GetValue().value() - motorPosOld;
-        modPosChange = complex<double>(cos(angle)*motorPosChg*3.9*M_PI/6.75, sin(angle)*motorPosChg*3.9*M_PI/6.75);
+        auto motorPos = dMotor->GetPosition().GetValue();
+        auto motorPosChg = motorPos - motorPosOld;
+        modPosChange = complex<double>(cos(angle)*motorPosChg.value()*3.9*M_PI/6.75, sin(angle)*motorPosChg.value()*3.9*M_PI/6.75);
         motorPosOld = motorPos;
     }
 
     complex<double> getPositionChange() {
         return modPosChange;
-    }
-
-    double getMotPosChg() {
-        return motorPosChg;
     }
 
     double getMotorPos() {
@@ -64,9 +62,7 @@ private:
     rev::CANSparkMax *sMotor;
     complex<double> turnVector;
     complex<double> modPosChange;
-    double motorPos;
-    double motorPosOld = 0;
-    double motorPosChg;
+    units::angle::turn_t motorPosOld = 0_tr;
 };
 /*
 
