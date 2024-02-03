@@ -47,6 +47,6 @@ private:
         Module{3, complex<double>(25, -17.75)},
         Module{4, complex<double>(-25, -17.75)}
     };
-    complex<double> pos = complex<double>(0, 0);
+    // complex<double> pos = complex<double>(0, 0);
     double angle;
 };
