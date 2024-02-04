@@ -37,8 +37,7 @@ public:
             dMotor->Set(0);
             sMotor->Set(0);
         }
-        motorPos = dMotor->GetPosition().GetValue().value();
-        motorPosChg = motorPos-motorPosOld;
+        motorPosChg = dMotor->GetPosition().GetValue().value() - motorPosOld;
         modPosChange = complex<double>(cos(angle)*motorPosChg*3.9*M_PI/6.75, sin(angle)*motorPosChg*3.9*M_PI/6.75);
         motorPosOld = motorPos;
     }
@@ -52,7 +51,7 @@ public:
     }
 
     double getMotorPos() {
-        return motorPos;
+        return dMotor->GetPosition().GetValue().value();
     }
 
     complex<double> getVelocity(complex<double> rVector, double turnRate){
