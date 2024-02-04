@@ -24,9 +24,7 @@ public:
             module.set(velocity/fastest, turnRate/fastest);
             posChange += module.getPositionChange();
         }
-        posChange /= 4;
-        posChange *= complex<double>(cos(angle), sin(angle));
-        pos += posChange;
+        pos += posChange * polar<double>(0.25, angle);
         frc::SmartDashboard::PutNumber("posr", pos.real());
         frc::SmartDashboard::PutNumber("posi", pos.imag());
         frc::SmartDashboard::PutNumber("poschg", abs(posChange));
