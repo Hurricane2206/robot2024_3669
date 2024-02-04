@@ -6,7 +6,6 @@
 #include <complex.h>
 #include <string>
 #include "angleMath.h"
-#include "units/angle.h"
 
 using namespace std;
 
@@ -22,7 +21,7 @@ public:
     void set(complex<double> rVector, double turnRate){
         complex<double> modVector = getVelocity(rVector, turnRate);
         double throttle = abs(modVector);
-        double angle = encoder->GetAbsolutePosition().GetValueAsDouble()*(M_PI*2);
+        angle = encoder->GetAbsolutePosition().GetValueAsDouble()*(M_PI*2);
         if (throttle > 0.001){
             double error = arg(modVector)-angle;
             limit(error);
@@ -38,13 +37,12 @@ public:
             dMotor->Set(0);
             sMotor->Set(0);
         }
-        auto motorPos = dMotor->GetPosition().GetValue();
-        auto motorPosChg = motorPos - motorPosOld;
-        modPosChange = complex<double>(cos(angle)*motorPosChg.value()*3.9*M_PI/6.75, sin(angle)*motorPosChg.value()*3.9*M_PI/6.75);
-        motorPosOld = motorPos;
     }
 
     complex<double> getPositionChange() {
+        double motorPosChg = dMotor->GetPosition().GetValue().value() - motorPosOld;
+        complex<double> modPosChange = complex<double>(cos(angle)*motorPosChg*3.9*M_PI/6.75, sin(angle)*motorPosChg*3.9*M_PI/6.75);
+        motorPosOld = dMotor->GetPosition().GetValue().value();
         return modPosChange;
     }
 
@@ -62,7 +60,8 @@ private:
     rev::CANSparkMax *sMotor;
     complex<double> turnVector;
     complex<double> modPosChange;
-    units::angle::turn_t motorPosOld = 0_tr;
+    double motorPosOld = 0;
+    double angle;
 };
 /*
 
