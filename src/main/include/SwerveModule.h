@@ -41,7 +41,7 @@ public:
 
     complex<double> getPositionChange() {
         double motorPosChg = dMotor->GetPosition().GetValue().value() - motorPosOld;
-        complex<double> modPosChange = complex<double>(cos(angle)*motorPosChg*3.9*M_PI/6.75, sin(angle)*motorPosChg*3.9*M_PI/6.75);
+        complex<double> modPosChange = polar<double>(motorPosChg*3.9*M_PI/6.75, angle);
         motorPosOld = dMotor->GetPosition().GetValue().value();
         return modPosChange;
     }
