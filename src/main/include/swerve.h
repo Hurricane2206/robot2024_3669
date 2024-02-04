@@ -38,8 +38,12 @@ public:
         double angleError = inputAngle-angle;
         limit(angleError);
         complex<double> posPIDoutput = posError*0.01;
-        if (abs(posPIDoutput) > 1){
-            posPIDoutput /= abs(posPIDoutput);
+        double anglePIDoutput = angleError*0.3;
+        if (abs(posPIDoutput) > 0.3) {
+            posPIDoutput *= 0.3 / abs(posPIDoutput);
+        }
+        if (abs(anglePIDoutput) > 0.5) {
+            anglePIDoutput *= 0.5 * abs(anglePIDoutput);
         }
         set(posPIDoutput, angleError/M_PI);
     }
