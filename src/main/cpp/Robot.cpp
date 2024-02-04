@@ -12,7 +12,7 @@ void Robot::RobotPeriodic() {}
 
 void Robot::AutonomousInit() {}
 void Robot::AutonomousPeriodic() {
-  swerve.setPos(complex<double>(0, 0), 0);
+  // swerve.setPos(complex<double>(0, 0), 0);
 }
 
 void Robot::TeleopInit() {}

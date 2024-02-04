@@ -16,7 +16,6 @@ public:
         dMotor = new ctre::phoenix6::hardware::TalonFX(modID+10, "rio");
         encoder = new ctre::phoenix6::hardware::CANcoder(modID+20, "rio");
         sMotor = new rev::CANSparkMax(modID+30, rev::CANSparkMax::MotorType::kBrushless);
-        motorPosOld = 0;
     }
     void set(complex<double> rVector, double turnRate){
         complex<double> modVector = getVelocity(rVector, turnRate);
@@ -37,16 +36,16 @@ public:
             dMotor->Set(0);
             sMotor->Set(0);
         }
-        motorPos = dMotor->GetPosition().GetValueAsDouble();
-        motorPosChange = polar<double>((motorPos-motorPosOld)*3.9*M_PI/6.75, angle);
-        motorPosOld = motorPos;
+        // motorPos = dMotor->GetPosition().GetValueAsDouble();
+        // motorPosChange = polar<double>((motorPos-motorPosOld)*3.9*M_PI/6.75, angle);
+        // motorPosOld = motorPos;
     }
     complex<double> getVelocity(complex<double> rVector, double turnRate){
         return rVector+turnVector*turnRate;
     }
-    complex<double> getPosChange(){
-        return motorPosChange;
-    }
+    // complex<double> getPosChange(){
+    //     return motorPosChange;
+    // }
     double getMotorPos(){
         return dMotor->GetPosition().GetValueAsDouble();
     }
@@ -57,7 +56,7 @@ private:
     complex<double> turnVector;
     complex<double> motorPosChange;
     double motorPos;
-    double motorPosOld;
+    double motorPosOld = 0;
 };
 /*
 
