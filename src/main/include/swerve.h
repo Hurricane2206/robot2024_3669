@@ -22,14 +22,15 @@ public:
         complex<double> posChange = complex<double>(0, 0);
         for (Module module : modules){
             module.set(velocity/fastest, turnRate/fastest);
-            posChange += module.getPositionChange()*polar<double>(0.25, angle);
+            posChange += module.getPositionChange();
         }
+        posChange /= 4;
+        posChange *= complex<double>(cos(angle), sin(angle));
         pos += posChange;
         frc::SmartDashboard::PutNumber("posr", pos.real());
         frc::SmartDashboard::PutNumber("posi", pos.imag());
         frc::SmartDashboard::PutNumber("motpos", modules[0].getMotorPos());
         frc::SmartDashboard::PutNumber("motposchg", abs(modules[0].getPositionChange()));
-
     }
     // void setPos(complex<double> inputPos, double inputAngle){
     //     complex<double> posError = inputPos-pos;
