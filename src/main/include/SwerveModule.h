@@ -15,7 +15,7 @@ public:
     complex<double> modPosChange;
     double motorPos;
     double motorPosOld = 0;
-    double motorPosChg;
+    // double motorPosChg;
 
     Module(int modID, complex<double> pos){
         turnVector = pos*complex<double>(0, 1)/abs(pos);
@@ -42,7 +42,7 @@ public:
             dMotor->Set(0);
             sMotor->Set(0);
         }
-        motorPos = dMotor->GetPosition().GetValue().value();
+        motorPos = dMotor->GetPosition().GetValueAsDouble();
         // motorPosChg = motorPos-motorPosOld;
         // modPosChange = complex<double>(motorPosChg);
         // modPosChange = complex<double>(motorPosChg*3.9*M_PI/6.75, angle);
