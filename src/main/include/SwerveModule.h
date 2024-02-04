@@ -39,7 +39,7 @@ public:
         }
         motorPos = dMotor->GetPosition().GetValue().value();
         motorPosChg = motorPos-motorPosOld;
-        modPosChange = polar<double>(motorPosChg*3.9*M_PI/6.75, angle);
+        modPosChange = complex<double>(cos(angle)*motorPosChg*3.9*M_PI/6.75, sin(angle)*motorPosChg*3.9*M_PI/6.75);
         motorPosOld = motorPos;
     }
 
