@@ -12,9 +12,10 @@ using namespace std;
 class Module{
 public:
     complex<double> turnVector;
-    complex<double> motorPosChange;
+    complex<double> modPosChange;
     double motorPos;
     double motorPosOld = 0;
+    double motorPosChg;
 
     Module(int modID, complex<double> pos){
         turnVector = pos*complex<double>(0, 1)/abs(pos);
@@ -42,7 +43,8 @@ public:
             sMotor->Set(0);
         }
         motorPos = dMotor->GetPosition().GetValue().value();
-        motorPosChange = polar<double>((motorPos-motorPosOld)*3.9*M_PI/6.75, angle);
+        motorPosChg = motorPos-motorPosOld;
+        // modPosChange = polar<double>((motorPos-motorPosOld)*3.9*M_PI/6.75, angle);
         motorPosOld = motorPos;
     }
     complex<double> getVelocity(complex<double> rVector, double turnRate){
