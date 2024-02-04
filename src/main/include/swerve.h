@@ -10,9 +10,9 @@ using namespace std;
 class Swerve{
 public:
     void set(complex<double> velocity, double turnRate){
-        double fastest = 1;
         angle = gyro.GetYaw()*-(M_PI/180);
         velocity *= polar<double>(1, -angle);
+        double fastest = 1;
         for (Module module : modules){
             double speed = abs(module.getVelocity(velocity, turnRate));
             if (speed > fastest){
@@ -26,7 +26,7 @@ public:
         }
         posChange /= 4;
         posChange *= complex<double>(cos(angle), sin(angle));
-        pos += posChange;
+        pos = pos + posChange;
         frc::SmartDashboard::PutNumber("posr", pos.real());
         frc::SmartDashboard::PutNumber("posi", pos.imag());
         frc::SmartDashboard::PutNumber("motpos", modules[0].getMotorPos());
