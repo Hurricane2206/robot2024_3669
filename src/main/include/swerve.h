@@ -27,7 +27,7 @@ public:
         pos += posChange;
         frc::SmartDashboard::PutNumber("posr", pos.real());
         frc::SmartDashboard::PutNumber("posi", pos.imag());
-        frc::SmartDashboard::PutNumber("motposchg", modules[0].getMotPosChg());
+        frc::SmartDashboard::PutNumber("motposchg", abs(modules[0].getPositionChange()));
 
     }
     // void setPos(complex<double> inputPos, double inputAngle){
