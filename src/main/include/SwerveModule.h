@@ -42,9 +42,9 @@ public:
             dMotor->Set(0);
             sMotor->Set(0);
         }
-        motorPos = dMotor->GetPosition().GetValueAsDouble();
+        motorPos = dMotor->GetPosition().GetValue().value();
         // motorPosChg = motorPos-motorPosOld;
-        // modPosChange = complex<double>(motorPosChg);
+        // modPosChange = complex<double>(motorPosChg, 0);
         // modPosChange = complex<double>(motorPosChg*3.9*M_PI/6.75, angle);
         // motorPosOld = motorPos;
     }
