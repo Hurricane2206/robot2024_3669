@@ -11,11 +11,6 @@ using namespace std;
 
 class Module{
 public:
-    complex<double> turnVector;
-    complex<double> modPosChange;
-    double motorPos;
-    // double motorPosOld = 0;
-    // double motorPosChg;
 
     Module(int modID, complex<double> pos){
         turnVector = pos*complex<double>(0, 1)/abs(pos);
@@ -42,7 +37,7 @@ public:
             dMotor->Set(0);
             sMotor->Set(0);
         }
-        // motorPos = dMotor->GetPosition().GetValue().value();
+        motorPos = dMotor->GetPosition().GetValue().value();
         // motorPosChg = motorPos-motorPosOld;
         // modPosChange = complex<double>(motorPosChg, 0);
         // modPosChange = complex<double>(motorPosChg*3.9*M_PI/6.75, angle);
@@ -53,13 +48,18 @@ public:
     }
 
     double getMotorPosition() {
-        return dMotor->GetPosition().GetValue().value();
+        return motorPos;
     }
 
 private:
     ctre::phoenix6::hardware::TalonFX *dMotor;
     ctre::phoenix6::hardware::CANcoder *encoder;
     rev::CANSparkMax *sMotor;
+    complex<double> turnVector;
+    complex<double> modPosChange;
+    double motorPos;
+    // double motorPosOld = 0;
+    // double motorPosChg;
 };
 /*
 
