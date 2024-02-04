@@ -14,7 +14,7 @@ public:
     complex<double> turnVector;
     complex<double> modPosChange;
     double motorPos;
-    double motorPosOld = 0;
+    // double motorPosOld = 0;
     // double motorPosChg;
 
     Module(int modID, complex<double> pos){
@@ -46,7 +46,7 @@ public:
         // motorPosChg = motorPos-motorPosOld;
         // modPosChange = complex<double>(motorPosChg);
         // modPosChange = complex<double>(motorPosChg*3.9*M_PI/6.75, angle);
-        motorPosOld = motorPos;
+        // motorPosOld = motorPos;
     }
     complex<double> getVelocity(complex<double> rVector, double turnRate){
         return rVector+turnVector*turnRate;
