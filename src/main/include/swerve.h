@@ -27,7 +27,7 @@ public:
         pos += posChange;
         frc::SmartDashboard::PutNumber("posr", pos.real());
         frc::SmartDashboard::PutNumber("posi", pos.imag());
-        frc::SmartDashboard::PutNumber("motpos", modules[0].getMotorPos())
+        frc::SmartDashboard::PutNumber("motpos", modules[0].getMotorPos());
         frc::SmartDashboard::PutNumber("motposchg", abs(modules[0].getPositionChange()));
 
     }
