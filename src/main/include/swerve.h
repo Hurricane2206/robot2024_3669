@@ -26,7 +26,7 @@ public:
         }
         posChange /= 4;
         posChange *= complex<double>(cos(angle), sin(angle));
-        pos += posChange;
+        pos = pos + posChange;
         frc::SmartDashboard::PutNumber("posr", pos.real());
         frc::SmartDashboard::PutNumber("posi", pos.imag());
         frc::SmartDashboard::PutNumber("motpos", modules[0].getMotorPos());
