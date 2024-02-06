@@ -28,10 +28,6 @@ public:
         frc::SmartDashboard::PutNumber("posr", pos.real());
         frc::SmartDashboard::PutNumber("posi", pos.imag());
         frc::SmartDashboard::PutNumber("poschg", abs(posChange));
-        frc::SmartDashboard::PutNumber("motposchg1", abs(modules[0].getPositionChange()));
-        frc::SmartDashboard::PutNumber("motposchg2", abs(modules[1].getPositionChange()));
-        frc::SmartDashboard::PutNumber("motposchg3", abs(modules[2].getPositionChange()));
-        frc::SmartDashboard::PutNumber("motposchg4", abs(modules[3].getPositionChange()));
     }
     bool setPos(complex<double> inputPos, double inputAngle){
         complex<double> posError = inputPos-pos;
@@ -45,8 +41,14 @@ public:
         if (abs(anglePIDoutput) > 0.5) {
             anglePIDoutput *= 0.5 * abs(anglePIDoutput);
         }
-        set(posPIDoutput, angleError/M_PI);
+        set(posPIDoutput, angleError);
         return abs(posError) < 1;
+    }
+    void zeroPos(){
+        for (Module module : modules){
+            module.zero();
+            pos *= 0;
+        }
     }
 private:
     AHRS gyro{frc::SPI::Port::kMXP};

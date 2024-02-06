@@ -38,7 +38,10 @@ public:
             sMotor->Set(0);
         }
     }
-
+    void zero(){
+        dMotor->SetPosition(0_tr);
+        motorPosOld = 0;
+    }
     complex<double> getPositionChange() {
         double motorPosChg = dMotor->GetPosition().GetValue().value() - motorPosOld;
         complex<double> modPosChange = polar<double>(motorPosChg*3.9*M_PI/6.75, angle);
