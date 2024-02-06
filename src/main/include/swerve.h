@@ -46,9 +46,7 @@ public:
             anglePIDoutput *= 0.5 * abs(anglePIDoutput);
         }
         set(posPIDoutput, angleError/M_PI);
-        if (abs(posError) < 1){
-            return true;
-        }
+        return abs(posError) < 1;
     }
 private:
     AHRS gyro{frc::SPI::Port::kMXP};
