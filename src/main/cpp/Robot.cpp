@@ -12,7 +12,7 @@ void Robot::RobotPeriodic() {}
 
 void Robot::AutonomousInit() {}
 void Robot::AutonomousPeriodic() {
-  if (x > 3){
+  if (x > sizeof(autoPos)-1){
     x = 0;
   }
   if (swerve.setPos(autoPos[x].pos, autoPos[x].angle)){
@@ -24,9 +24,6 @@ void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic() {
   complex<double> velocity = complex<double>(-controller.GetLeftY(), -controller.GetLeftX());
   double turnRate = -controller.GetRightX()*0.3;
-  // angle += turnRate*0.1;
-  // robotPos += velocity*complex<double>(0.7, 0.7);
-  // swerve.setPos(robotPos, angle)
   swerve.set(velocity, turnRate);
 }
 

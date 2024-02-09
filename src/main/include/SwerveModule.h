@@ -24,10 +24,10 @@ public:
         angle = encoder->GetAbsolutePosition().GetValueAsDouble()*(M_PI*2);
         if (throttle > 0.001){
             double error = arg(modVector)-angle;
-            limit(error);
+            am::limit(error);
             if (abs(error) > (M_PI/2)){
                 error += M_PI;
-                limit(error);
+                am::limit(error);
                 throttle *= -1;
             }
             sMotor->Set(error/M_PI);

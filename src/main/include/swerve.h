@@ -28,11 +28,15 @@ public:
         frc::SmartDashboard::PutNumber("posr", pos.real());
         frc::SmartDashboard::PutNumber("posi", pos.imag());
         frc::SmartDashboard::PutNumber("poschg", abs(posChange));
+        frc::SmartDashboard::PutNumber("mchg1", abs(modules[0].getPositionChange()));
+        frc::SmartDashboard::PutNumber("mchg2", abs(modules[1].getPositionChange()));
+        frc::SmartDashboard::PutNumber("mchg3", abs(modules[2].getPositionChange()));
+        frc::SmartDashboard::PutNumber("mchg4", abs(modules[3].getPositionChange()));
     }
     bool setPos(complex<double> inputPos, double inputAngle){
         complex<double> posError = inputPos-pos;
         double angleError = inputAngle-angle;
-        limit(angleError);
+        am::limit(angleError);
         complex<double> posPIDoutput = posError*0.025;
         double anglePIDoutput = angleError*0.3;
         if (abs(posPIDoutput) > 0.3) {
