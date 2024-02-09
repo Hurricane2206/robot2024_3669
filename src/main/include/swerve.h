@@ -38,7 +38,7 @@ public:
         double angleError = inputAngle-angle;
         am::limit(angleError);
         complex<double> posPIDoutput = posError*0.025;
-        double anglePIDoutput = angleError*0.3;
+        double anglePIDoutput = angleError*0.2;
         if (abs(posPIDoutput) > 0.3) {
             posPIDoutput *= 0.3 / abs(posPIDoutput);
         }
