@@ -12,18 +12,18 @@ using namespace std;
 class Module{
 public:
 
-    Module(int modID, complex<double> pos){
-        turnVector = pos*complex<double>(0, 1)/abs(pos);
+    Module(int modID, complex<float> pos){
+        turnVector = pos*complex<float>(0, 1)/abs(pos);
         dMotor = new ctre::phoenix6::hardware::TalonFX(modID+10, "rio");
         encoder = new ctre::phoenix6::hardware::CANcoder(modID+20, "rio");
         sMotor = new rev::CANSparkMax(modID+30, rev::CANSparkMax::MotorType::kBrushless);
     }
-    void set(complex<double> rVector, double turnRate){
-        complex<double> modVector = getVelocity(rVector, turnRate);
-        double throttle = abs(modVector);
-        angle = encoder->GetAbsolutePosition().GetValueAsDouble()*(M_PI*2);
+    void set(complex<float> rVector, float turnRate){
+        complex<float> modVector = getVelocity(rVector, turnRate);
+        float throttle = abs(modVector);
+        angle = encoder->GetAbsolutePosition().GetValue().value()*(M_PI*2);
         if (throttle > 0.001){
-            double error = arg(modVector)-angle;
+            float error = arg(modVector)-angle;
             am::limit(error);
             if (abs(error) > (M_PI/2)){
                 error += M_PI;
@@ -42,18 +42,18 @@ public:
         dMotor->SetPosition(0_tr);
         motorPosOld = 0;
     }
-    complex<double> getPositionChange() {
-        double motorPosChg = dMotor->GetPosition().GetValue().value() - motorPosOld;
-        complex<double> modPosChange = polar<double>(motorPosChg*3.9*M_PI/6.75, angle);
+    complex<float> getPositionChange() {
+        float motorPosChg = dMotor->GetPosition().GetValue().value() - motorPosOld;
+        complex<float> modPosChange = polar<float>(motorPosChg*3.9*M_PI/6.75, angle);
         motorPosOld = dMotor->GetPosition().GetValue().value();
         return modPosChange;
     }
 
-    double getMotorPos() {
+    float getMotorPos() {
         return dMotor->GetPosition().GetValue().value();
     }
 
-    complex<double> getVelocity(complex<double> rVector, double turnRate){
+    complex<float> getVelocity(complex<float> rVector, float turnRate){
         return rVector+turnVector*turnRate;
     }
 
@@ -61,10 +61,10 @@ private:
     ctre::phoenix6::hardware::TalonFX *dMotor;
     ctre::phoenix6::hardware::CANcoder *encoder;
     rev::CANSparkMax *sMotor;
-    complex<double> turnVector;
-    complex<double> modPosChange;
-    double motorPosOld = 0;
-    double angle;
+    complex<float> turnVector;
+    complex<float> modPosChange;
+    float motorPosOld = 0;
+    float angle;
 };
 /*
 

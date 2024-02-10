@@ -2,7 +2,7 @@
 
 #include <math.h>
 namespace am{
-    void limit(double &angle){
+    void limit(float &angle){
         while (angle > M_PI){
             angle -= M_PI*2;
         }

@@ -13,17 +13,17 @@ class Robot : public frc::TimedRobot {
   int x = 0; // current autoPos setpoint index
   int i = 0; // next position index while waiting
   struct autoValue{
-    complex<double> pos;
-    double angle = 0;
+    complex<float> pos;
+    float angle = 0;
     units::time::second_t holdTime = 0_s;
   };
   frc::XboxController controller{0};
   Swerve swerve;
   autoValue autoPos[4] = {
-    {complex<double>(15, 0), 0, 1_s},
-    {complex<double>(15, 15), 0, 1_s},
-    {complex<double>(0, 15), 0, 1_s},
-    {complex<double>(0, 0), 0, 1_s}
+    {complex<float>(15, 0), 0, 1_s},
+    {complex<float>(15, 15), 0, 1_s},
+    {complex<float>(0, 15), 0, 1_s},
+    {complex<float>(0, 0), 0, 1_s}
   };
   frc::Timer time;
   void RobotInit() override;

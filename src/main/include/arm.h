@@ -7,7 +7,7 @@ public:
     }
     void load(){}
     void unload(){}
-    void setDistance(double inches){}
+    void setDistance(float inches){}
     void toggleShoot(){
         if (shootMode){
             shootMode = 0;

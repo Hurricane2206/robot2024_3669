@@ -9,22 +9,22 @@ using namespace std;
 
 class Swerve{
 public:
-    void set(complex<double> velocity, double turnRate){
+    void set(complex<float> velocity, float turnRate){
         angle = gyro.GetYaw()*-(M_PI/180);
-        velocity *= polar<double>(1, -angle);
-        double fastest = 1;
+        velocity *= polar<float>(1, -angle);
+        float fastest = 1;
         for (Module module : modules){
-            double speed = abs(module.getVelocity(velocity, turnRate));
+            float speed = abs(module.getVelocity(velocity, turnRate));
             if (speed > fastest){
                 fastest = speed;
             }
         }
-        complex<double> posChange = complex<double>(0, 0);
+        complex<float> posChange = complex<float>(0, 0);
         for (Module module : modules){
             module.set(velocity/fastest, turnRate/fastest);
             posChange += module.getPositionChange();
         }
-        pos += posChange * polar<double>(0.25, angle);
+        pos += posChange * polar<float>(0.25, angle);
         frc::SmartDashboard::PutNumber("posr", pos.real());
         frc::SmartDashboard::PutNumber("posi", pos.imag());
         frc::SmartDashboard::PutNumber("poschg", abs(posChange));
@@ -33,12 +33,12 @@ public:
         frc::SmartDashboard::PutNumber("mchg3", abs(modules[2].getPositionChange()));
         frc::SmartDashboard::PutNumber("mchg4", abs(modules[3].getPositionChange()));
     }
-    bool setPos(complex<double> inputPos, double inputAngle){
-        complex<double> posError = inputPos-pos;
-        double angleError = inputAngle-angle;
+    bool setPos(complex<float> inputPos, float inputAngle){
+        complex<float> posError = inputPos-pos;
+        float angleError = inputAngle-angle;
         am::limit(angleError);
-        complex<double> posPIDoutput = posError*0.025;
-        double anglePIDoutput = angleError*0.2;
+        complex<float> posPIDoutput = posError*polar<float>(0.025, 1);
+        float anglePIDoutput = angleError*0.2;
         if (abs(posPIDoutput) > 0.3) {
             posPIDoutput *= 0.3 / abs(posPIDoutput);
         }
@@ -57,11 +57,11 @@ public:
 private:
     AHRS gyro{frc::SPI::Port::kMXP};
     Module modules[4] = {
-        Module{1, complex<double>(25, 17.75)},
-        Module{2, complex<double>(-25, 17.75)},
-        Module{3, complex<double>(25, -17.75)},
-        Module{4, complex<double>(-25, -17.75)}
+        Module{1, complex<float>(25, 17.75)},
+        Module{2, complex<float>(-25, 17.75)},
+        Module{3, complex<float>(25, -17.75)},
+        Module{4, complex<float>(-25, -17.75)}
     };
-    complex<double> pos = complex<double>(0, 0);
-    double angle;
+    complex<float> pos = complex<float>(0, 0);
+    float angle;
 };

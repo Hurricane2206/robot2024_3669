@@ -25,8 +25,8 @@ void Robot::AutonomousPeriodic() {
 
 void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic() {
-  complex<double> velocity = complex<double>(-controller.GetLeftY(), -controller.GetLeftX());
-  double turnRate = -controller.GetRightX()*0.3;
+  complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
+  float turnRate = -controller.GetRightX()*0.3;
   swerve.set(velocity, turnRate);
 }
 
