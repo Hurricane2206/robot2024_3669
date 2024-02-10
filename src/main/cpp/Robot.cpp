@@ -14,10 +14,10 @@ void Robot::AutonomousInit() {}
 void Robot::AutonomousPeriodic() {
   if (swerve.setPos(autoPos[x].pos, autoPos[x].angle) && x < size(autoPos)-1){
     if (i == x) {
-      time.Restart();
+      posWaitTimer.Restart();
       i++;
     }
-    if (time.HasElapsed(autoPos[x].holdTime)) {
+    if (posWaitTimer.HasElapsed(autoPos[x].time)) {
       x++;
     }
   }

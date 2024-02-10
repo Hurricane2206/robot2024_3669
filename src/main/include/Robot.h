@@ -15,7 +15,7 @@ class Robot : public frc::TimedRobot {
   struct autoValue{
     complex<float> pos;
     float angle = 0;
-    units::time::second_t holdTime = 0_s;
+    units::time::second_t time = 0_s;
   };
   frc::XboxController controller{0};
   Swerve swerve;
@@ -25,7 +25,7 @@ class Robot : public frc::TimedRobot {
     {complex<float>(0, 15), 0, 1_s},
     {complex<float>(0, 0), 0, 1_s}
   };
-  frc::Timer time;
+  frc::Timer posWaitTimer;
   void RobotInit() override;
   void RobotPeriodic() override;
 
