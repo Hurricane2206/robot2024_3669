@@ -4,6 +4,7 @@
 #include <frc/XboxController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <complex.h>
+#include <frc/Timer.h>
 
 #include "Swerve.h"
 

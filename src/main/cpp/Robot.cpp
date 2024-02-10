@@ -4,7 +4,6 @@
 
 #include "Robot.h"
 #include "math.h"
-#include "angleMath.h"
 
 using namespace std;
 
@@ -13,10 +12,9 @@ void Robot::RobotPeriodic() {}
 
 void Robot::AutonomousInit() {}
 void Robot::AutonomousPeriodic() {
-  double posAng = (x/10)/(2*M_PI);
-  am::limit(posAng);
-  swerve.setPos(polar<double>(15, posAng), 0);
-  x++;
+  if (swerve.setPos(autoPos[x].pos, autoPos[x].angle) && x < size(autoPos)-1){
+    x++;
+  }
 }
 
 void Robot::TeleopInit() {}
