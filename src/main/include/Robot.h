@@ -25,7 +25,7 @@ class Robot : public frc::TimedRobot {
     {complex<double>(0, 15), 0, 1_s},
     {complex<double>(0, 0), 0, 1_s}
   };
-  frc::Timer posHold;
+  frc::Timer time;
   void RobotInit() override;
   void RobotPeriodic() override;
 
