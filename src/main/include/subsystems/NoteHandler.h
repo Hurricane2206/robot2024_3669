@@ -27,20 +27,20 @@ public:
 	void Initialize() {
 		// m_elevator.RestoreFactoryDefaults();
 		// m_elevator.SetInverted(false);
-		// elevatorPID.SetP(0.2);
-		// elevatorPID.SetI(0);
-		// elevatorPID.SetD(1);
-		// elevatorPID.SetFF(0);
+		// anglePID.SetP(5e-5);
+		// anglePID.SetI(1e-6);
+		// anglePID.SetD(0);
+		// anglePID.SetFF(0.000156);
 		// elevatorPID.SetSmartMotionMaxAccel(2000);
 		// e_elevator.SetPositionConversionFactor(elevatorIPR);
 		// m_elevator.BurnFlash();
 
 		// m_angle.RestoreFactoryDefaults();
 		// m_angle.SetInverted(false);
-		// anglePID.SetP(0.2);
-		// anglePID.SetI(0);
-		// anglePID.SetD(1);
-		// anglePID.SetFF(0);
+		// anglePID.SetP(5e-5);
+		// anglePID.SetI(1e-6);
+		// anglePID.SetD(0);
+		// anglePID.SetFF(0.000156);
 		// anglePID.SetSmartMotionMaxAccel(2000);
 		// e_angle.SetPositionConversionFactor(angleDPR);
 		// m_angle.BurnFlash();
