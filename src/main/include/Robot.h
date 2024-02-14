@@ -7,6 +7,7 @@
 #include <frc/Timer.h>
 
 #include "subsystems/Swerve.h"
+#include "subsystems/IntakeShooter.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -18,7 +19,8 @@ class Robot : public frc::TimedRobot {
     units::time::second_t time = 0_s;
   };
   frc::XboxController controller{0};
-  Swerve swerve;
+  // Swerve swerve;
+  IntakeShooter intakeShooter;
   autoValue autoPos[4] = {
     {complex<float>(15, 0), 0, 1_s},
     {complex<float>(15, 15), 0, 1_s},

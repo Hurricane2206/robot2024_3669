@@ -12,22 +12,29 @@ void Robot::RobotPeriodic() {}
 
 void Robot::AutonomousInit() {}
 void Robot::AutonomousPeriodic() {
-  if (swerve.setPos(autoPos[x].pos, autoPos[x].angle) && x < size(autoPos)-1){
-    if (i == x) {
-      posWaitTimer.Restart();
-      i++;
-    }
-    if (posWaitTimer.HasElapsed(autoPos[x].time)) {
-      x++;
-    }
-  }
+  // if (swerve.setPos(autoPos[x].pos, autoPos[x].angle) && x < size(autoPos)-1){
+  //   if (i == x) {
+  //     posWaitTimer.Restart();
+  //     i++;
+  //   }
+  //   if (posWaitTimer.HasElapsed(autoPos[x].time)) {
+  //     x++;
+  //   }
+  // }
 }
 
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() {
+  intakeShooter.Initialize();
+}
 void Robot::TeleopPeriodic() {
-  complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
-  float turnRate = -controller.GetRightX()*0.3;
-  swerve.set(velocity, turnRate);
+  // complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
+  // float turnRate = -controller.GetRightX()*0.3;
+  // swerve.set(velocity, turnRate);
+  if (controller.GetAButton()) {
+    intakeShooter.SetAngle(30, 1000, 3);
+  } else {
+    intakeShooter.SetAngle(0, 1000, 3);
+  }
 }
 
 void Robot::DisabledInit() {}
