@@ -7,7 +7,9 @@
 
 using namespace std;
 
-void Robot::RobotInit() {}
+void Robot::RobotInit() {
+  intakeShooter.Initialize();
+}
 void Robot::RobotPeriodic() {}
 
 void Robot::AutonomousInit() {}
@@ -24,7 +26,6 @@ void Robot::AutonomousPeriodic() {
 }
 
 void Robot::TeleopInit() {
-  intakeShooter.Initialize();
 }
 void Robot::TeleopPeriodic() {
   // complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
