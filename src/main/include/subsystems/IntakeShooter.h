@@ -79,7 +79,7 @@ private:
 	// rev::SparkPIDController shooterPID2 = m2_shooter.GetPIDController();
 	// rev::SparkRelativeEncoder e2_shooter = m2_shooter.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
-	rev::CANSparkMax m_angle{44, rev::CANSparkMax::MotorType::kBrushless};
+	rev::CANSparkMax m_angle{41, rev::CANSparkMax::MotorType::kBrushless};
 	rev::SparkPIDController anglePID = m_angle.GetPIDController();
 	rev::SparkRelativeEncoder e_angle = m_angle.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 	
