@@ -58,7 +58,7 @@ public:
 		m_angle.RestoreFactoryDefaults();
 		m_angle.SetInverted(false);
 		anglePID.SetP(5e-5);
-		anglePID.SetI(1e-6);
+		anglePID.SetI(0);
 		anglePID.SetD(0);
 		anglePID.SetFF(0.000156);
 		anglePID.SetSmartMotionMaxAccel(1500);
