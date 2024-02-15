@@ -32,7 +32,7 @@ void Robot::TeleopPeriodic() {
   // float turnRate = -controller.GetRightX()*0.3;
   // swerve.set(velocity, turnRate);
   if (controller.GetAButton()) {
-    intakeShooter.SetAngle(30, 4000, 3);
+    intakeShooter.SetAngle(90, 4000, 3);
   } else {
     intakeShooter.SetAngle(0, 4000, 3);
   }

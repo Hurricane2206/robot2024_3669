@@ -61,8 +61,8 @@ public:
 		anglePID.SetI(1e-6);
 		anglePID.SetD(0);
 		anglePID.SetFF(0.000156);
-		anglePID.SetSmartMotionAllowedClosedLoopError(0);
 		anglePID.SetSmartMotionMaxAccel(1500);
+		anglePID.SetSmartMotionAllowedClosedLoopError(0);
 		anglePID.SetSmartMotionMinOutputVelocity(0);
 		e_angle.SetPositionConversionFactor(angleDPR);
 		m_angle.BurnFlash();
@@ -91,7 +91,7 @@ private:
 	// inches per rotation of the shooter motors
 	const float shooterIPR = M_PI*4;
 
-	const float angleGearboxReduction = 3;
+	const float angleGearboxReduction = 27;
 	// degrees per rotation of the angle motor
 	const float angleDPR = 360/angleGearboxReduction;
 };
