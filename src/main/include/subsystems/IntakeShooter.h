@@ -61,7 +61,7 @@ public:
 		anglePID.SetI(1e-6);
 		anglePID.SetD(0);
 		anglePID.SetFF(0.000156);
-		anglePID.SetSmartMotionMaxAccel(2000);
+		anglePID.SetSmartMotionMaxAccel(3000);
 		e_angle.SetPositionConversionFactor(angleDPR);
 		m_angle.BurnFlash();
 	}
