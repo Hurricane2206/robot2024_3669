@@ -77,7 +77,7 @@ private:
 	// note handler angle gearbox reduction
 	const float angleGearboxReduction = 3;
 	// degrees per rotation of the motor
-	const float angleDPR = 1.0/360/3/elevatorGearboxReduction;
+	const float angleDPR = 360/3/elevatorGearboxReduction;
 
 	const float rollerIPR = 1.225*M_PI;
 };
