@@ -91,5 +91,5 @@ private:
 
 	const float angleGearboxReduction = 3;
 	// degrees per rotation of the angle motor
-	const float angleDPR = 1.0/360/angleGearboxReduction;
+	const float angleDPR = 360/angleGearboxReduction;
 };
