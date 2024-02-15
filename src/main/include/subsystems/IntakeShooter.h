@@ -10,7 +10,7 @@ class IntakeShooter
 public:
 	bool SetAngle(float angle, float maxRPM, float tolerance) {
 		anglePID.SetSmartMotionMaxVelocity(maxRPM);
-		anglePID.SetReference(angle, rev::CANSparkMax::ControlType::kSmartMotion);
+		anglePID.SetReference(angle, rev::CANSparkMax::ControlType::kPosition);
 		return abs(angle - e_angle.GetPosition()) < tolerance;
 	}
 	// void SetIntakeSpeed(float inPerMin) {
@@ -57,13 +57,10 @@ public:
 
 		m_angle.RestoreFactoryDefaults();
 		m_angle.SetInverted(false);
-		anglePID.SetP(5e-5);
+		anglePID.SetP(0.3);
 		anglePID.SetI(0);
-		anglePID.SetD(0);
-		anglePID.SetFF(0.000156);
-		anglePID.SetSmartMotionMaxAccel(1500);
-		anglePID.SetSmartMotionAllowedClosedLoopError(0);
-		anglePID.SetSmartMotionMinOutputVelocity(0);
+		anglePID.SetD(1);
+		anglePID.SetFF(0);
 		e_angle.SetPositionConversionFactor(angleDPR);
 		m_angle.BurnFlash();
 	}
