@@ -14,6 +14,7 @@ class Robot : public frc::TimedRobot {
  public:
   int x = 0; // current autoPos setpoint index
   int i = 0; // next position index while waiting
+  bool isShooting = false;
   struct autoValue{
     complex<float> pos;
     float angle = 0;
@@ -29,6 +30,7 @@ class Robot : public frc::TimedRobot {
     {complex<float>(0, 0), 0, 1_s}
   };
   frc::Timer posWaitTimer;
+  frc::Timer shootTimer;
   void RobotInit() override;
   void RobotPeriodic() override;
 

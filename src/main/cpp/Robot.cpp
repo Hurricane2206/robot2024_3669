@@ -28,13 +28,32 @@ void Robot::AutonomousPeriodic() {
 void Robot::TeleopInit() {
 }
 void Robot::TeleopPeriodic() {
-  // complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
-  // float turnRate = -controller.GetRightX()*0.3;
-  // swerve.set(velocity, turnRate);
-  if (controller.GetAButton()) {
-    intakeShooter.SetAngle(90, 4000, 3);
+  if (isShooting) {
+    intakeShooter.SetShooter(0.25);
+    if (shootTimer.HasElapsed(1_s)) {
+      intakeShooter.SetShooter(0);
+      isShooting = false;
+    }
   } else {
-    intakeShooter.SetAngle(0, 4000, 3);
+    // complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
+    // float turnRate = -controller.GetRightX()*0.3;
+    // swerve.set(velocity, turnRate);
+    if (controller.GetBButton()) {
+      intakeShooter.SetAngle(45);
+      // todo: aim swerve
+      if (controller.GetRightTriggerAxis() > 0.2) {
+        shootTimer.Restart();
+        isShooting = true;
+      }
+    } else {
+      if (controller.GetAButton() && !intakeShooter.GetNoteSensor()) {
+        intakeShooter.SetAngle(90);
+        intakeShooter.SetIntakeSpeed(200);
+      } else {
+        intakeShooter.SetAngle(0);
+        intakeShooter.SetIntakeSpeed(0);
+      }
+    }
   }
 }
 
