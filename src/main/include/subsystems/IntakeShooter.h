@@ -26,7 +26,7 @@ public:
 		m_intake.Set(speed);
 	}
 	bool GetNotePresent() {
-		return true; // todo: get sensor value
+		return false; // todo: get sensor value
 	}
 	void Initialize() {
 		m_intake.RestoreFactoryDefaults();
