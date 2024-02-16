@@ -46,7 +46,7 @@ void Robot::TeleopPeriodic() {
         isShooting = true;
       }
     } else {
-      if (controller.GetAButton() && !intakeShooter.GetNotePresent()) {
+      if (controller.GetAButton()) {
         intakeShooter.SetAngle(90);
         intakeShooter.SetIntakeSpeed(1000);
       } else {
