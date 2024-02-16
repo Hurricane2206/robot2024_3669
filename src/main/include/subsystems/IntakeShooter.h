@@ -19,12 +19,13 @@ public:
 		shooterPID1.SetReference(inPerMin, rev::CANSparkMax::ControlType::kVelocity);
 		shooterPID2.SetReference(inPerMin, rev::CANSparkMax::ControlType::kVelocity);
 	}
+	// set all the motors required for shooting using percent output
 	void SetShooter(float speed) {
 		m1_shooter.Set(speed);
 		m2_shooter.Set(speed);
 		m_intake.Set(speed);
 	}
-	bool GetNoteSensor() {
+	bool GetNotePresent() {
 		return true; // todo: get sensor value
 	}
 	void Initialize() {
