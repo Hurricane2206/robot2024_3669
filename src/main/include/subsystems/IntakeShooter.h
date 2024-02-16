@@ -26,7 +26,7 @@ public:
 		m_intake.Set(speed);
 	}
 	bool GetNotePresent() {
-		return true; // todo: get sensor value
+		return false; // todo: get sensor value
 	}
 	void Initialize() {
 		m_intake.RestoreFactoryDefaults();
@@ -58,7 +58,7 @@ public:
 
 		m_angle.RestoreFactoryDefaults();
 		m_angle.SetInverted(false);
-		anglePID.SetP(0.01);
+		anglePID.SetP(0.03);
 		anglePID.SetI(0);
 		anglePID.SetD(1);
 		anglePID.SetFF(0);
