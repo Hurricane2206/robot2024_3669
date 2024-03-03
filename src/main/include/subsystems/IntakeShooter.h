@@ -71,11 +71,11 @@ private:
 	rev::SparkPIDController intakePID = m_intake.GetPIDController();
 	rev::SparkRelativeEncoder e_intake = m_intake.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
-	rev::CANSparkMax m1_shooter{52, rev::CANSparkMax::MotorType::kBrushless};
+	rev::CANSparkMax m1_shooter{43, rev::CANSparkMax::MotorType::kBrushless};
 	rev::SparkPIDController shooterPID1 = m1_shooter.GetPIDController();
 	rev::SparkRelativeEncoder e1_shooter = m1_shooter.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
-	rev::CANSparkMax m2_shooter{53, rev::CANSparkMax::MotorType::kBrushless};
+	rev::CANSparkMax m2_shooter{44, rev::CANSparkMax::MotorType::kBrushless};
 	rev::SparkPIDController shooterPID2 = m2_shooter.GetPIDController();
 	rev::SparkRelativeEncoder e2_shooter = m2_shooter.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
