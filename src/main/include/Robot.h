@@ -26,7 +26,7 @@ public:
 	frc::DigitalInput dEye{0};
 	frc::XboxController controller{0};
 	Swerve swerve;
-	IntakeShooter intakeShooter;
+	// IntakeShooter intakeShooter;
 	autoValue autoPos[4] = {
 		{complex<float>(15, 0), 0, 1_s},
 		{complex<float>(15, 15), 0, 1_s},

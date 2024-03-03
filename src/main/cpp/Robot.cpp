@@ -9,7 +9,7 @@ using namespace std;
 
 void Robot::RobotInit()
 {
-	intakeShooter.Initialize();
+	//intakeShooter.Initialize();
 }
 void Robot::RobotPeriodic() {}
 
@@ -30,44 +30,44 @@ void Robot::AutonomousPeriodic()
 void Robot::TeleopInit(){}
 void Robot::TeleopPeriodic(){
 	frc::SmartDashboard::PutBoolean("Sensor: ", dEye.Get());
-	if (isShooting)
-	{
-		intakeShooter.SetShooter(0.25);
-		if (shootTimer.HasElapsed(1_s))
-		{
-			intakeShooter.SetShooter(0);
-			isShooting = false;
-		}
-	}
-	else
-	{
-		complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
+	// if (isShooting)
+	// {
+	// 	intakeShooter.SetShooter(0.25);
+	// 	if (shootTimer.HasElapsed(1_s))
+	// 	{
+	// 		intakeShooter.SetShooter(0);
+	// 		isShooting = false;
+	// 	}
+	// }
+	// else
+	// {
+	 	complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
 		float turnRate = -controller.GetRightX()*0.3;
 		swerve.set(velocity, turnRate);
-		if (controller.GetBButton())
-		{
-			intakeShooter.SetAngle(45);
-			// todo: aim swerve
-			if (controller.GetRightTriggerAxis() > 0.2)
-			{
-				shootTimer.Restart();
-				isShooting = true;
-			}
-		}
-		else
-		{
-			if (controller.GetAButton() && !intakeShooter.GetNotePresent())
-			{
-				intakeShooter.SetAngle(90);
-				intakeShooter.SetIntakeSpeed(1000);
-			}
-			else
-			{
-				intakeShooter.SetAngle(0);
-				intakeShooter.SetIntakeSpeed(0);
-			}
-		}
-	}
+	// 	if (controller.GetBButton())
+	// 	{
+	// 		intakeShooter.SetAngle(45);
+	// 		// todo: aim swerve
+	// 		if (controller.GetRightTriggerAxis() > 0.2)
+	// 		{
+	// 			shootTimer.Restart();
+	// 			isShooting = true;
+	// 		}
+	// 	}
+	// 	else
+	// 	{
+	// 		if (controller.GetAButton() && !intakeShooter.GetNotePresent())
+	// 		{
+	// 			intakeShooter.SetAngle(90);
+	// 			intakeShooter.SetIntakeSpeed(1000);
+	// 		}
+	// 		else
+	// 		{
+	// 			intakeShooter.SetAngle(0);
+	// 			intakeShooter.SetIntakeSpeed(0);
+	// 		}
+	// 	}
+	//}
 }
 
 void Robot::DisabledInit() {}
