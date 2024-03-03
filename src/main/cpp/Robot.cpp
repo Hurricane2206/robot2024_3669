@@ -27,11 +27,9 @@ void Robot::AutonomousPeriodic()
 	// }
 }
 
-void Robot::TeleopInit()
-{
-}
-void Robot::TeleopPeriodic()
-{
+void Robot::TeleopInit(){}
+void Robot::TeleopPeriodic(){
+	frc::SmartDashboard::PutBoolean("Sensor: ", dEye.Get());
 	if (isShooting)
 	{
 		intakeShooter.SetShooter(0.25);
@@ -43,9 +41,9 @@ void Robot::TeleopPeriodic()
 	}
 	else
 	{
-		// complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
-		// float turnRate = -controller.GetRightX()*0.3;
-		// swerve.set(velocity, turnRate);
+		complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
+		float turnRate = -controller.GetRightX()*0.3;
+		swerve.set(velocity, turnRate);
 		if (controller.GetBButton())
 		{
 			intakeShooter.SetAngle(45);

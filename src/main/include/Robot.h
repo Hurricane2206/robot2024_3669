@@ -3,10 +3,11 @@
 #include <frc/TimedRobot.h>
 #include <frc/XboxController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/DigitalInput.h>
 #include <complex.h>
 #include <frc/Timer.h>
 
-// #include "subsystems/Swerve.h"
+#include "subsystems/Swerve.h"
 #include "subsystems/IntakeShooter.h"
 using namespace std;
 
@@ -22,8 +23,9 @@ public:
 		float angle = 0;
 		units::time::second_t time = 0_s;
 	};
+	frc::DigitalInput dEye{0};
 	frc::XboxController controller{0};
-	// Swerve swerve;
+	Swerve swerve;
 	IntakeShooter intakeShooter;
 	autoValue autoPos[4] = {
 		{complex<float>(15, 0), 0, 1_s},

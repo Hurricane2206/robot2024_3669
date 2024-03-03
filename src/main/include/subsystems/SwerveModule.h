@@ -1,4 +1,4 @@
-t#pragma once
+#pragma once
 
 #include <ctre/phoenix6/CANcoder.hpp>
 #include <ctre/phoenix6/TalonFX.hpp>
