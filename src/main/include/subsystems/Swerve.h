@@ -57,10 +57,10 @@ public:
 private:
     AHRS gyro{frc::SPI::Port::kMXP};
     Module modules[4] = {
-        Module{1, complex<float>(25, 17.75)},
-        Module{2, complex<float>(-25, 17.75)},
-        Module{3, complex<float>(25, -17.75)},
-        Module{4, complex<float>(-25, -17.75)}
+        Module{1, complex<float>(1, 1)},
+        Module{2, complex<float>(-1, 1)},
+        Module{3, complex<float>(1, -1)},
+        Module{4, complex<float>(-1, -1)}
     };
     complex<float> pos = complex<float>(0, 0);
     float angle;
