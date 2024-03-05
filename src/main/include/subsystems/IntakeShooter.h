@@ -83,13 +83,13 @@
 // 	rev::SparkPIDController anglePID = m_angle.GetPIDController();
 // 	rev::SparkRelativeEncoder e_angle = m_angle.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 	
-// 	const float intakeGearboxReduction = 3;
+// 	const float intakeGearboxReduction = 36;
 // 	// inches per rotation of the intake motor
 // 	const float intakeIPR = M_PI*2/intakeGearboxReduction;
 // 	// inches per rotation of the shooter motors
 // 	const float shooterIPR = M_PI*4;
 
-// 	const float angleGearboxReduction = 27;
+// 	const float angleGearboxReduction = 60;
 // 	// degrees per rotation of the angle motor
 // 	const float angleDPR = 360/angleGearboxReduction;
 // };
