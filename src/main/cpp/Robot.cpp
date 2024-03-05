@@ -42,9 +42,10 @@ void Robot::TeleopPeriodic(){
 	// }
 	// else
 	// {
-	 	complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
-		float turnRate = -controller.GetRightX()*0.3;
-		swerve.set(velocity, turnRate);
+	 	//complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
+		//float turnRate = -controller.GetRightX()*0.3;
+		//swerve.set(velocity, turnRate);
+		arm.SetHeight(controller.GetLeftY()*0.3);
 	// 	if (controller.GetBButton())
 	// 	{
 	// 		intakeShooter.SetAngle(45);

@@ -9,6 +9,7 @@
 
 #include "subsystems/Swerve.h"
 #include "subsystems/IntakeShooter.h"
+#include "subsystems/NoteHandler.h"
 using namespace std;
 
 class Robot : public frc::TimedRobot
@@ -26,6 +27,7 @@ public:
 	frc::DigitalInput dEye{0};
 	frc::XboxController controller{0};
 	Swerve swerve;
+	NoteHandler arm;
 	// IntakeShooter intakeShooter;
 	autoValue autoPos[4] = {
 		{complex<float>(15, 0), 0, 1_s},
