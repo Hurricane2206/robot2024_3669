@@ -70,14 +70,15 @@ private:
 	// rev::SparkRelativeEncoder e_rollers = m_rollers.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
 	// elevator gearbox reduction
-	const float elevatorGearboxReduction = 3;
+	const float elevatorGearboxReduction = 5;
 	// inches per rotation of the motor
 	const float elevatorIPR = 9/2.54/elevatorGearboxReduction;
 
 	// note handler angle gearbox reduction
-	const float angleGearboxReduction = 3;
+	const float angleGearboxReduction = 25;
 	// degrees per rotation of the motor
 	const float angleDPR = 360/3/elevatorGearboxReduction;
 
-	const float rollerIPR = 1.225*M_PI;
+	const float rollerGearboxReduction = 25;
+	const float rollerIPR = 1.225*M_PI/25;
 };
