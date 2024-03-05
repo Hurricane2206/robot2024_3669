@@ -70,6 +70,7 @@ void Robot::TeleopPeriodic(){
 	// 		}
 	// 	}
 	//}
+	frc::SmartDashboard::PutNumber("height", arm.SetHeight(controller.GetRightX()*0.25));
 }
 
 void Robot::DisabledInit() {}
