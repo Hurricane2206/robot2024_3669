@@ -11,6 +11,7 @@ void Robot::RobotInit()
 {
 	//intakeShooter.Initialize();
 	swerve.init();
+	arm.init();
 }
 void Robot::RobotPeriodic() {}
 
@@ -45,7 +46,12 @@ void Robot::TeleopPeriodic(){
 	 	//complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
 		//float turnRate = -controller.GetRightX()*0.3;
 		//swerve.set(velocity, turnRate);
-		arm.SetHeight(controller.GetLeftY()*0.3);
+		if (controller.GetYButton()){
+			arm.SetHeight(10);
+		}
+		else if (controller.GetAButton()){
+			arm.SetHeight(0);
+		}
 	// 	if (controller.GetBButton())
 	// 	{
 	// 		intakeShooter.SetAngle(45);
@@ -70,7 +76,6 @@ void Robot::TeleopPeriodic(){
 	// 		}
 	// 	}
 	//}
-	frc::SmartDashboard::PutNumber("height", arm.SetHeight(controller.GetRightX()*0.25));
 }
 
 void Robot::DisabledInit() {}

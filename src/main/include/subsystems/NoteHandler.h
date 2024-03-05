@@ -8,11 +8,10 @@
 class NoteHandler
 {
 public:
-	double SetHeight(float height, float maxRPM = 1000, float tolerance = 0.5) {
+	bool SetHeight(float height, float maxRPM = 1000, float tolerance = 0.5) {
 		m_elevator.Set(height);
-		// elevatorPID.SetSmartMotionMaxVelocity(maxRPM);
-		// elevatorPID.SetReference(height, rev::CANSparkMax::ControlType::kSmartMotion);
-		return e_elevator.GetPosition(); // abs(height - e_elevator.GetPosition()) < tolerance;
+		elevatorPID.SetReference(height, rev::CANSparkMax::ControlType::kPosition);
+		abs(height - e_elevator.GetPosition()) < tolerance;
 	}
 
 	// bool SetAngle(float angle, float maxRPM, float tolerance) {
@@ -25,9 +24,10 @@ public:
 	// 	rollersPID.SetReference(inPerMin, rev::CANSparkMax::ControlType::kVelocity);
 	// }
 
-	void Initialize() {
+	void init() {
 		m_elevator.RestoreFactoryDefaults();
-		m_elevator.SetInverted(false);
+		m_elevator.SetInverted(true);
+		m_elevator.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 		// anglePID.SetP(5e-5);
 		// anglePID.SetI(1e-6);
 		// anglePID.SetD(0);
