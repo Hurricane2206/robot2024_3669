@@ -15,7 +15,15 @@ public:
         turnVector = pos*complex<float>(0, 1)/abs(pos);
         dMotor = new ctre::phoenix6::hardware::TalonFX(modID+10, "CTREdevices");
         encoder = new ctre::phoenix6::hardware::CANcoder(modID+20, "CTREdevices");
+        current = new ctre::phoenix6::controls::TorqueCurrentFOC(0_A, 1, 0_A, true, false, false);
         sMotor = new rev::CANSparkMax(modID+30, rev::CANSparkMax::MotorType::kBrushless);
+    }
+    void init() {
+        dMotor->SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+        ctre::phoenix6::configs::TalonFXConfiguration configs{};
+        configs.CurrentLimits.StatorCurrentLimit = 40;
+
+        dMotor->GetConfigurator().Apply(configs);
     }
     void set(complex<float> rVector, float turnRate){
         complex<float> modVector = getVelocity(rVector, turnRate);
@@ -37,10 +45,6 @@ public:
             sMotor->Set(0);
         }
     }
-    void zero(){
-        dMotor->SetPosition(0_tr);
-        motorPosOld = 0;
-    }
     complex<float> getPositionChange() {
         float motorPosChg = dMotor->GetPosition().GetValue().value() - motorPosOld;
         complex<float> modPosChange = polar<float>(motorPosChg*3.9*M_PI/6.75, angle);
@@ -59,6 +63,7 @@ public:
 private:
     ctre::phoenix6::hardware::TalonFX *dMotor;
     ctre::phoenix6::hardware::CANcoder *encoder;
+    ctre::phoenix6::controls::TorqueCurrentFOC *current;
     rev::CANSparkMax *sMotor;
     complex<float> turnVector;
     complex<float> modPosChange;

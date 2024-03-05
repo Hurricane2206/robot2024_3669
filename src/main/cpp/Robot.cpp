@@ -10,6 +10,7 @@ using namespace std;
 void Robot::RobotInit()
 {
 	//intakeShooter.Initialize();
+	swerve.init();
 }
 void Robot::RobotPeriodic() {}
 
