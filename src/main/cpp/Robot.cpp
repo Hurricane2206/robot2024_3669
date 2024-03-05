@@ -42,9 +42,9 @@ void Robot::TeleopPeriodic(){
 	// }
 	// else
 	// {
-	 	complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
-		float turnRate = -controller.GetRightX()*0.3;
-		swerve.set(velocity, turnRate);
+	// 	 complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
+	//	 float turnRate = -controller.GetRightX()*0.3;
+	//	 swerve.set(velocity, turnRate);
 	// 	if (controller.GetBButton())
 	// 	{
 	// 		intakeShooter.SetAngle(45);
@@ -69,6 +69,7 @@ void Robot::TeleopPeriodic(){
 	// 		}
 	// 	}
 	//}
+	frc::SmartDashboard::PutNumber("height", nh.SetHeight(controller.GetRightX()*0.25));
 }
 
 void Robot::DisabledInit() {}
