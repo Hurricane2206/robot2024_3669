@@ -8,11 +8,12 @@
 class NoteHandler
 {
 public:
-	// bool SetHeight(float height, float maxRPM, float tolerance) {
-	// 	elevatorPID.SetSmartMotionMaxVelocity(maxRPM);
-	// 	elevatorPID.SetReference(height, rev::CANSparkMax::ControlType::kSmartMotion);
-	// 	return abs(height - e_elevator.GetPosition()) < tolerance;
-	// }
+	bool SetHeight(float height, float maxRPM = 1000, float tolerance = 0.5) {
+		m_elevator.Set(height);
+		// elevatorPID.SetSmartMotionMaxVelocity(maxRPM);
+		// elevatorPID.SetReference(height, rev::CANSparkMax::ControlType::kSmartMotion);
+		return abs(height - e_elevator.GetPosition()) < tolerance;
+	}
 
 	// bool SetAngle(float angle, float maxRPM, float tolerance) {
 	// 	anglePID.SetSmartMotionMaxVelocity(maxRPM);
@@ -57,9 +58,9 @@ public:
 	}
 
 private:
-	// rev::CANSparkMax m_elevator{51, rev::CANSparkMax::MotorType::kBrushless};
-	// rev::SparkPIDController elevatorPID = m_elevator.GetPIDController();
-	// rev::SparkRelativeEncoder e_elevator = m_elevator.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+	rev::CANSparkMax m_elevator{51, rev::CANSparkMax::MotorType::kBrushless};
+	rev::SparkPIDController elevatorPID = m_elevator.GetPIDController();
+	rev::SparkRelativeEncoder e_elevator = m_elevator.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
 	// rev::CANSparkMax m_angle{52, rev::CANSparkMax::MotorType::kBrushless};
 	// rev::SparkPIDController anglePID = m_angle.GetPIDController();
