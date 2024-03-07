@@ -11,7 +11,12 @@ class Swerve{
 public:
     void set(complex<float> velocity, float turnRate){
         angle = gyro.GetYaw()*-(M_PI/180);
+        targetVelocity = velocity;
+
+        // robot orient the velocity
         velocity *= polar<float>(1, -angle);
+
+        // find fastest module speed
         float fastest = 1;
         for (Module module : modules){
             float speed = abs(module.getVelocity(velocity, turnRate));
@@ -19,9 +24,26 @@ public:
                 fastest = speed;
             }
         }
+
+        // move current velocity toward target
+        targetVelocity /= fastest;
+        turnRate /= fastest;
+        complex<float> velError = targetVelocity-currentVelocity;
+        float turnRateError = turnRate - currentTurnRate;
+        if (abs(velError) > slewRate) {
+            velError *= slewRate/abs(velError);
+        }
+        if (abs(turnRateError) > slewRate) {
+            turnRateError *= slewRate/abs(turnRateError);
+        }
+        currentVelocity += velError;
+        currentTurnRate += turnRateError;
+        targetVelocity = currentVelocity * polar<float>(1, -angle);
+
+        // calculate odometry and set modules
         complex<float> posChange = complex<float>(0, 0);
         for (Module module : modules){
-            module.set(velocity/fastest, turnRate/fastest);
+            module.set(targetVelocity, currentTurnRate);
             posChange += module.getPositionChange();
         }
         pos += posChange * polar<float>(0.25, angle);
@@ -48,6 +70,7 @@ public:
         set(posPIDoutput, angleError);
         return abs(posError) < 1;
     }
+
     void init(){
         for (Module module : modules){
             module.init();
@@ -61,6 +84,13 @@ private:
         Module{3, complex<float>(1, -1)},
         Module{4, complex<float>(-1, -1)}
     };
+
     complex<float> pos = complex<float>(0, 0);
     float angle;
+
+    complex<float> currentVelocity;
+    float currentTurnRate = 0;
+    complex<float> targetVelocity;
+
+    const float slewRate = 0.08;
 };
