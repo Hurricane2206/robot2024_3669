@@ -19,6 +19,7 @@ public:
 	int i = 0; // next position index while waiting
 	bool isShooting = false;
 	bool isIntaking = false;
+	
 	struct autoValue
 	{
 		complex<float> pos;
@@ -26,7 +27,7 @@ public:
 		units::time::second_t time = 0_s;
 	};
 	frc::XboxController controller{0};
-	frc::Joystick kPad{1};
+	frc::Joystick key_pad{1};
 	Swerve swerve;
 	NoteHandler arm;
 	IntakeShooter intakeShooter;
