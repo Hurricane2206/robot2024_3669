@@ -46,28 +46,31 @@ void Robot::TeleopPeriodic(){
 	 	complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
 		float turnRate = -controller.GetRightX()*0.3;
 		swerve.set(velocity, turnRate);
-		if (kPad.GetRawButton(11)){
+		if (key_pad.GetRawButton(11)){
 			intakeShooter.SetAngle(30);
 			// todo: aim swerve
-			if (kPad.GetRawButtonPressed(12)){
+			if (key_pad.GetRawButton(12)){
 				shootTimer.Restart();
 				isShooting = true;
 			}
 		}
 		else{
-			if (kPad.GetRawButtonPressed(10)){
-				isIntaking = true;
-			}
-			if (isIntaking && !intakeShooter.GetNotePresent()){
+			if (isIntaking){
 				intakeShooter.SetAngle(80);
 				intakeShooter.SetIntake(70);
+				if (intakeShooter.GetNotePresent() || key_pad.GetRawButtonPressed(10)){
+					isIntaking = false;
+				}
 			}
-			else{
-				isIntaking = false;
+			else {
+				if (key_pad.GetRawButtonPressed(10) && !intakeShooter.GetNotePresent()){
+					isIntaking = true;
+				}
 				intakeShooter.SetAngle(5);
 				intakeShooter.SetIntake(0);
 			}
 		}
+		
 	}
 }
 

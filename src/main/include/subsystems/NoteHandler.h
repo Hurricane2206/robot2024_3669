@@ -14,11 +14,10 @@ public:
 		return abs(height - e_elevator.GetPosition()) < tolerance;
 	}
 
-	// bool SetAngle(float angle, float maxRPM, float tolerance) {
-	// 	anglePID.SetSmartMotionMaxVelocity(maxRPM);
-	// 	anglePID.SetReference(angle, rev::CANSparkMax::ControlType::kSmartMotion);
-	// 	return abs(angle - e_angle.GetPosition()) < tolerance;
-	// }
+	bool SetAngle(float angle, float tolerance = 1) {
+		anglePID.SetReference(angle, rev::CANSparkMax::ControlType::kSmartMotion);
+		return abs(angle - e_angle.GetPosition()) < tolerance;
+	}
 
 	// void SetRollerSpeed(float inPerMin) {
 	// 	rollersPID.SetReference(inPerMin, rev::CANSparkMax::ControlType::kVelocity);
@@ -36,15 +35,15 @@ public:
 		e_elevator.SetPositionConversionFactor(elevatorIPR);
 		m_elevator.BurnFlash();
 
-		// m_angle.RestoreFactoryDefaults();
-		// m_angle.SetInverted(false);
-		// anglePID.SetP(5e-5);
-		// anglePID.SetI(1e-6);
-		// anglePID.SetD(0);
-		// anglePID.SetFF(0.000156);
-		// anglePID.SetSmartMotionMaxAccel(2000);
-		// e_angle.SetPositionConversionFactor(angleDPR);
-		// m_angle.BurnFlash();
+		m_angle.RestoreFactoryDefaults();
+		m_angle.SetInverted(false);
+		anglePID.SetP(5e-5/angleDPR);
+		anglePID.SetI(1e-6);
+		anglePID.SetD(1/angleDPR);
+		anglePID.SetFF(0.000156);
+		anglePID.SetSmartMotionMaxAccel(2000);
+		e_angle.SetPositionConversionFactor(angleDPR);
+		m_angle.BurnFlash();
 
 		// m_rollers.RestoreFactoryDefaults();
 		// m_rollers.SetInverted(false);
@@ -62,9 +61,9 @@ private:
 	rev::SparkPIDController elevatorPID = m_elevator.GetPIDController();
 	rev::SparkRelativeEncoder e_elevator = m_elevator.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
-	// rev::CANSparkMax m_angle{52, rev::CANSparkMax::MotorType::kBrushless};
-	// rev::SparkPIDController anglePID = m_angle.GetPIDController();
-	// rev::SparkRelativeEncoder e_angle = m_angle.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+	rev::CANSparkMax m_angle{52, rev::CANSparkMax::MotorType::kBrushless};
+	rev::SparkPIDController anglePID = m_angle.GetPIDController();
+	rev::SparkRelativeEncoder e_angle = m_angle.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
 	// rev::CANSparkMax m_rollers{53, rev::CANSparkMax::MotorType::kBrushless};
 	// rev::SparkPIDController rollersPID = m_rollers.GetPIDController();
