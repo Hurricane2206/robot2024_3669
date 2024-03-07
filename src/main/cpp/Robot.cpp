@@ -70,7 +70,7 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetIntake(0);
 			}
 		}
-		
+		arm.SetAngle(30);
 	}
 }
 

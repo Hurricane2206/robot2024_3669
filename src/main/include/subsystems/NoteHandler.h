@@ -15,7 +15,7 @@ public:
 	}
 
 	bool SetAngle(float angle, float tolerance = 1) {
-		anglePID.SetReference(angle, rev::CANSparkMax::ControlType::kSmartMotion);
+		anglePID.SetReference(angle, rev::CANSparkMax::ControlType::kPosition);
 		return abs(angle - e_angle.GetPosition()) < tolerance;
 	}
 
@@ -37,8 +37,8 @@ public:
 
 		m_angle.RestoreFactoryDefaults();
 		m_angle.SetInverted(false);
-		anglePID.SetP(5e-5/angleDPR);
-		anglePID.SetI(1e-6);
+		anglePID.SetP(0.1/angleDPR);
+		anglePID.SetI(0);
 		anglePID.SetD(1/angleDPR);
 		anglePID.SetFF(0.000156);
 		anglePID.SetSmartMotionMaxAccel(2000);
