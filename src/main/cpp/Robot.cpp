@@ -9,7 +9,7 @@ using namespace std;
 
 void Robot::RobotInit()
 {
-	//intakeShooter.Initialize();
+	intakeShooter.init();
 	swerve.init();
 	arm.init();
 }
@@ -31,51 +31,44 @@ void Robot::AutonomousPeriodic()
 
 void Robot::TeleopInit(){}
 void Robot::TeleopPeriodic(){
-	frc::SmartDashboard::PutBoolean("Sensor: ", dEye.Get());
-	// if (isShooting)
-	// {
-	// 	intakeShooter.SetShooter(0.25);
-	// 	if (shootTimer.HasElapsed(1_s))
-	// 	{
-	// 		intakeShooter.SetShooter(0);
-	// 		isShooting = false;
-	// 	}
-	// }
-	// else
-	// {
-	 	//complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
-		//float turnRate = -controller.GetRightX()*0.3;
-		//swerve.set(velocity, turnRate);
-		if (controller.GetYButton()){
-			arm.SetHeight(10);
+	if (isShooting){
+		intakeShooter.SetShooter(60);
+		if (shootTimer.HasElapsed(1_s)){
+			intakeShooter.SetIntake(100);
 		}
-		else if (controller.GetAButton()){
-			arm.SetHeight(0);
+		if (shootTimer.HasElapsed(1.3_s)){
+			intakeShooter.SetShooter(0);
+			intakeShooter.SetIntake(0);
+			isShooting = false;
 		}
-	// 	if (controller.GetBButton())
-	// 	{
-	// 		intakeShooter.SetAngle(45);
-	// 		// todo: aim swerve
-	// 		if (controller.GetRightTriggerAxis() > 0.2)
-	// 		{
-	// 			shootTimer.Restart();
-	// 			isShooting = true;
-	// 		}
-	// 	}
-	// 	else
-	// 	{
-	// 		if (controller.GetAButton() && !intakeShooter.GetNotePresent())
-	// 		{
-	// 			intakeShooter.SetAngle(90);
-	// 			intakeShooter.SetIntakeSpeed(1000);
-	// 		}
-	// 		else
-	// 		{
-	// 			intakeShooter.SetAngle(0);
-	// 			intakeShooter.SetIntakeSpeed(0);
-	// 		}
-	// 	}
-	//}
+	}
+	else{
+	 	complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
+		float turnRate = -controller.GetRightX()*0.3;
+		swerve.set(velocity, turnRate);
+		if (kPad.GetRawButton(11)){
+			intakeShooter.SetAngle(30);
+			// todo: aim swerve
+			if (kPad.GetRawButtonPressed(12)){
+				shootTimer.Restart();
+				isShooting = true;
+			}
+		}
+		else{
+			if (kPad.GetRawButtonPressed(10)){
+				isIntaking = true;
+			}
+			if (isIntaking && !intakeShooter.GetNotePresent()){
+				intakeShooter.SetAngle(80);
+				intakeShooter.SetIntake(70);
+			}
+			else{
+				isIntaking = false;
+				intakeShooter.SetAngle(5);
+				intakeShooter.SetIntake(0);
+			}
+		}
+	}
 }
 
 void Robot::DisabledInit() {}

@@ -2,6 +2,7 @@
 
 #include <frc/TimedRobot.h>
 #include <frc/XboxController.h>
+#include <frc/Joystick.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/DigitalInput.h>
 #include <complex.h>
@@ -12,23 +13,23 @@
 #include "subsystems/NoteHandler.h"
 using namespace std;
 
-class Robot : public frc::TimedRobot
-{
+class Robot : public frc::TimedRobot{
 public:
 	int x = 0; // current autoPos setpoint index
 	int i = 0; // next position index while waiting
 	bool isShooting = false;
+	bool isIntaking = false;
 	struct autoValue
 	{
 		complex<float> pos;
 		float angle = 0;
 		units::time::second_t time = 0_s;
 	};
-	frc::DigitalInput dEye{0};
 	frc::XboxController controller{0};
+	frc::Joystick kPad{1};
 	Swerve swerve;
 	NoteHandler arm;
-	// IntakeShooter intakeShooter;
+	IntakeShooter intakeShooter;
 	autoValue autoPos[4] = {
 		{complex<float>(15, 0), 0, 1_s},
 		{complex<float>(15, 15), 0, 1_s},

@@ -16,7 +16,8 @@
   },
   "C_Cpp.default.configurationProvider": "vscode-wpilib",
   "files.associations": {
-    "complex": "cpp"
+    "complex": "cpp",
+    "*.inc": "cpp"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
