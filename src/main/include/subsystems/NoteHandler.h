@@ -36,11 +36,13 @@ public:
 		m_elevator.BurnFlash();
 
 		m_angle.RestoreFactoryDefaults();
+		m_angle.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 		m_angle.SetInverted(false);
 		anglePID.SetP(0.1/angleDPR);
 		anglePID.SetI(0);
 		anglePID.SetD(1/angleDPR);
 		anglePID.SetFF(0.000156);
+		anglePID.SetOutputRange(0.3, 0.3);
 		anglePID.SetSmartMotionMaxAccel(2000);
 		e_angle.SetPositionConversionFactor(angleDPR);
 		m_angle.BurnFlash();
