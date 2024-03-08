@@ -21,7 +21,7 @@ public:
         m_intake.Set(percent/100);
     }
 	void SetShooterSpeed(float inPerSec) { 
-		auto friction_torque = (inPerSec > 0) ? 20_A : -20_A; // To account for friction, we add this to the arbitrary feed forward
+		auto friction_torque = (inPerSec > 0) ? 3_A : -3_A; // To account for friction, we add this to the arbitrary feed forward
 		/* Use torque velocity */
 		m1_shooter.SetControl(s_velocity.WithVelocity(inPerSec/shooterIPR*1_tps).WithFeedForward(friction_torque));
 		m2_shooter.SetControl(s_velocity.WithVelocity(inPerSec/shooterIPR*1_tps).WithFeedForward(friction_torque));
