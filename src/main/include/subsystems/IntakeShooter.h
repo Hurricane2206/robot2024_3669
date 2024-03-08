@@ -29,7 +29,7 @@ public:
 		m2_shooter.Set(speed/100);
 	}
 	int GetNotePresent() {
-		return !eye0.Get() || !eye1.Get() || !eye2.Get(); // todo: get sensor value
+		return !eye0.Get() || !eye1.Get() || eye2.Get(); // todo: get sensor value
 	}
  	void init() {
 		m_intake.RestoreFactoryDefaults();
