@@ -13,9 +13,9 @@ public:
  		anglePID.SetReference(angle, rev::CANSparkMax::ControlType::kPosition);
  		return abs(angle - e_angle.GetPosition()) < tolerance;
  	}
-	// void SetIntakeSpeed(float inPerMin) {
-	// 	intakePID.SetReference(inPerMin, rev::CANSparkMax::ControlType::kVelocity);
-	// }
+	void SetIntakeSpeed(float inPerMin) {
+		intakePID.SetReference(inPerMin, rev::CANSparkMax::ControlType::kVelocity);
+	}
     void SetIntake(float percent){
         m_intake.Set(percent/100);
     }
