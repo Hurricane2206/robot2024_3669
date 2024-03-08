@@ -72,6 +72,7 @@ void Robot::TeleopPeriodic(){
 		}
 		arm.SetAngle(30);
 	}
+	frc::SmartDashboard::PutNumber("angle", intakeShooter.GetAngle());
 }
 
 void Robot::DisabledInit() {}
