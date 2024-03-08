@@ -30,7 +30,7 @@ public:
 		m1_shooter.Set(speed/100);
 		m2_shooter.Set(speed/100);
 	}
-	int GetNotePresent() {
+	bool GetNotePresent() {
 		return eye0.Get() || eye1.Get() || eye2.Get(); // todo: get sensor value
 	}
 	double GetAngle() {
