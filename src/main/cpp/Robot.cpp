@@ -33,12 +33,13 @@ void Robot::TeleopInit() {
 	intakeShooter.SetAngle(5);
 }
 void Robot::TeleopPeriodic(){
-
+	lastRobotState = robotState;
+	
 	switch (robotState) {
 		case AIMING:
 			if (key_pad.GetRawButton(12)){
 				shootTimer.Restart();
-				robotState = SHOOTING;
+				robotState = RAMPING;
 			}
 			if (!key_pad.GetRawButton(11)) {
 				robotState = IDLE;
@@ -114,6 +115,7 @@ void Robot::TeleopPeriodic(){
 	swerve.set(velocity, turnRate);
 		
 	frc::SmartDashboard::PutNumber("angle", intakeShooter.GetAngle());
+	frc::SmartDashboard::PutNumber("robot state", robotState);
 }
 
 void Robot::DisabledInit() {}
