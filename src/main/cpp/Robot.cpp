@@ -29,68 +29,97 @@ void Robot::AutonomousPeriodic()
 	// }
 }
 
-void Robot::TeleopInit(){}
+void Robot::TeleopInit() {
+	intakeShooter.SetAngle(5);
+}
 void Robot::TeleopPeriodic(){
+	lastRobotState = robotState;
+
+	switch (robotState) {
+		case AIMING:
+			if (key_pad.GetRawButton(12)){
+				shootTimer.Restart();
+				robotState = RAMPING;
+			}
+			if (!key_pad.GetRawButton(11)) {
+				robotState = IDLE;
+			}
+			break;
+		case RAMPING:
+			// intakeShooter.SetShooter(60);
+			if (shootTimer.HasElapsed(1_s)){
+				robotState = SHOOTING;
+			}
+			break;
+		case SHOOTING:
+			if (shootTimer.HasElapsed(1.3_s)){
+				robotState = IDLE;
+			}
+			break;
+		case TRANSFERING:
+			if (!intakeShooter.GetNotePresent()) {
+				robotState = IDLE;
+			}
+			break;
+		case INTAKING:
+			if (intakeShooter.GetNotePresent() || key_pad.GetRawButtonPressed(10)){
+				robotState = IDLE;
+			}
+			break;
+		case IDLE:
+			if (key_pad.GetRawButtonPressed(10) && !intakeShooter.GetNotePresent()){
+				robotState = INTAKING;
+			}
+			if (key_pad.GetRawButton(11)){
+				robotState = AIMING;
+			}
+			if (key_pad.GetRawButtonPressed(2)) {
+				robotState = TRANSFERING;
+			}
+			break;
+	}
+	if (robotState != lastRobotState) {
+		switch (robotState) {
+			case AIMING:
+				intakeShooter.SetAngle(30);
+				// todo: aim swerve
+				break;
+			case RAMPING:
+				intakeShooter.SetShooter(60);
+				break;
+			case SHOOTING:
+				intakeShooter.SetIntake(100);
+				break;
+			case TRANSFERING:
+				arm.SetAngle(20);
+				arm.SetHeight(0);
+				arm.SetRollerSpeed(10);
+				intakeShooter.SetAngle(5);
+				intakeShooter.SetIntakeSpeed(10);
+				intakeShooter.SetShooterSpeed(10);
+				break;
+			case INTAKING:
+				intakeShooter.SetAngle(80);
+				intakeShooter.SetIntake(70);
+				break;
+			case IDLE:
+				intakeShooter.SetAngle(5);
+				intakeShooter.SetIntake(0);
+				intakeShooter.SetShooter(0);
+				arm.SetAngle(0);
+				arm.SetHeight(0);
+				arm.SetRollerSpeed(0);
+				break;
+		}
+	}
+
 	complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
 	float turnRate = -controller.GetRightX()*0.3;
 	swerve.set(velocity, turnRate);
-	if (isShooting){
-		intakeShooter.SetShooter(60);
-		if (shootTimer.HasElapsed(1_s)){
-			intakeShooter.SetIntake(100);
-		}
-		if (shootTimer.HasElapsed(1.3_s)){
-			intakeShooter.SetShooter(0);
-			intakeShooter.SetIntake(0);
-			isShooting = false;
-		}
-	}
-	else if (isTransfering){
-		arm.SetAngle(20);
-		arm.SetHeight(0);
-		intakeShooter.SetAngle(5);
-		if (intakeShooter.GetNotePresent()){
-			intakeShooter.SetIntakeSpeed(20);
-			intakeShooter.SetShooterSpeed(20);
-			arm.SetRollerSpeed(20);
-		}
-		else {
-			isTransfering = false;
-			intakeShooter.SetIntake(0);
-			intakeShooter.SetShooter(0);
-			arm.SetRollerSpeed(0);
-		}
-	}
-	else{
-		if (key_pad.GetRawButton(11)){
-			intakeShooter.SetAngle(30);
-			// todo: aim swerve
-			if (key_pad.GetRawButton(12)){
-				shootTimer.Restart();
-				isShooting = true;
-			}
-		}
-		else if (key_pad.GetRawButtonPressed(2) && intakeShooter.GetNotePresent()){
-			isTransfering = true;
-		}
-		else{
-			if (isIntaking){
-				intakeShooter.SetAngle(80);
-				intakeShooter.SetIntake(70);
-				if (intakeShooter.GetNotePresent() || key_pad.GetRawButtonPressed(10)){
-					isIntaking = false;
-				}
-			}
-			else {
-				if (key_pad.GetRawButtonPressed(10) && !intakeShooter.GetNotePresent()){
-					isIntaking = true;
-				}
-				intakeShooter.SetAngle(5);
-				intakeShooter.SetIntake(0);
-			}
-		}
-	}
+		
 	frc::SmartDashboard::PutNumber("angle", intakeShooter.GetAngle());
+	frc::SmartDashboard::PutNumber("robot state", robotState);
+	frc::SmartDashboard::PutBoolean("note detected", intakeShooter.GetNotePresent());
 }
 
 void Robot::DisabledInit() {}

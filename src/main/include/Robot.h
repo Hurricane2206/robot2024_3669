@@ -7,6 +7,7 @@
 #include <frc/DigitalInput.h>
 #include <complex.h>
 #include <frc/Timer.h>
+#include <string.h>
 
 #include "subsystems/Swerve.h"
 #include "subsystems/IntakeShooter.h"
@@ -17,9 +18,18 @@ class Robot : public frc::TimedRobot{
 public:
 	int x = 0; // current autoPos setpoint index
 	int i = 0; // next position index while waiting
-	bool isShooting = false;
-	bool isIntaking = false;
-	bool isTransfering = false;
+
+	enum State {
+		IDLE,
+		INTAKING,
+		AIMING,
+		RAMPING,
+		SHOOTING,
+		TRANSFERING
+	};
+	enum State robotState = IDLE;
+	enum State lastRobotState = IDLE;
+	
 	struct autoValue
 	{
 		complex<float> pos;

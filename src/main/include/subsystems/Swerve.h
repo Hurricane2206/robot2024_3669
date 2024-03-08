@@ -47,13 +47,6 @@ public:
             posChange += module.getPositionChange();
         }
         pos += posChange * polar<float>(0.25, angle);
-        frc::SmartDashboard::PutNumber("posr", pos.real());
-        frc::SmartDashboard::PutNumber("posi", pos.imag());
-        frc::SmartDashboard::PutNumber("poschg", abs(posChange));
-        frc::SmartDashboard::PutNumber("mchg1", abs(modules[0].getPositionChange()));
-        frc::SmartDashboard::PutNumber("mchg2", abs(modules[1].getPositionChange()));
-        frc::SmartDashboard::PutNumber("mchg3", abs(modules[2].getPositionChange()));
-        frc::SmartDashboard::PutNumber("mchg4", abs(modules[3].getPositionChange()));
     }
     bool setPos(complex<float> inputPos, float inputAngle){
         complex<float> posError = inputPos-pos;
@@ -92,5 +85,5 @@ private:
     float currentTurnRate = 0;
     complex<float> targetVelocity;
 
-    const float slewRate = 0.08;
+    const float slewRate = 0.04;
 };

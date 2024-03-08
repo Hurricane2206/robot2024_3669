@@ -21,10 +21,9 @@ public:
         m_intake.Set(percent/100);
     }
 	void SetShooterSpeed(float inPerSec) { 
-		auto friction_torque = (inPerSec > 0) ? 1_A : -1_A; // To account for friction, we add this to the arbitrary feed forward
 		/* Use torque velocity */
-		m1_shooter.SetControl(s_velocity.WithVelocity(inPerSec/4/M_PI*1_tps).WithFeedForward(friction_torque));
-		m2_shooter.SetControl(s_velocity.WithVelocity(inPerSec/4/M_PI*1_tps).WithFeedForward(friction_torque));
+		m1_shooter.SetControl(s_velocity.WithVelocity(inPerSec/shooterIPR*1_tps).WithFeedForward(20_A));
+		m2_shooter.SetControl(s_velocity.WithVelocity(inPerSec/shooterIPR*1_tps).WithFeedForward(15_A));
 	}
 	void SetShooter(float speed) {
 		m1_shooter.Set(speed/100);
@@ -46,7 +45,7 @@ public:
 		intakePID.SetFF(0.000015);
 		e_intake.SetPositionConversionFactor(intakeIPR);
 		m_intake.BurnFlash();
-
+		
  		m_angle.RestoreFactoryDefaults();
         m_angle.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
  		m_angle.SetInverted(true);
@@ -57,6 +56,7 @@ public:
         anglePID.SetOutputRange(-0.25, 0.4);
  		e_angle.SetPositionConversionFactor(angleDPR);
 		e_abs_angle.SetDistancePerRotation(360.0);
+		e_abs_angle.SetPositionOffset(347.3);
  		m_angle.BurnFlash();
 
         m1_shooter.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
@@ -64,8 +64,8 @@ public:
         ctre::phoenix6::configs::TalonFXConfiguration configs{};
         configs.CurrentLimits.StatorCurrentLimit = 100;
 		/* Torque-based velocity does not require a feed forward, as torque will accelerate the rotor up to the desired velocity by itself */
-		configs.Slot1.kP = 5; // An error of 1 rotation per second results in 5 amps output
-		configs.Slot1.kI = 10; // An error of 1 rotation per second increases output by 0.1 amps every second
+		configs.Slot1.kP = 7; // An error of 1 rotation per second results in 5 amps output
+		configs.Slot1.kI = 0.1; // An error of 1 rotation per second increases output by 0.1 amps every second
 		configs.Slot1.kD = 0.001; // A change of 1000 rotation per second squared results in 1 amp output
 
 		configs.TorqueCurrent.PeakForwardTorqueCurrent = 100;  // Peak output of 40 amps
