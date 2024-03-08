@@ -15,7 +15,6 @@ public:
         turnVector = pos*complex<float>(0, 1)/abs(pos);
         dMotor = new ctre::phoenix6::hardware::TalonFX(modID+10, "CTREdevices");
         encoder = new ctre::phoenix6::hardware::CANcoder(modID+20, "CTREdevices");
-        current = new ctre::phoenix6::controls::TorqueCurrentFOC(0_A, 1, 0_A, true, false, false);
         sMotor = new rev::CANSparkMax(modID+30, rev::CANSparkMax::MotorType::kBrushless);
     }
     void init() {
