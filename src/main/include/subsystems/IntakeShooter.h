@@ -21,7 +21,7 @@ public:
         m_intake.Set(percent/100);
     }
 	void SetShooterSpeed(float inPerSec) { 
-		auto friction_torque = (inPerSec > 0) ? 1_A : -1_A; // To account for friction, we add this to the arbitrary feed forward
+		auto friction_torque = (inPerSec > 0) ? 20_A : -20_A; // To account for friction, we add this to the arbitrary feed forward
 		/* Use torque velocity */
 		m1_shooter.SetControl(s_velocity.WithVelocity(inPerSec/shooterIPR*1_tps).WithFeedForward(friction_torque));
 		m2_shooter.SetControl(s_velocity.WithVelocity(inPerSec/shooterIPR*1_tps).WithFeedForward(friction_torque));
@@ -64,7 +64,7 @@ public:
         ctre::phoenix6::configs::TalonFXConfiguration configs{};
         configs.CurrentLimits.StatorCurrentLimit = 100;
 		/* Torque-based velocity does not require a feed forward, as torque will accelerate the rotor up to the desired velocity by itself */
-		configs.Slot1.kP = 5; // An error of 1 rotation per second results in 5 amps output
+		configs.Slot1.kP = 8; // An error of 1 rotation per second results in 5 amps output
 		configs.Slot1.kI = 0.1; // An error of 1 rotation per second increases output by 0.1 amps every second
 		configs.Slot1.kD = 0.001; // A change of 1000 rotation per second squared results in 1 amp output
 
