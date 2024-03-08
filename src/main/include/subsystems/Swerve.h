@@ -92,5 +92,5 @@ private:
     float currentTurnRate = 0;
     complex<float> targetVelocity;
 
-    const float slewRate = 0.08;
+    const float slewRate = 0.04;
 };

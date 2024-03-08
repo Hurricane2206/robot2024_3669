@@ -23,8 +23,8 @@ public:
 	void SetShooterSpeed(float inPerSec) { 
 		auto friction_torque = (inPerSec > 0) ? 1_A : -1_A; // To account for friction, we add this to the arbitrary feed forward
 		/* Use torque velocity */
-		m1_shooter.SetControl(s_velocity.WithVelocity(inPerSec/240_tps/M_PI).WithFeedForward(friction_torque));
-		m2_shooter.SetControl(s_velocity.WithVelocity(inPerSec/240_tps/M_PI).WithFeedForward(friction_torque));
+		m1_shooter.SetControl(s_velocity.WithVelocity(inPerSec/shooterIPR*1_tps).WithFeedForward(friction_torque));
+		m2_shooter.SetControl(s_velocity.WithVelocity(inPerSec/shooterIPR*1_tps).WithFeedForward(friction_torque));
 	}
 	void SetShooter(float speed) {
 		m1_shooter.Set(speed/100);
@@ -46,25 +46,7 @@ public:
 		intakePID.SetFF(0.000015);
 		e_intake.SetPositionConversionFactor(intakeIPR);
 		m_intake.BurnFlash();
-
-		// m1_shooter.RestoreFactoryDefaults();
-		// m1_shooter.SetInverted(false);
-		// shooterPID1.SetP(6e-5);
-		// shooterPID1.SetI(1e-6);
-		// shooterPID1.SetD(0);
-		// shooterPID1.SetFF(0.000015);
-		// e1_shooter.SetPositionConversionFactor(shooterIPR);
-		// m1_shooter.BurnFlash();
-
-		// m2_shooter.RestoreFactoryDefaults();
-		// m2_shooter.SetInverted(false);
-		// shooterPID2.SetP(6e-5);
-		// shooterPID2.SetI(1e-6);
-		// shooterPID2.SetD(0);
-		// shooterPID2.SetFF(0.000015);
-		// e2_shooter.SetPositionConversionFactor(shooterIPR);
-		// m2_shooter.BurnFlash();
-
+		
  		m_angle.RestoreFactoryDefaults();
         m_angle.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
  		m_angle.SetInverted(true);
@@ -111,7 +93,7 @@ private:
     frc::DigitalInput eye2{2};
 	frc::DutyCycleEncoder e_abs_angle{9};
 	
-	const float intakeGearboxReduction = 9;
+	const float intakeGearboxReduction = 25;
 	// inches per rotation of the intake motor
 	const float intakeIPR = M_PI*2/intakeGearboxReduction;
 	// inches per rotation of the shooter motors
