@@ -34,7 +34,7 @@ void Robot::TeleopInit() {
 }
 void Robot::TeleopPeriodic(){
 	lastRobotState = robotState;
-	
+
 	switch (robotState) {
 		case AIMING:
 			if (key_pad.GetRawButton(12)){
@@ -72,6 +72,9 @@ void Robot::TeleopPeriodic(){
 			}
 			if (key_pad.GetRawButton(11)){
 				robotState = AIMING;
+			}
+			if (key_pad.GetRawButtonPressed(2)) {
+				robotState = TRANSFERING;
 			}
 			break;
 	}
@@ -116,6 +119,7 @@ void Robot::TeleopPeriodic(){
 		
 	frc::SmartDashboard::PutNumber("angle", intakeShooter.GetAngle());
 	frc::SmartDashboard::PutNumber("robot state", robotState);
+	frc::SmartDashboard::PutBoolean("note detected", intakeShooter.GetNotePresent());
 }
 
 void Robot::DisabledInit() {}
