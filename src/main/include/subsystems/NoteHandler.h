@@ -19,8 +19,8 @@ public:
 		return abs(angle - e_angle.GetPosition()) < tolerance;
 	}
 
-	void SetRollerSpeed(float inPerMin) {
-		rollersPID.SetReference(inPerMin, rev::CANSparkMax::ControlType::kVelocity);
+	void SetRollerSpeed(float inPerSec) {
+		rollersPID.SetReference(inPerSec/60, rev::CANSparkMax::ControlType::kVelocity);
 	}
 
 	void init() {

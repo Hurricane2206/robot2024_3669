@@ -14,17 +14,18 @@ public:
  		anglePID.SetReference(angle, rev::CANSparkMax::ControlType::kPosition);
  		return abs(angle - e_angle.GetPosition()) < tolerance;
  	}
-	void SetIntakeSpeed(float inPerMin) {
-		intakePID.SetReference(inPerMin, rev::CANSparkMax::ControlType::kVelocity);
+	void SetIntakeSpeed(float inPerSec) {
+		intakePID.SetReference(inPerSec/60, rev::CANSparkMax::ControlType::kVelocity);
 	}
     void SetIntake(float percent){
         m_intake.Set(percent/100);
     }
-	// void SetShooterSpeed(float inPerMin) {
-	// 	shooterPID1.SetReference(inPerMin, rev::CANSparkMax::ControlType::kVelocity);
-	// 	shooterPID2.SetReference(inPerMin, rev::CANSparkMax::ControlType::kVelocity);
-	// }
-	// set all the motors required for shooting using percent output
+	void SetShooterSpeed(float inPerSec) { 
+		auto friction_torque = (inPerSec > 0) ? 1_A : -1_A; // To account for friction, we add this to the arbitrary feed forward
+		/* Use torque velocity */
+		m1_shooter.SetControl(s_velocity.WithVelocity(inPerSec/240_tps/M_PI).WithFeedForward(friction_torque));
+		m2_shooter.SetControl(s_velocity.WithVelocity(inPerSec/240_tps/M_PI).WithFeedForward(friction_torque));
+	}
 	void SetShooter(float speed) {
 		m1_shooter.Set(speed/100);
 		m2_shooter.Set(speed/100);
@@ -80,6 +81,13 @@ public:
         m2_shooter.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
         ctre::phoenix6::configs::TalonFXConfiguration configs{};
         configs.CurrentLimits.StatorCurrentLimit = 100;
+		/* Torque-based velocity does not require a feed forward, as torque will accelerate the rotor up to the desired velocity by itself */
+		configs.Slot1.kP = 5; // An error of 1 rotation per second results in 5 amps output
+		configs.Slot1.kI = 0.1; // An error of 1 rotation per second increases output by 0.1 amps every second
+		configs.Slot1.kD = 0.001; // A change of 1000 rotation per second squared results in 1 amp output
+
+		configs.TorqueCurrent.PeakForwardTorqueCurrent = 60;  // Peak output of 40 amps
+		configs.TorqueCurrent.PeakReverseTorqueCurrent = -60; // Peak output of 40 amps
 
         m1_shooter.GetConfigurator().Apply(configs);
         m2_shooter.GetConfigurator().Apply(configs);
@@ -90,8 +98,8 @@ private:
 	rev::SparkPIDController intakePID = m_intake.GetPIDController();
 	rev::SparkRelativeEncoder e_intake = m_intake.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
+	ctre::phoenix6::controls::VelocityTorqueCurrentFOC s_velocity{0_tps, 0_tr_per_s_sq, 0_A, 1, false};
 	ctre::phoenix6::hardware::TalonFX m1_shooter{43, "CTREdevices"};
-
 	ctre::phoenix6::hardware::TalonFX m2_shooter{44, "CTREdevices"};
 
  	rev::CANSparkMax m_angle{41, rev::CANSparkMax::MotorType::kBrushless};
