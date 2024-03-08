@@ -15,7 +15,7 @@ public:
  		return abs(angle - e_angle.GetPosition()) < tolerance;
  	}
 	void SetIntakeSpeed(float inPerSec) {
-		intakePID.SetReference(inPerSec/60, rev::CANSparkMax::ControlType::kVelocity);
+		intakePID.SetReference(inPerSec*60, rev::CANSparkMax::ControlType::kVelocity);
 	}
     void SetIntake(float percent){
         m_intake.Set(percent/100);
@@ -23,15 +23,15 @@ public:
 	void SetShooterSpeed(float inPerSec) { 
 		auto friction_torque = (inPerSec > 0) ? 1_A : -1_A; // To account for friction, we add this to the arbitrary feed forward
 		/* Use torque velocity */
-		m1_shooter.SetControl(s_velocity.WithVelocity(inPerSec/240_tps/M_PI).WithFeedForward(friction_torque));
-		m2_shooter.SetControl(s_velocity.WithVelocity(inPerSec/240_tps/M_PI).WithFeedForward(friction_torque));
+		m1_shooter.SetControl(s_velocity.WithVelocity(inPerSec/4/M_PI*1_tps).WithFeedForward(friction_torque));
+		m2_shooter.SetControl(s_velocity.WithVelocity(inPerSec/4/M_PI*1_tps).WithFeedForward(friction_torque));
 	}
 	void SetShooter(float speed) {
 		m1_shooter.Set(speed/100);
 		m2_shooter.Set(speed/100);
 	}
 	int GetNotePresent() {
-		return !eye0.Get() || !eye1.Get() || eye2.Get(); // todo: get sensor value
+		return !eye0.Get() || !eye1.Get() || !eye2.Get(); // todo: get sensor value
 	}
 	double GetAngle() {
 		return e_abs_angle.GetDistance();
@@ -46,24 +46,6 @@ public:
 		intakePID.SetFF(0.000015);
 		e_intake.SetPositionConversionFactor(intakeIPR);
 		m_intake.BurnFlash();
-
-		// m1_shooter.RestoreFactoryDefaults();
-		// m1_shooter.SetInverted(false);
-		// shooterPID1.SetP(6e-5);
-		// shooterPID1.SetI(1e-6);
-		// shooterPID1.SetD(0);
-		// shooterPID1.SetFF(0.000015);
-		// e1_shooter.SetPositionConversionFactor(shooterIPR);
-		// m1_shooter.BurnFlash();
-
-		// m2_shooter.RestoreFactoryDefaults();
-		// m2_shooter.SetInverted(false);
-		// shooterPID2.SetP(6e-5);
-		// shooterPID2.SetI(1e-6);
-		// shooterPID2.SetD(0);
-		// shooterPID2.SetFF(0.000015);
-		// e2_shooter.SetPositionConversionFactor(shooterIPR);
-		// m2_shooter.BurnFlash();
 
  		m_angle.RestoreFactoryDefaults();
         m_angle.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
@@ -83,11 +65,11 @@ public:
         configs.CurrentLimits.StatorCurrentLimit = 100;
 		/* Torque-based velocity does not require a feed forward, as torque will accelerate the rotor up to the desired velocity by itself */
 		configs.Slot1.kP = 5; // An error of 1 rotation per second results in 5 amps output
-		configs.Slot1.kI = 0.1; // An error of 1 rotation per second increases output by 0.1 amps every second
+		configs.Slot1.kI = 10; // An error of 1 rotation per second increases output by 0.1 amps every second
 		configs.Slot1.kD = 0.001; // A change of 1000 rotation per second squared results in 1 amp output
 
-		configs.TorqueCurrent.PeakForwardTorqueCurrent = 60;  // Peak output of 40 amps
-		configs.TorqueCurrent.PeakReverseTorqueCurrent = -60; // Peak output of 40 amps
+		configs.TorqueCurrent.PeakForwardTorqueCurrent = 100;  // Peak output of 40 amps
+		configs.TorqueCurrent.PeakReverseTorqueCurrent = -100; // Peak output of 40 amps
 
         m1_shooter.GetConfigurator().Apply(configs);
         m2_shooter.GetConfigurator().Apply(configs);
@@ -111,7 +93,7 @@ private:
     frc::DigitalInput eye2{2};
 	frc::DutyCycleEncoder e_abs_angle{9};
 	
-	const float intakeGearboxReduction = 9;
+	const float intakeGearboxReduction = 25;
 	// inches per rotation of the intake motor
 	const float intakeIPR = M_PI*2/intakeGearboxReduction;
 	// inches per rotation of the shooter motors

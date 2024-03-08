@@ -20,7 +20,7 @@ public:
 	}
 
 	void SetRollerSpeed(float inPerSec) {
-		rollersPID.SetReference(inPerSec/60, rev::CANSparkMax::ControlType::kVelocity);
+		rollersPID.SetReference(inPerSec*60, rev::CANSparkMax::ControlType::kVelocity);
 	}
 
 	void init() {
@@ -52,7 +52,7 @@ public:
 		rollersPID.SetP(6e-5);
 		rollersPID.SetI(1e-6);
 		rollersPID.SetD(0);
-		rollersPID.SetFF(0.000015);
+		rollersPID.SetFF(0.00015);
 		e_rollers.SetPositionConversionFactor(rollerIPR);
 		m_rollers.BurnFlash();
 	}
