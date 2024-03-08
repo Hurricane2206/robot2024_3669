@@ -29,7 +29,7 @@ public:
 		m2_shooter.Set(speed/100);
 	}
 	int GetNotePresent() {
-		return !holdEye.Get(); // todo: get sensor value
+		return !eye0.Get() || !eye1.Get() || !eye2.Get(); // todo: get sensor value
 	}
  	void init() {
 		m_intake.RestoreFactoryDefaults();
@@ -93,7 +93,9 @@ private:
  	rev::SparkPIDController anglePID = m_angle.GetPIDController();
  	rev::SparkRelativeEncoder e_angle = m_angle.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
-    frc::DigitalInput holdEye{2};
+	frc::DigitalInput eye0{0};
+	frc::DigitalInput eye1{1};
+    frc::DigitalInput eye2{2};
 	
 	const float intakeGearboxReduction = 9;
 	// inches per rotation of the intake motor

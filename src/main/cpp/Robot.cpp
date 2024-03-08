@@ -42,6 +42,22 @@ void Robot::TeleopPeriodic(){
 			isShooting = false;
 		}
 	}
+	else if (isTransfering){
+		arm.SetAngle(20);
+		arm.SetHeight(0);
+		intakeShooter.SetAngle(5);
+		if (intakeShooter.GetNotePresent()){
+			intakeShooter.SetIntake(15);
+			intakeShooter.SetShooter(10);
+			arm.SetRollerSpeed(1500);
+		}
+		else {
+			isTransfering = false;
+			intakeShooter.SetIntake(0);
+			intakeShooter.SetShooter(0);
+			arm.SetRollerSpeed(0);
+		}
+	}
 	else{
 	 	complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
 		float turnRate = -controller.GetRightX()*0.3;
@@ -53,6 +69,9 @@ void Robot::TeleopPeriodic(){
 				shootTimer.Restart();
 				isShooting = true;
 			}
+		}
+		else if (key_pad.GetRawButtonPressed(2) && intakeShooter.GetNotePresent()){
+			isTransfering = true;
 		}
 		else{
 			if (isIntaking){
@@ -70,7 +89,6 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetIntake(0);
 			}
 		}
-		arm.SetAngle(30);
 	}
 }
 
