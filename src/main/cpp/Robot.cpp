@@ -59,6 +59,11 @@ void Robot::TeleopPeriodic(){
 		case TRANSFERING:
 			if (!intakeShooter.GetNotePresent()) {
 				robotState = IDLE;
+				if (!eye_0.Get()) {
+					intakeShooter.SetShooterSpeed(50);
+				} else if (!eye_2.Get()) {
+					intakeShooter.SetShooterSpeed(10);
+				}
 			}
 			break;
 		case INTAKING:

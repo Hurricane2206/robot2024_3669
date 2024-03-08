@@ -38,6 +38,9 @@ public:
 	};
 	frc::XboxController controller{0};
 	frc::Joystick key_pad{1};
+	frc::DigitalInput eye_0{0};
+	frc::DigitalInput eye_1{1};
+	frc::DigitalInput eye_2{2};
 	Swerve swerve;
 	NoteHandler arm;
 	IntakeShooter intakeShooter;

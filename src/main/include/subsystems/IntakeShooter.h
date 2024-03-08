@@ -30,7 +30,7 @@ public:
 		m2_shooter.Set(speed/100);
 	}
 	int GetNotePresent() {
-		return !eye0.Get() || !eye1.Get() || !eye2.Get(); // todo: get sensor value
+		return eye0.Get() || eye1.Get() || eye2.Get();
 	}
 	double GetAngle() {
 		return e_abs_angle.GetDistance();
@@ -93,7 +93,7 @@ private:
     frc::DigitalInput eye2{2};
 	frc::DutyCycleEncoder e_abs_angle{9};
 	
-	const float intakeGearboxReduction = 25;
+	const float intakeGearboxReduction = 9;
 	// inches per rotation of the intake motor
 	const float intakeIPR = M_PI*2/intakeGearboxReduction;
 	// inches per rotation of the shooter motors
