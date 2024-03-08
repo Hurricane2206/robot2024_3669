@@ -15,16 +15,15 @@ public:
  		return abs(angle - e_angle.GetPosition()) < tolerance;
  	}
 	void SetIntakeSpeed(float inPerSec) {
-		intakePID.SetReference(inPerSec/60, rev::CANSparkMax::ControlType::kVelocity);
+		intakePID.SetReference(inPerSec*60, rev::CANSparkMax::ControlType::kVelocity);
 	}
     void SetIntake(float percent){
         m_intake.Set(percent/100);
     }
 	void SetShooterSpeed(float inPerSec) { 
-		auto friction_torque = (inPerSec > 0) ? 3_A : -3_A; // To account for friction, we add this to the arbitrary feed forward
 		/* Use torque velocity */
-		m1_shooter.SetControl(s_velocity.WithVelocity(inPerSec/shooterIPR*1_tps).WithFeedForward(friction_torque));
-		m2_shooter.SetControl(s_velocity.WithVelocity(inPerSec/shooterIPR*1_tps).WithFeedForward(friction_torque));
+		m1_shooter.SetControl(s_velocity.WithVelocity(inPerSec/shooterIPR*1_tps).WithFeedForward(20_A));
+		m2_shooter.SetControl(s_velocity.WithVelocity(inPerSec/shooterIPR*1_tps).WithFeedForward(15_A));
 	}
 	void SetShooter(float speed) {
 		m1_shooter.Set(speed/100);
@@ -65,12 +64,12 @@ public:
         ctre::phoenix6::configs::TalonFXConfiguration configs{};
         configs.CurrentLimits.StatorCurrentLimit = 100;
 		/* Torque-based velocity does not require a feed forward, as torque will accelerate the rotor up to the desired velocity by itself */
-		configs.Slot1.kP = 8; // An error of 1 rotation per second results in 5 amps output
+		configs.Slot1.kP = 7; // An error of 1 rotation per second results in 5 amps output
 		configs.Slot1.kI = 0.1; // An error of 1 rotation per second increases output by 0.1 amps every second
 		configs.Slot1.kD = 0.001; // A change of 1000 rotation per second squared results in 1 amp output
 
-		configs.TorqueCurrent.PeakForwardTorqueCurrent = 60;  // Peak output of 40 amps
-		configs.TorqueCurrent.PeakReverseTorqueCurrent = -60; // Peak output of 40 amps
+		configs.TorqueCurrent.PeakForwardTorqueCurrent = 100;  // Peak output of 40 amps
+		configs.TorqueCurrent.PeakReverseTorqueCurrent = -100; // Peak output of 40 amps
 
         m1_shooter.GetConfigurator().Apply(configs);
         m2_shooter.GetConfigurator().Apply(configs);
@@ -94,7 +93,7 @@ private:
     frc::DigitalInput eye2{2};
 	frc::DutyCycleEncoder e_abs_angle{9};
 	
-	const float intakeGearboxReduction = 25;
+	const float intakeGearboxReduction = 9;
 	// inches per rotation of the intake motor
 	const float intakeIPR = M_PI*2/intakeGearboxReduction;
 	// inches per rotation of the shooter motors

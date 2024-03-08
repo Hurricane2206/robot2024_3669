@@ -20,7 +20,7 @@ public:
 	}
 
 	void SetRollerSpeed(float inPerSec) {
-		rollersPID.SetReference(inPerSec/60, rev::CANSparkMax::ControlType::kVelocity);
+		rollersPID.SetReference(inPerSec*60, rev::CANSparkMax::ControlType::kVelocity);
 	}
 
 	void init() {
@@ -81,5 +81,5 @@ private:
 	const float angleDPR = 360.0/75;
 
 	const float rollerGearboxReduction = 25;
-	const float rollerIPR = 1.225*M_PI/25;
+	const float rollerIPR = 1.225*M_PI/rollerGearboxReduction;
 };

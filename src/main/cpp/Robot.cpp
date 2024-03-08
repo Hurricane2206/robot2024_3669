@@ -105,7 +105,7 @@ void Robot::TeleopPeriodic(){
 			case IDLE:
 				intakeShooter.SetAngle(5);
 				intakeShooter.SetIntake(0);
-				intakeShooter.SetShooterSpeed(0);
+				intakeShooter.SetShooter(0);
 				arm.SetAngle(0);
 				arm.SetHeight(0);
 				arm.SetRollerSpeed(0);
