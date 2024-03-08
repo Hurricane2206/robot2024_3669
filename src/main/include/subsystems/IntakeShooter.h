@@ -57,6 +57,7 @@ public:
         anglePID.SetOutputRange(-0.25, 0.4);
  		e_angle.SetPositionConversionFactor(angleDPR);
 		e_abs_angle.SetDistancePerRotation(360.0);
+		e_abs_angle.SetPositionOffset(347.3);
  		m_angle.BurnFlash();
 
         m1_shooter.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);

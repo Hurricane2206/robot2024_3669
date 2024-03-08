@@ -79,14 +79,14 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetIntake(70);
 				if (intakeShooter.GetNotePresent() || key_pad.GetRawButtonPressed(10)){
 					isIntaking = false;
+					intakeShooter.SetAngle(5);
+					intakeShooter.SetIntake(0);
 				}
 			}
 			else {
 				if (key_pad.GetRawButtonPressed(10) && !intakeShooter.GetNotePresent()){
 					isIntaking = true;
 				}
-				intakeShooter.SetAngle(5);
-				intakeShooter.SetIntake(0);
 			}
 		}
 	}

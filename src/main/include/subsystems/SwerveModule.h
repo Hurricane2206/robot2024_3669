@@ -49,7 +49,7 @@ public:
         }
         else {
             dMotor->Set(0);
-            dMotor->SetControl(m_velocity.WithVelocity(0_tps));
+            dMotor->Set(0);
         }
     }
     complex<float> getPositionChange() {
