@@ -19,7 +19,7 @@ public:
 	int i = 0; // next position index while waiting
 	bool isShooting = false;
 	bool isIntaking = false;
-	
+	bool isTransfering = false;
 	struct autoValue
 	{
 		complex<float> pos;

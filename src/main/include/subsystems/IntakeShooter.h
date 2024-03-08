@@ -6,7 +6,6 @@
 #include <rev/CANSparkMax.h>
 #include <frc/DigitalInput.h>
 #include <ctre/phoenix6/TalonFX.hpp>
-#include <frc/DutyCycleEncoder.h>
 
 class IntakeShooter {
 public:
@@ -30,10 +29,7 @@ public:
 		m2_shooter.Set(speed/100);
 	}
 	int GetNotePresent() {
-		return !holdEye.Get(); // todo: get sensor value
-	}
-	double GetAngle() {
-		return eabs_angle.GetDistance();
+		return !eye0.Get() || !eye1.Get() || eye2.Get(); // todo: get sensor value
 	}
  	void init() {
 		m_intake.RestoreFactoryDefaults();
@@ -73,7 +69,6 @@ public:
  		anglePID.SetFF(-0.05);
         anglePID.SetOutputRange(-0.25, 0.4);
  		e_angle.SetPositionConversionFactor(angleDPR);
-		eabs_angle.SetDistancePerRotation(360.0);
  		m_angle.BurnFlash();
 
         m1_shooter.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
@@ -98,8 +93,9 @@ private:
  	rev::SparkPIDController anglePID = m_angle.GetPIDController();
  	rev::SparkRelativeEncoder e_angle = m_angle.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
-    frc::DigitalInput holdEye{2};
-	frc::DutyCycleEncoder eabs_angle{9};
+	frc::DigitalInput eye0{0};
+	frc::DigitalInput eye1{1};
+    frc::DigitalInput eye2{2};
 	
 	const float intakeGearboxReduction = 9;
 	// inches per rotation of the intake motor
