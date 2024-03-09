@@ -13,9 +13,17 @@ public:
 	frc::DigitalInput eye0{0};
 	frc::DigitalInput eye1{1};
     frc::DigitalInput eye2{2};
- 	bool SetAngle(float angle, float tolerance = 4) {
- 		anglePID.SetReference(angle, rev::CANSparkMax::ControlType::kPosition);
- 		return abs(angle - e_angle.GetPosition()) < tolerance;
+ 	void SetAngle(float angle) {
+		this->angle = angle;
+ 	}
+ 	void RunAnglePID() {
+		float error = angle + GetAngle();
+		float output = error/120;
+		if (abs(output) > 0.4) {
+			output *= 0.4/abs(output);
+		}
+		m_angle.Set(output);
+ 		// anglePID.SetReference(angle, rev::CANSparkMax::ControlType::kPosition);
  	}
 	void SetIntakeSpeed(float inPerSec) {
 		intakePID.SetReference(inPerSec*60, rev::CANSparkMax::ControlType::kVelocity);
@@ -59,7 +67,7 @@ public:
         anglePID.SetOutputRange(-0.25, 0.4);
  		e_angle.SetPositionConversionFactor(angleDPR);
 		e_abs_angle.SetDistancePerRotation(360.0);
-		e_abs_angle.SetPositionOffset(347.3);
+		e_abs_angle.SetPositionOffset(351);
  		m_angle.BurnFlash();
 
         m1_shooter.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
@@ -79,6 +87,7 @@ public:
  	}
 	
 private:
+	float angle = 10;
 	rev::CANSparkMax m_intake{42, rev::CANSparkMax::MotorType::kBrushless};
 	rev::SparkPIDController intakePID = m_intake.GetPIDController();
 	rev::SparkRelativeEncoder e_intake = m_intake.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);

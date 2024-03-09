@@ -50,7 +50,7 @@ public:
 		m_rollers.SetInverted(false);
 		// PID for velocity control
 		rollersPID.SetP(6e-5);
-		rollersPID.SetI(1e-6);
+		rollersPID.SetI(0);
 		rollersPID.SetD(0);
 		rollersPID.SetFF(0.00015);
 		e_rollers.SetPositionConversionFactor(rollerIPR);

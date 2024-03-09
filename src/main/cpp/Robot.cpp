@@ -30,7 +30,7 @@ void Robot::AutonomousPeriodic()
 }
 
 void Robot::TeleopInit() {
-	intakeShooter.SetAngle(5);
+	intakeShooter.SetAngle(15);
 }
 void Robot::TeleopPeriodic(){
 	lastRobotState = robotState;
@@ -102,7 +102,7 @@ void Robot::TeleopPeriodic(){
 	if (robotState != lastRobotState) {
 		switch (robotState) {
 			case AIMING:
-				intakeShooter.SetAngle(30);
+				intakeShooter.SetAngle(40);
 				// todo: aim swerve
 				break;
 			case RAMPING:
@@ -115,16 +115,16 @@ void Robot::TeleopPeriodic(){
 				arm.SetAngle(20);
 				arm.SetHeight(0);
 				arm.SetRollerSpeed(100);
-				intakeShooter.SetAngle(5);
+				intakeShooter.SetAngle(15);
 				intakeShooter.SetIntakeSpeed(10);
 				intakeShooter.SetShooter(10);
 				break;
 			case INTAKING:
-				intakeShooter.SetAngle(80);
+				intakeShooter.SetAngle(90);
 				intakeShooter.SetIntake(70);
 				break;
 			case AMPOS:
-				intakeShooter.SetAngle(30);
+				intakeShooter.SetAngle(40);
 				arm.SetHeight(15);
 				arm.SetAngle(225);
 				break;
@@ -134,12 +134,12 @@ void Robot::TeleopPeriodic(){
 				break;
 			case ARMDEFAULT:
 				timer.Restart();
-				intakeShooter.SetAngle(30);
+				intakeShooter.SetAngle(40);
 				arm.SetHeight(0);
 				arm.SetAngle(0);
 				break;
 			case IDLE:
-				intakeShooter.SetAngle(5);
+				intakeShooter.SetAngle(15);
 				intakeShooter.SetIntake(0);
 				intakeShooter.SetShooter(0);
 				arm.SetAngle(0);
@@ -152,6 +152,7 @@ void Robot::TeleopPeriodic(){
 	complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
 	float turnRate = -controller.GetRightX()*0.3;
 	swerve.set(velocity, turnRate);
+	intakeShooter.RunAnglePID();
 		
 	frc::SmartDashboard::PutNumber("angle", intakeShooter.GetAngle());
 	frc::SmartDashboard::PutNumber("robot state", robotState);
