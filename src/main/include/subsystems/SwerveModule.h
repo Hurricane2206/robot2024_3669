@@ -33,24 +33,21 @@ public:
         complex<float> modVector = getVelocity(rVector, turnRate);
         float throttle = abs(modVector);
         angle = encoder->GetAbsolutePosition().GetValue().value()*(M_PI*2);
-        if (throttle > 0.005){
-            float error = arg(modVector)-angle;
+        float error = arg(modVector)-angle;
+        if (throttle < 0.001) {
+            error = 0;
+        }
+        am::limit(error);
+        if (abs(error) > (M_PI/2)){
+            error += M_PI;
             am::limit(error);
-            if (abs(error) > (M_PI/2)){
-                error += M_PI;
-                am::limit(error);
-                throttle *= -1;
-            }
-            sMotor->Set(error/M_PI);
-            auto friction_torque = (throttle > 0) ? 1_A : -1_A; // To account for friction, we add this to the arbitrary feed forward
-            /* Use torque velocity */
-            dMotor->SetControl(m_velocity.WithVelocity(throttle*90_tps).WithFeedForward(friction_torque));
-            // dMotor->Set(throttle);
+            throttle *= -1;
         }
-        else {
-            dMotor->Set(0);
-            dMotor->Set(0);
-        }
+        sMotor->Set(error/M_PI);
+        auto friction_torque = (throttle > 0) ? 1_A : -1_A; // To account for friction, we add this to the arbitrary feed forward
+        /* Use torque velocity */
+        dMotor->SetControl(m_velocity.WithVelocity(throttle*90_tps).WithFeedForward(friction_torque));
+        // dMotor->Set(throttle);
     }
     complex<float> getPositionChange() {
         float motorPosChg = dMotor->GetPosition().GetValue().value() - motorPosOld;
