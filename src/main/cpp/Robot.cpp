@@ -56,13 +56,13 @@ void Robot::TeleopPeriodic(){
 				robotState = IDLE;
 			}
 			break;
-		case TRANSFERING:
+		case AMPTRANSFER:
 			if (!intakeShooter.GetNotePresent()) {
-				robotState = IDLE;
+				robotState = AMPOS;
 			}
 			break;
 		case AMPOS:
-			if (key_pad.GetRawButtonPressed(5)) {
+			if (key_pad.GetRawButtonPressed(2)) {
 				robotState = AMPSCORE;
 			}
 			break;
@@ -89,10 +89,7 @@ void Robot::TeleopPeriodic(){
 				robotState = AIMING;
 			}
 			if (key_pad.GetRawButtonPressed(2)) {
-				robotState = TRANSFERING;
-			}
-			if (key_pad.GetRawButtonPressed(5)) {
-				robotState = AMPOS;
+				robotState = AMPTRANSFER;
 			}
 			break;
 	}
@@ -108,7 +105,7 @@ void Robot::TeleopPeriodic(){
 			case SHOOTING:
 				intakeShooter.SetIntake(100);
 				break;
-			case TRANSFERING:
+			case AMPTRANSFER:
 				arm.SetAngle(20);
 				arm.SetHeight(0);
 				arm.SetRollerSpeed(130);
@@ -122,6 +119,9 @@ void Robot::TeleopPeriodic(){
 				break;
 			case AMPOS:
 				intakeShooter.SetAngle(40);
+				intakeShooter.SetShooter(0);
+				intakeShooter.SetIntake(0);
+				arm.SetRollerSpeed(0);
 				arm.SetHeight(15);
 				arm.SetAngle(225);
 				break;
@@ -145,15 +145,15 @@ void Robot::TeleopPeriodic(){
 				break;
 		}
 	}
-	float x = -controller.GetLeftY();
-	float y = -controller.GetLeftX();
-	float tR = -controller.GetRightX();
-	x = (abs(x) > 0.05) ? x : 0;
-	y = (abs(y) > 0.05) ? y : 0;
-	tR = (abs(tR) > 0.05) ? tR : 0;
-	complex<float> velocity = complex<float>(x ,y);
-	float turnRate = tR*0.3;
-	swerve.set(velocity, turnRate);
+	// float x = -controller.GetLeftY();
+	// float y = -controller.GetLeftX();
+	// float tR = -controller.GetRightX();
+	// x = (abs(x) > 0.05) ? x : 0;
+	// y = (abs(y) > 0.05) ? y : 0;
+	// tR = (abs(tR) > 0.05) ? tR : 0;
+	// complex<float> velocity = complex<float>(x ,y);
+	// float turnRate = tR*0.3;
+	// swerve.set(velocity, turnRate);
 	intakeShooter.RunAnglePID();
 		
 	frc::SmartDashboard::PutNumber("angle", intakeShooter.GetAngle());
