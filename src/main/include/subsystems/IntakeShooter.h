@@ -5,6 +5,7 @@
 #pragma once
 #include <rev/CANSparkMax.h>
 #include <frc/DigitalInput.h>
+#include <angleMath.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <frc/DutyCycleEncoder.h>
 
@@ -18,6 +19,7 @@ public:
  	}
  	void RunAnglePID() {
 		float error = angle + GetAngle();
+		am::limitDeg(error);
 		float output = error/120;
 		if (abs(output) > 0.4) {
 			output *= 0.4/abs(output);

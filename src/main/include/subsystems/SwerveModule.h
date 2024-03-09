@@ -20,7 +20,6 @@ public:
     void init() {
         dMotor->SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
         ctre::phoenix6::configs::TalonFXConfiguration configs{};
-
 		/* Torque-based velocity does not require a feed forward, as torque will accelerate the rotor up to the desired velocity by itself */
 		configs.Slot1.kP = 5; // An error of 1 rotation per second results in 5 amps output
 		configs.Slot1.kI = 0.1; // An error of 1 rotation per second increases output by 0.1 amps every second
@@ -43,10 +42,10 @@ public:
                 throttle *= -1;
             }
             sMotor->Set(error/M_PI);
-            // auto friction_torque = (throttle > 0) ? 1_A : -1_A; // To account for friction, we add this to the arbitrary feed forward
-            // /* Use torque velocity */
-            // dMotor->SetControl(m_velocity.WithVelocity(throttle*90_tps).WithFeedForward(friction_torque));
-            dMotor->Set(throttle);
+            auto friction_torque = (throttle > 0) ? 1_A : -1_A; // To account for friction, we add this to the arbitrary feed forward
+            /* Use torque velocity */
+            dMotor->SetControl(m_velocity.WithVelocity(throttle*90_tps).WithFeedForward(friction_torque));
+            // dMotor->Set(throttle);
         }
         else {
             dMotor->Set(0);

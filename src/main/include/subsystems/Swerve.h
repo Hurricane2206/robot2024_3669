@@ -2,7 +2,6 @@
 
 #include <AHRS.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-
 #include "subsystems/SwerveModule.h"
 
 using namespace std;

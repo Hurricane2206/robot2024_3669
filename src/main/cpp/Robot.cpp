@@ -77,8 +77,8 @@ void Robot::TeleopPeriodic(){
 			}
 			break;
 		case INTAKING:
-			if (intakeShooter.eye2.Get()){
-				intakeShooter.SetAngle(15);
+			if (intakeShooter.eye2.Get() || key_pad.GetRawButtonPressed(10)){
+				robotState = IDLE;
 			}
 			break;
 		case IDLE:
@@ -113,7 +113,7 @@ void Robot::TeleopPeriodic(){
 				arm.SetHeight(0);
 				arm.SetRollerSpeed(130);
 				intakeShooter.SetAngle(15);
-				intakeShooter.SetIntakeSpeed(70);
+				intakeShooter.SetIntakeSpeed(100);
 				intakeShooter.SetShooter(10);
 				break;
 			case INTAKING:
@@ -145,9 +145,14 @@ void Robot::TeleopPeriodic(){
 				break;
 		}
 	}
-
-	complex<float> velocity = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
-	float turnRate = -controller.GetRightX()*0.3;
+	float x = -controller.GetLeftY();
+	float y = -controller.GetLeftX();
+	float tR = -controller.GetRightX();
+	x = (abs(x) > 0.05) ? x : 0;
+	y = (abs(y) > 0.05) ? y : 0;
+	tR = (abs(tR) > 0.05) ? tR : 0;
+	complex<float> velocity = complex<float>(x ,y);
+	float turnRate = tR*0.3;
 	swerve.set(velocity, turnRate);
 	intakeShooter.RunAnglePID();
 		
