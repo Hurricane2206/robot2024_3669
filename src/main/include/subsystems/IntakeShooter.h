@@ -10,6 +10,9 @@
 
 class IntakeShooter {
 public:
+	frc::DigitalInput eye0{0};
+	frc::DigitalInput eye1{1};
+    frc::DigitalInput eye2{2};
  	bool SetAngle(float angle, float tolerance = 4) {
  		anglePID.SetReference(angle, rev::CANSparkMax::ControlType::kPosition);
  		return abs(angle - e_angle.GetPosition()) < tolerance;
@@ -62,7 +65,7 @@ public:
         m1_shooter.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
         m2_shooter.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
         ctre::phoenix6::configs::TalonFXConfiguration configs{};
-        configs.CurrentLimits.StatorCurrentLimit = 100;
+        configs.CurrentLimits.StatorCurrentLimit = 150;
 		/* Torque-based velocity does not require a feed forward, as torque will accelerate the rotor up to the desired velocity by itself */
 		configs.Slot1.kP = 7; // An error of 1 rotation per second results in 5 amps output
 		configs.Slot1.kI = 0.1; // An error of 1 rotation per second increases output by 0.1 amps every second
@@ -88,9 +91,6 @@ private:
  	rev::SparkPIDController anglePID = m_angle.GetPIDController();
  	rev::SparkRelativeEncoder e_angle = m_angle.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
-	frc::DigitalInput eye0{0};
-	frc::DigitalInput eye1{1};
-    frc::DigitalInput eye2{2};
 	frc::DutyCycleEncoder e_abs_angle{9};
 	
 	const float intakeGearboxReduction = 9;

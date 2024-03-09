@@ -34,7 +34,7 @@ public:
         complex<float> modVector = getVelocity(rVector, turnRate);
         float throttle = abs(modVector);
         angle = encoder->GetAbsolutePosition().GetValue().value()*(M_PI*2);
-        if (throttle > 0.001){
+        if (throttle > 0.005){
             float error = arg(modVector)-angle;
             am::limit(error);
             if (abs(error) > (M_PI/2)){

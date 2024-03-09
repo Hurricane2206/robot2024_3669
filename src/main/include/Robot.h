@@ -21,11 +21,14 @@ public:
 
 	enum State {
 		IDLE,
+		ARMDEFAULT,
 		INTAKING,
 		AIMING,
 		RAMPING,
 		SHOOTING,
-		TRANSFERING
+		TRANSFERING,
+		AMPSCORE,
+		AMPOS
 	};
 	enum State robotState = IDLE;
 	enum State lastRobotState = IDLE;
@@ -38,9 +41,6 @@ public:
 	};
 	frc::XboxController controller{0};
 	frc::Joystick key_pad{1};
-	frc::DigitalInput eye_0{0};
-	frc::DigitalInput eye_1{1};
-	frc::DigitalInput eye_2{2};
 	Swerve swerve;
 	NoteHandler arm;
 	IntakeShooter intakeShooter;
@@ -50,7 +50,7 @@ public:
 		{complex<float>(0, 15), 0, 1_s},
 		{complex<float>(0, 0), 0, 1_s}};
 	frc::Timer posWaitTimer;
-	frc::Timer shootTimer;
+	frc::Timer timer;
 	void RobotInit() override;
 	void RobotPeriodic() override;
 

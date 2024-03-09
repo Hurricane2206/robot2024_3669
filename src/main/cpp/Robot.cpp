@@ -37,8 +37,8 @@ void Robot::TeleopPeriodic(){
 
 	switch (robotState) {
 		case AIMING:
-			if (key_pad.GetRawButton(12)){
-				shootTimer.Restart();
+			if (key_pad.GetRawButton(12) && intakeShooter.GetNotePresent()){
+				timer.Restart();
 				robotState = RAMPING;
 			}
 			if (!key_pad.GetRawButton(11)) {
@@ -47,23 +47,36 @@ void Robot::TeleopPeriodic(){
 			break;
 		case RAMPING:
 			// intakeShooter.SetShooter(60);
-			if (shootTimer.HasElapsed(1_s)){
+			if (timer.HasElapsed(1_s)){
 				robotState = SHOOTING;
 			}
 			break;
 		case SHOOTING:
-			if (shootTimer.HasElapsed(1.3_s)){
+			if (timer.HasElapsed(1.3_s)){
 				robotState = IDLE;
 			}
 			break;
 		case TRANSFERING:
 			if (!intakeShooter.GetNotePresent()) {
 				robotState = IDLE;
-				if (!eye_0.Get()) {
-					intakeShooter.SetShooterSpeed(50);
-				} else if (!eye_2.Get()) {
-					intakeShooter.SetShooterSpeed(10);
+				if (intakeShooter.eye1.Get()) {
+					intakeShooter.SetShooter(0);
 				}
+			}
+			break;
+		case AMPOS:
+			if (key_pad.GetRawButtonPressed(5)) {
+				robotState = AMPSCORE;
+			}
+			break;
+		case AMPSCORE:
+			if (timer.HasElapsed(0.5_s)) {
+				robotState = ARMDEFAULT;
+			}
+			break;
+		case ARMDEFAULT:
+			if (timer.HasElapsed(0.7_s)) {
+				robotState = IDLE;
 			}
 			break;
 		case INTAKING:
@@ -80,6 +93,9 @@ void Robot::TeleopPeriodic(){
 			}
 			if (key_pad.GetRawButtonPressed(2)) {
 				robotState = TRANSFERING;
+			}
+			if (key_pad.GetRawButtonPressed(5)) {
+				robotState = AMPOS;
 			}
 			break;
 	}
@@ -98,14 +114,29 @@ void Robot::TeleopPeriodic(){
 			case TRANSFERING:
 				arm.SetAngle(20);
 				arm.SetHeight(0);
-				arm.SetRollerSpeed(10);
+				arm.SetRollerSpeed(100);
 				intakeShooter.SetAngle(5);
 				intakeShooter.SetIntakeSpeed(10);
-				intakeShooter.SetShooterSpeed(10);
+				intakeShooter.SetShooter(10);
 				break;
 			case INTAKING:
 				intakeShooter.SetAngle(80);
 				intakeShooter.SetIntake(70);
+				break;
+			case AMPOS:
+				intakeShooter.SetAngle(30);
+				arm.SetHeight(15);
+				arm.SetAngle(225);
+				break;
+			case AMPSCORE:
+				timer.Restart();
+				arm.SetRollerSpeed(-100);
+				break;
+			case ARMDEFAULT:
+				timer.Restart();
+				intakeShooter.SetAngle(30);
+				arm.SetHeight(0);
+				arm.SetAngle(0);
 				break;
 			case IDLE:
 				intakeShooter.SetAngle(5);
@@ -124,7 +155,7 @@ void Robot::TeleopPeriodic(){
 		
 	frc::SmartDashboard::PutNumber("angle", intakeShooter.GetAngle());
 	frc::SmartDashboard::PutNumber("robot state", robotState);
-	frc::SmartDashboard::PutBoolean("note detected", intakeShooter.GetNotePresent());
+	frc::SmartDashboard::PutBoolean("note detected", intakeShooter.eye2.Get());
 }
 
 void Robot::DisabledInit() {}
