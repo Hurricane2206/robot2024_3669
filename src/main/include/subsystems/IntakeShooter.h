@@ -51,7 +51,7 @@ public:
         m_intake.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 		m_intake.SetInverted(true);
 		intakePID.SetP(6e-5);
-		intakePID.SetI(1e-6);
+		intakePID.SetI(0);
 		intakePID.SetD(0);
 		intakePID.SetFF(0.000015);
 		e_intake.SetPositionConversionFactor(intakeIPR);

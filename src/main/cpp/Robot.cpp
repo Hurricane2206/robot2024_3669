@@ -59,9 +59,6 @@ void Robot::TeleopPeriodic(){
 		case TRANSFERING:
 			if (!intakeShooter.GetNotePresent()) {
 				robotState = IDLE;
-				if (intakeShooter.eye1.Get()) {
-					intakeShooter.SetShooter(0);
-				}
 			}
 			break;
 		case AMPOS:
@@ -80,8 +77,8 @@ void Robot::TeleopPeriodic(){
 			}
 			break;
 		case INTAKING:
-			if (intakeShooter.GetNotePresent() || key_pad.GetRawButtonPressed(10)){
-				robotState = IDLE;
+			if (intakeShooter.eye2.Get()){
+				intakeShooter.SetAngle(15);
 			}
 			break;
 		case IDLE:
@@ -114,9 +111,9 @@ void Robot::TeleopPeriodic(){
 			case TRANSFERING:
 				arm.SetAngle(20);
 				arm.SetHeight(0);
-				arm.SetRollerSpeed(100);
+				arm.SetRollerSpeed(130);
 				intakeShooter.SetAngle(15);
-				intakeShooter.SetIntakeSpeed(10);
+				intakeShooter.SetIntakeSpeed(70);
 				intakeShooter.SetShooter(10);
 				break;
 			case INTAKING:
