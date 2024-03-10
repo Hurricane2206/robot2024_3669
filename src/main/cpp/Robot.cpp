@@ -90,7 +90,7 @@ void Robot::TeleopPeriodic(){
 				robotState = TRAPCLIMBDOWN;
 			}
 			if (intakeShooter.GetAngle() > 50) {
-				climb.SetHeight(1);
+				climb.SetHeight(10);
 			}
 			break;
 		case TRAPCLIMBDOWN:
@@ -130,6 +130,11 @@ void Robot::TeleopPeriodic(){
 			case SHOOTING:
 				intakeShooter.SetIntake(100);
 				break;
+			case INTAKING:
+				intakeShooter.SetAngle(91);
+				intakeShooter.SetIntake(70);
+				break;
+			// amp procedure:
 			case AMPTRANSFER:
 				arm.SetAngle(20);
 				arm.SetHeight(0);
@@ -137,10 +142,6 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetAngle(15);
 				intakeShooter.SetIntakeSpeed(100);
 				intakeShooter.SetShooter(10);
-				break;
-			case INTAKING:
-				intakeShooter.SetAngle(91);
-				intakeShooter.SetIntake(70);
 				break;
 			case AMPOS:
 				intakeShooter.SetAngle(40);
@@ -160,6 +161,7 @@ void Robot::TeleopPeriodic(){
 				arm.SetHeight(0);
 				arm.SetAngle(0);
 				break;
+			// trap procedure:
 			case TRAPTRANSFER:
 				arm.SetAngle(20);
 				arm.SetHeight(0);
