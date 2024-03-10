@@ -8,14 +8,17 @@
 class NoteHandler
 {
 public:
-	bool SetHeight(float height, float maxRPM = 1000, float tolerance = 0.5) {
+	bool SetHeight(float height, float tolerance = 0.5) {
 		m_elevator.Set(height);
 		elevatorPID.SetReference(height, rev::CANSparkMax::ControlType::kPosition);
 		return abs(height - e_elevator.GetPosition()) < tolerance;
 	}
 
-	bool SetAngle(float angle, float tolerance = 1) {
+	void SetAngle(float angle) {
 		anglePID.SetReference(angle, rev::CANSparkMax::ControlType::kPosition);
+	}
+
+	bool GetAngleReached(float angle, float tolerance = 1) {
 		return abs(angle - e_angle.GetPosition()) < tolerance;
 	}
 

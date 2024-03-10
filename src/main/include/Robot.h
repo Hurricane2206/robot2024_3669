@@ -12,6 +12,7 @@
 #include "subsystems/Swerve.h"
 #include "subsystems/IntakeShooter.h"
 #include "subsystems/NoteHandler.h"
+#include "subsystems/Climb.h"
 using namespace std;
 
 class Robot : public frc::TimedRobot{
@@ -27,6 +28,12 @@ public:
 		RAMPING,
 		SHOOTING,
 		AMPTRANSFER,
+		TRAPTRANSFER,
+		TRAPCLIMBUP,
+		TRAPCLIMBDOWN,
+		TRAPSCORE,
+		CLIMBUP,
+		CLIMBDOWN,
 		AMPSCORE,
 		AMPOS
 	};
@@ -44,6 +51,7 @@ public:
 	Swerve swerve;
 	NoteHandler arm;
 	IntakeShooter intakeShooter;
+	Climb climb;
 	autoValue autoPos[4] = {
 		{complex<float>(15, 0), 0, 1_s},
 		{complex<float>(15, 15), 0, 1_s},

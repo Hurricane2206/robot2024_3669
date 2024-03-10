@@ -18,7 +18,7 @@ public:
 		this->angle = angle;
  	}
  	void RunAnglePID() {
-		float error = angle + GetAngle();
+		float error = angle - GetAngle();
 		am::limitDeg(error);
 		float output = error/120;
 		if (abs(output) > 0.4) {
@@ -46,7 +46,7 @@ public:
 		return eye0.Get() || eye1.Get() || eye2.Get();
 	}
 	double GetAngle() {
-		return e_abs_angle.GetDistance();
+		return -e_abs_angle.GetDistance();
 	}
  	void init() {
 		m_intake.RestoreFactoryDefaults();
