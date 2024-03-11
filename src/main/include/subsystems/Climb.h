@@ -25,11 +25,11 @@ public:
 		m2_elevator.RestoreFactoryDefaults();
 		m2_elevator.SetInverted(true);
 		m2_elevator.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-		elevatorPID2.SetP(0.12/elevatorIPR);
+		elevatorPID2.SetP(0.3/elevatorIPR);
 		elevatorPID2.SetI(0);
 		elevatorPID2.SetD(1/elevatorIPR);
 		elevatorPID2.SetFF(0.000156);
-		elevatorPID2.SetOutputRange(-0.25, 0.25);
+		elevatorPID2.SetOutputRange(-0.375, 0.75);
 		e2_elevator.SetPositionConversionFactor(elevatorIPR);
 		m2_elevator.BurnFlash();
     }
