@@ -94,6 +94,11 @@ void Robot::TeleopPeriodic(){
 			break;
 		case TRAPCLIMBDOWN:
 			if (key_pad.GetRawButtonPressed(3)) {
+				robotState = TRAPSCOREREADY;
+			}
+			break;
+		case TRAPSCOREREADY:
+			if (key_pad.GetRawButtonPressed(3)) {
 				robotState = TRAPSCORE;
 			}
 			break;
@@ -195,6 +200,15 @@ void Robot::TeleopPeriodic(){
 			case TRAPCLIMBDOWN:
 				intakeShooter.SetAngle(60);
 				arm.SetAngle(90);
+				arm.SetHeight(20.5);
+				arm.SetRollerSpeed(0);
+				intakeShooter.SetIntakeSpeed(0);
+				intakeShooter.SetShooter(0);
+				climb.SetHeight(0);
+				break;
+			case TRAPSCOREREADY:
+				intakeShooter.SetAngle(15);
+				arm.SetAngle(235);
 				arm.SetHeight(20.5);
 				arm.SetRollerSpeed(0);
 				intakeShooter.SetIntakeSpeed(0);
