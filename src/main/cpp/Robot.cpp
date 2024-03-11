@@ -34,6 +34,7 @@ void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic(){
 	lastRobotState = robotState;
 
+	// this switch case runs for each state
 	switch (robotState) {
 		case AIMING:
 			if (key_pad.GetRawButton(12) && intakeShooter.GetNotePresent()){
@@ -120,6 +121,8 @@ void Robot::TeleopPeriodic(){
 			}
 			break;
 	}
+
+	// this switch case only runs when the robot state changes
 	if (robotState != lastRobotState) {
 		switch (robotState) {
 			case AIMING:
