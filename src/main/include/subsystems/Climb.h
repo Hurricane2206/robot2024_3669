@@ -18,7 +18,7 @@ public:
 		elevatorPID.SetI(0);
 		elevatorPID.SetD(1/elevatorIPR);
 		elevatorPID.SetFF(0.000156);
-		elevatorPID.SetOutputRange(-0.1, 0.1);
+		elevatorPID.SetOutputRange(-0.25, 0.25);
 		e_elevator.SetPositionConversionFactor(elevatorIPR);
 		m_elevator.BurnFlash();
 
