@@ -176,7 +176,12 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetShooter(10);
 				break;
 			case INTAKECLEAR:
+				arm.SetAngle(90);
+				arm.SetHeight(0);
+				arm.SetRollerSpeed(0);
 				intakeShooter.SetAngle(60);
+				intakeShooter.SetIntakeSpeed(0);
+				intakeShooter.SetShooter(0);
 			break;
 			case TRAPCLIMBUP:
 				intakeShooter.SetAngle(60);
@@ -190,20 +195,20 @@ void Robot::TeleopPeriodic(){
 			case TRAPCLIMBDOWN:
 				intakeShooter.SetAngle(60);
 				arm.SetAngle(90);
-				arm.SetHeight(20);
+				arm.SetHeight(20.5);
 				arm.SetRollerSpeed(0);
 				intakeShooter.SetIntakeSpeed(0);
 				intakeShooter.SetShooter(0);
-				climb.SetHeight(0.375);
+				climb.SetHeight(0);
 				break;
 			case TRAPSCORE:
 				intakeShooter.SetAngle(15);
 				arm.SetAngle(235);
-				arm.SetHeight(20);
+				arm.SetHeight(20.5);
 				arm.SetRollerSpeed(0);
 				intakeShooter.SetIntakeSpeed(0);
 				intakeShooter.SetShooter(0);
-				climb.SetHeight(0.375);
+				climb.SetHeight(0);
 				break;
 			case IDLE:
 				intakeShooter.SetAngle(15);
