@@ -45,7 +45,6 @@ void Robot::TeleopPeriodic(){
 			}
 			break;
 		case RAMPING:
-			// intakeShooter.SetShooter(60);
 			if (timer.HasElapsed(1_s)){
 				robotState = SHOOTING;
 			}
@@ -55,6 +54,7 @@ void Robot::TeleopPeriodic(){
 				robotState = IDLE;
 			}
 			break;
+		// Amp procedure
 		case AMPTRANSFER:
 			if (!intakeShooter.GetNotePresent()) {
 				robotState = AMPOS;
@@ -75,13 +75,14 @@ void Robot::TeleopPeriodic(){
 				robotState = IDLE;
 			}
 			break;
-		case INTAKING:
-			if (intakeShooter.eye2.Get() || key_pad.GetRawButtonPressed(10)){
-				robotState = IDLE;
-			}
-			break;
+		// climb procedure
 		case TRAPTRANSFER:
 			if (!intakeShooter.GetNotePresent()){
+				robotState = INTAKECLEAR;
+			}
+			break;
+		case INTAKECLEAR:
+			if (intakeShooter.GetAngle() > 50) {
 				robotState = TRAPCLIMBUP;
 			}
 			break;
@@ -89,12 +90,8 @@ void Robot::TeleopPeriodic(){
 			if (key_pad.GetRawButtonPressed(3)){
 				robotState = TRAPCLIMBDOWN;
 			}
-			if (intakeShooter.GetAngle() > 50) {
-				climb.SetHeight(10);
-			}
 			break;
 		case TRAPCLIMBDOWN:
-			//condition or timer
 			if (key_pad.GetRawButtonPressed(3)) {
 				robotState = TRAPSCORE;
 			}
@@ -103,6 +100,11 @@ void Robot::TeleopPeriodic(){
 			if (arm.GetAngleReached(235)) {
 				arm.SetRollerSpeed(-100);
 			}
+		case INTAKING:
+			if (intakeShooter.eye2.Get() || key_pad.GetRawButtonPressed(10)){
+				robotState = IDLE;
+			}
+			break;
 		case IDLE:
 			if (key_pad.GetRawButtonPressed(10) && !intakeShooter.GetNotePresent()){
 				robotState = INTAKING;
@@ -170,6 +172,9 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetIntakeSpeed(100);
 				intakeShooter.SetShooter(10);
 				break;
+			case INTAKECLEAR:
+				intakeShooter.SetAngle(60);
+			break;
 			case TRAPCLIMBUP:
 				intakeShooter.SetAngle(60);
 				arm.SetAngle(90);
@@ -177,6 +182,7 @@ void Robot::TeleopPeriodic(){
 				arm.SetRollerSpeed(0);
 				intakeShooter.SetIntakeSpeed(0);
 				intakeShooter.SetShooter(0);
+				climb.SetHeight(20);
 				break;
 			case TRAPCLIMBDOWN:
 				intakeShooter.SetAngle(60);

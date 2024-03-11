@@ -10,11 +10,6 @@ public:
 		return abs(height - e_elevator.GetPosition()) < tolerance;
 	}
 
-    // void SetSpeed(float speed) {
-    //     m_elevator.Set(speed);
-    //     m2_elevator.Set(speed);
-    // }
-
     void init() {
 		m_elevator.RestoreFactoryDefaults();
 		m_elevator.SetInverted(true);
