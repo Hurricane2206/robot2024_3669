@@ -93,19 +93,30 @@ void Robot::TeleopPeriodic(){
 			}
 			break;
 		case TRAPCLIMBDOWN:
-			if (key_pad.GetRawButtonPressed(3)) {
+			if (climb.GetHeightReached(0)) {
+				robotState = WAITFORCLIMB;
+			}
+			break;
+		case WAITFORCLIMB:
+			if (timer.HasElapsed(1_s)) {
 				robotState = TRAPSCOREREADY;
 			}
 			break;
 		case TRAPSCOREREADY:
-			if (key_pad.GetRawButtonPressed(3)) {
+			if (timer.HasElapsed(0.4_s)) {
+				robotState = WAITINGTOSCORE;
+			}
+			break;
+		case WAITINGTOSCORE:
+			if (timer.HasElapsed(1.5_s)) {
 				robotState = TRAPSCORE;
 			}
 			break;
 		case TRAPSCORE:
-			if (arm.GetAngleReached(235)) {
-				arm.SetRollerSpeed(-100);
+			if (timer.HasElapsed(1.5_s)) {
+				arm.SetRollerSpeed(0);
 			}
+			break;
 		case INTAKING:
 			if (intakeShooter.eye2.Get() || key_pad.GetRawButtonPressed(10)){
 				robotState = IDLE;
@@ -206,20 +217,29 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetShooter(0);
 				climb.SetHeight(0);
 				break;
+			case WAITFORCLIMB:
+				timer.Restart();
+				break;
 			case TRAPSCOREREADY:
+				timer.Restart();
 				intakeShooter.SetAngle(15);
 				arm.SetAngle(235);
 				arm.SetHeight(20.5);
-				arm.SetRollerSpeed(0);
+				arm.SetRollerSpeed(50);
 				intakeShooter.SetIntakeSpeed(0);
 				intakeShooter.SetShooter(0);
 				climb.SetHeight(0);
 				break;
+			case WAITINGTOSCORE:
+				timer.Restart();
+				arm.SetRollerSpeed(0);
+				break;
 			case TRAPSCORE:
+				timer.Restart();
 				intakeShooter.SetAngle(15);
 				arm.SetAngle(235);
 				arm.SetHeight(20.5);
-				arm.SetRollerSpeed(0);
+				arm.SetRollerSpeed(-100);
 				intakeShooter.SetIntakeSpeed(0);
 				intakeShooter.SetShooter(0);
 				climb.SetHeight(0);

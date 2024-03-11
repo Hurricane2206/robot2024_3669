@@ -33,11 +33,13 @@ public:
 		TRAPCLIMBUP,
 		TRAPCLIMBDOWN,
 		TRAPSCOREREADY,
+		WAITINGTOSCORE,
 		TRAPSCORE,
 		CLIMBUP,
 		CLIMBDOWN,
 		AMPSCORE,
-		AMPOS
+		AMPOS,
+		WAITFORCLIMB
 	};
 	enum State robotState = IDLE;
 	enum State lastRobotState = IDLE;

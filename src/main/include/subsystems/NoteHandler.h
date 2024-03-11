@@ -25,6 +25,11 @@ public:
 	void SetRollerSpeed(float inPerSec) {
 		rollersPID.SetReference(inPerSec*60, rev::CANSparkMax::ControlType::kVelocity);
 	}
+	
+	void SetRollerPos(float dist) {
+		float pos = e_rollers.GetPosition()-dist;
+		rollersPID.SetReference(dist, rev::CANSparkMax::ControlType::kPosition, 1);
+	}
 
 	void init() {
 		m_elevator.RestoreFactoryDefaults();
@@ -56,6 +61,10 @@ public:
 		rollersPID.SetI(0);
 		rollersPID.SetD(0);
 		rollersPID.SetFF(0.00015);
+		anglePID.SetP(0.1/rollerIPR, 1);
+		anglePID.SetD(1/rollerIPR, 1);
+		anglePID.SetFF(0, 1);
+		anglePID.SetOutputRange(-0.5, 0.5, 1);
 		e_rollers.SetPositionConversionFactor(rollerIPR);
 		m_rollers.BurnFlash();
 	}

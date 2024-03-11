@@ -4,9 +4,12 @@
 
 class Climb {
 public:
-    bool SetHeight(float height, float tolerance = 0.5) {
+    void SetHeight(float height) {
 		elevatorPID.SetReference(height, rev::CANSparkMax::ControlType::kPosition);
 		elevatorPID2.SetReference(height, rev::CANSparkMax::ControlType::kPosition);
+	}
+
+	bool GetHeightReached(float height, float tolerance = 0.05) {
 		return abs(height - e_elevator.GetPosition()) < tolerance;
 	}
 
@@ -14,11 +17,11 @@ public:
 		m_elevator.RestoreFactoryDefaults();
 		m_elevator.SetInverted(true);
 		m_elevator.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-		elevatorPID.SetP(0.12/elevatorIPR);
+		elevatorPID.SetP(0.3/elevatorIPR);
 		elevatorPID.SetI(0);
 		elevatorPID.SetD(1/elevatorIPR);
 		elevatorPID.SetFF(0.000156);
-		elevatorPID.SetOutputRange(-0.25, 0.25);
+		elevatorPID.SetOutputRange(-1, 1);
 		e_elevator.SetPositionConversionFactor(elevatorIPR);
 		m_elevator.BurnFlash();
 
@@ -29,7 +32,7 @@ public:
 		elevatorPID2.SetI(0);
 		elevatorPID2.SetD(1/elevatorIPR);
 		elevatorPID2.SetFF(0.000156);
-		elevatorPID2.SetOutputRange(-0.375, 0.75);
+		elevatorPID2.SetOutputRange(-1, 1);
 		e2_elevator.SetPositionConversionFactor(elevatorIPR);
 		m2_elevator.BurnFlash();
     }
