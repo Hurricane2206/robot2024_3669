@@ -32,7 +32,6 @@ public:
 		elevatorPID2.SetOutputRange(-0.25, 0.25);
 		e2_elevator.SetPositionConversionFactor(elevatorIPR);
 		m2_elevator.BurnFlash();
-        // m2_elevator.Follow(m_elevator);
     }
 
 
