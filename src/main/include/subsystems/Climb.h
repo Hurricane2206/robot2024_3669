@@ -29,7 +29,7 @@ public:
 		elevatorPID2.SetI(0);
 		elevatorPID2.SetD(1/elevatorIPR);
 		elevatorPID2.SetFF(0.000156);
-		elevatorPID2.SetOutputRange(-0.1, 0.1);
+		elevatorPID2.SetOutputRange(-0.25, 0.25);
 		e2_elevator.SetPositionConversionFactor(elevatorIPR);
 		m2_elevator.BurnFlash();
         // m2_elevator.Follow(m_elevator);
