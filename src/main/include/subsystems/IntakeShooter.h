@@ -20,7 +20,7 @@ public:
  	void RunAnglePID() {
 		float error = angle - GetAngle();
 		am::limitDeg(error);
-		float output = error/120;
+		float output = error/80;
 		if (abs(output) > 0.4) {
 			output *= 0.4/abs(output);
 		}
@@ -89,7 +89,7 @@ public:
  	}
 	
 private:
-	float angle = 10;
+	float angle = 15;
 	rev::CANSparkMax m_intake{42, rev::CANSparkMax::MotorType::kBrushless};
 	rev::SparkPIDController intakePID = m_intake.GetPIDController();
 	rev::SparkRelativeEncoder e_intake = m_intake.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);

@@ -32,8 +32,15 @@ void Robot::AutonomousPeriodic()
 
 void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic(){
+	float tROffset = 0;
 	lastRobotState = robotState;
-
+	if (key_pad.GetRawButton(4)) {
+		pitch += 0.05;
+	}
+	if (key_pad.GetRawButton(7)) {
+		pitch -= 0.05;
+	}
+	frc::SmartDashboard::PutNumber("(20 - 80)\nPitch: ", pitch);
 	// this switch case runs for each state
 	switch (robotState) {
 		case AIMING:
@@ -44,6 +51,10 @@ void Robot::TeleopPeriodic(){
 			if (!key_pad.GetRawButton(11)) {
 				robotState = IDLE;
 			}
+			tROffset = -ll.getSpeakerYaw() / 35.0;
+			ty = ll.getSpeakerPitch();
+			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
+			intakeShooter.SetAngle(pitch);
 			break;
 		case RAMPING:
 			if (timer.HasElapsed(1_s)){
@@ -142,11 +153,10 @@ void Robot::TeleopPeriodic(){
 	if (robotState != lastRobotState) {
 		switch (robotState) {
 			case AIMING:
-				intakeShooter.SetAngle(40);
-				// todo: aim swerve
+			
 				break;
 			case RAMPING:
-				intakeShooter.SetShooter(60);
+				intakeShooter.SetShooter(55);
 				break;
 			case SHOOTING:
 				intakeShooter.SetIntake(100);
@@ -256,10 +266,7 @@ void Robot::TeleopPeriodic(){
 	}
 	float x = -controller.GetLeftY();
 	float y = -controller.GetLeftX();
-	float tR = -controller.GetRightX();
-	x = (abs(x) > 0.05) ? x : 0;
-	y = (abs(y) > 0.05) ? y : 0;
-	tR = (abs(tR) > 0.05) ? tR : 0;
+	float tR = -controller.GetRightX() + tROffset;
 	complex<float> velocity = complex<float>(x ,y);
 	float turnRate = tR*0.3;
 	swerve.set(velocity, turnRate);

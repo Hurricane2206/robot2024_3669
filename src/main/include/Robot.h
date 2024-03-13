@@ -13,12 +13,15 @@
 #include "subsystems/IntakeShooter.h"
 #include "subsystems/NoteHandler.h"
 #include "subsystems/Climb.h"
+#include "subsystems/Limelight.h"
 using namespace std;
 
 class Robot : public frc::TimedRobot{
 public:
 	int x = 0; // current autoPos setpoint index
 	int i = 0; // next position index while waiting
+	float pitch = 40;
+	float ty;
 
 	enum State {
 		IDLE,
@@ -55,6 +58,7 @@ public:
 	Swerve swerve;
 	NoteHandler arm;
 	IntakeShooter intakeShooter;
+	Limelight ll;
 	Climb climb;
 	autoValue autoPos[4] = {
 		{complex<float>(15, 0), 0, 1_s},

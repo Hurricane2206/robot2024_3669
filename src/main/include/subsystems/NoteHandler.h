@@ -28,7 +28,7 @@ public:
 	
 	void SetRollerPos(float dist) {
 		float pos = e_rollers.GetPosition()-dist;
-		rollersPID.SetReference(dist, rev::CANSparkMax::ControlType::kPosition, 1);
+		rollersPID.SetReference(pos, rev::CANSparkMax::ControlType::kPosition, 1);
 	}
 
 	void init() {
