@@ -44,7 +44,7 @@ void Robot::TeleopPeriodic(){
 			}
 			if (!key_pad.GetRawButton(11)) {
 				intakeShooter.SetP();
-				intakeShooter.SetRange();
+				intakeShooter.SetOutputRange();
 				robotState = IDLE;
 			}
 			tROffset = -ll.getSpeakerYaw() / 35.0;

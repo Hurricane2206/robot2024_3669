@@ -15,7 +15,7 @@ public:
 	frc::DigitalInput eye1{1};
     frc::DigitalInput eye2{2};
  	void SetAngle(float angle) {
-		this->angle = angle;
+		this->angleSetpoint = angle;
  	}
 	void SetP(float P = 0.008) {
 		this->P = P;
@@ -36,14 +36,14 @@ public:
 		this->min = min;
 	}
  	void RunAnglePID() {
-		currentAngle = GetAngle();
-		angleError = setpointAngle - currentAngle;
-		am::limitDeg(error);
-		float output = error*P;
+		float currentAngle = GetAngle();
+		angleError = angleSetpoint - currentAngle;
+		am::limitDeg(angleError);
+		float output = angleError*P;
 		accumulator += angleError*I;
-		output += accumulator
+		output += accumulator;
 		float angleChange = currentAngle - lastAngle;
-		limitDeg(angleChange);
+		am::limitDeg(angleChange);
 		output -= angleChange*D;
 		output += F;
 		if (output > max) {
