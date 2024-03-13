@@ -29,10 +29,10 @@ public:
 		am::limitDeg(error);
 		float output = error*P;
 		if (output > max) {
-			output *= max/output;
+			output = max;
 		}
 		if (output < min) {
-			output *= min/output;
+			output = min;
 		}
 		m_angle.Set(output);
  	}
