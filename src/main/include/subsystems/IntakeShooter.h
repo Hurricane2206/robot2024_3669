@@ -20,9 +20,9 @@ public:
 	void SetP(float p = 0.008) {
 		this->P = p;
 	}
-	void SetRange(float vel1 = 0.3, float vel2 = -0.25) {
-		this->max = vel1;
-		this->min = vel2;
+	void SetOutputRange(float min = -0.25, float max = 0.3) {
+		this->max = max;
+		this->min = min;
 	}
  	void RunAnglePID() {
 		float error = angle - GetAngle();
