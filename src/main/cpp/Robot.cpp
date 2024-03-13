@@ -52,7 +52,7 @@ void Robot::TeleopPeriodic(){
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
 			intakeShooter.SetAngle(pitch);
 			intakeShooter.SetP(0.01);
-			intakeShooter.SetRange(0.9, -0.8);
+			intakeShooter.SetOutputRange(-0.8, 0.9);
 			break;
 		case RAMPING:
 			if (timer.HasElapsed(1_s)){
