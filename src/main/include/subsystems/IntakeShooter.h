@@ -17,15 +17,24 @@ public:
  	void SetAngle(float angle) {
 		this->angle = angle;
  	}
+	void SetP(float p = 0.008) {
+		this->P = p;
+	}
+	void SetRange(float vel1 = 0.3, float vel2 = -0.25) {
+		this->max = vel1;
+		this->min = vel2;
+	}
  	void RunAnglePID() {
 		float error = angle - GetAngle();
 		am::limitDeg(error);
-		float output = error/80;
-		if (abs(output) > 0.4) {
-			output *= 0.4/abs(output);
+		float output = error*P;
+		if (output > max) {
+			output *= max/output;
+		}
+		if (output < min) {
+			output *= min/output;
 		}
 		m_angle.Set(output);
- 		// anglePID.SetReference(angle, rev::CANSparkMax::ControlType::kPosition);
  	}
 	void SetIntakeSpeed(float inPerSec) {
 		intakePID.SetReference(inPerSec*60, rev::CANSparkMax::ControlType::kVelocity);
@@ -90,6 +99,9 @@ public:
 	
 private:
 	float angle = 15;
+	float P = 0.0125;
+	float max = 0.4;
+	float min = -0.4;
 	rev::CANSparkMax m_intake{42, rev::CANSparkMax::MotorType::kBrushless};
 	rev::SparkPIDController intakePID = m_intake.GetPIDController();
 	rev::SparkRelativeEncoder e_intake = m_intake.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
