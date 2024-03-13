@@ -43,16 +43,12 @@ void Robot::TeleopPeriodic(){
 				robotState = RAMPING;
 			}
 			if (!key_pad.GetRawButton(11)) {
-				intakeShooter.SetP();
-				intakeShooter.SetOutputRange();
 				robotState = IDLE;
 			}
 			tROffset = -ll.getSpeakerYaw() / 35.0;
 			ty = ll.getSpeakerPitch();
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
 			intakeShooter.SetAngle(pitch);
-			intakeShooter.SetP(0.01);
-			intakeShooter.SetOutputRange(-0.8, 0.9);
 			break;
 		case RAMPING:
 			if (timer.HasElapsed(1_s)){
@@ -150,9 +146,10 @@ void Robot::TeleopPeriodic(){
 	// this switch case only runs when the robot state changes
 	if (robotState != lastRobotState) {
 		switch (robotState) {
-			case AIMING:
-			
-				break;
+			// case AIMING:
+			// 	intakeShooter.SetP(0.01);
+			// 	intakeShooter.SetOutputRange(-0.6, 0.7);
+			// 	break;
 			case RAMPING:
 				intakeShooter.SetShooter(55);
 				break;
@@ -206,7 +203,7 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetAngle(60);
 				intakeShooter.SetIntakeSpeed(0);
 				intakeShooter.SetShooter(0);
-			break;
+				break;
 			case TRAPCLIMBUP:
 				intakeShooter.SetAngle(60);
 				arm.SetAngle(90);

@@ -17,18 +17,18 @@ public:
  	void SetAngle(float angle) {
 		this->angleSetpoint = angle;
  	}
-	void SetP(float P = 0.008) {
+	void SetP(float P = 0.0125) {
 		this->P = P;
 	}
-	void SetI(float I = 0.0001) {
+	void SetI(float I = 0) {
 		this->I = I;
 	}
 	
-	void SetD(float D = 0.0001) {
+	void SetD(float D = 0) {
 		this->D = D;
 	}
 
-	void SetF(float F = 0.0001) {
+	void SetF(float F = 0) {
 		this->F = F;
 	}
 	void SetOutputRange(float min = -0.25, float max = 0.3) {
