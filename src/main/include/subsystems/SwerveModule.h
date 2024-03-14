@@ -29,7 +29,7 @@ public:
 
         dMotor->GetConfigurator().Apply(configs);
     }
-    void set(complex<float> rVector, float turnRate){
+    void set(complex<float> rVector, float turnRate, bool useDutyCycle = false){
         complex<float> modVector = getVelocity(rVector, turnRate);
         float throttle = abs(modVector);
         angle = encoder->GetAbsolutePosition().GetValue().value()*(M_PI*2);
@@ -44,10 +44,13 @@ public:
             throttle *= -1;
         }
         sMotor->Set(error/M_PI);
-        auto friction_torque = (throttle > 0) ? 1_A : -1_A; // To account for friction, we add this to the arbitrary feed forward
-        /* Use torque velocity */
-        dMotor->SetControl(m_velocity.WithVelocity(throttle*90_tps).WithFeedForward(friction_torque));
-        // dMotor->Set(throttle);
+        if (useDutyCycle) {
+            dMotor->Set(throttle);
+        } else {
+            auto friction_torque = (throttle > 0) ? 1_A : -1_A; // To account for friction, we add this to the arbitrary feed forward
+            /* Use torque velocity */
+            dMotor->SetControl(m_velocity.WithVelocity(throttle*90_tps).WithFeedForward(friction_torque));
+        }
     }
     complex<float> getPositionChange() {
         float motorPosChg = dMotor->GetPosition().GetValue().value() - motorPosOld;

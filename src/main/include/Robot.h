@@ -19,12 +19,11 @@ using namespace std;
 class Robot : public frc::TimedRobot{
 public:
 	int x = 0; // current autoPos setpoint index
-	int i = 0; // next position index while waiting
 	float pitch = 40;
 	float ty;
 
 	enum State {
-		IDLE,
+		DEFAULT,
 		ARMDEFAULT,
 		INTAKING,
 		AIMING,
@@ -44,14 +43,15 @@ public:
 		AMPOS,
 		WAITFORCLIMB
 	};
-	enum State robotState = IDLE;
-	enum State lastRobotState = IDLE;
+	enum State robotState = DEFAULT;
+	enum State lastRobotState = DEFAULT;
 	
 	struct autoValue
 	{
 		complex<float> pos;
 		float angle = 0;
-		units::time::second_t time = 0_s;
+		enum State setpointState = DEFAULT;
+		float shooterPitch = 75;
 	};
 	frc::XboxController controller{0};
 	frc::Joystick key_pad{1};
@@ -60,11 +60,9 @@ public:
 	IntakeShooter intakeShooter;
 	Limelight ll;
 	Climb climb;
-	autoValue autoPos[4] = {
-		{complex<float>(15, 0), 0, 1_s},
-		{complex<float>(15, 15), 0, 1_s},
-		{complex<float>(0, 15), 0, 1_s},
-		{complex<float>(0, 0), 0, 1_s}};
+	autoValue autoPose[4] = {
+		{complex<float>(15, 0), 0, INTAKING, 75},
+		{complex<float>(0, 0), 0, AIMING, 75}};
 	frc::Timer posWaitTimer;
 	frc::Timer timer;
 	void RobotInit() override;
