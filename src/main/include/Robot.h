@@ -64,7 +64,6 @@ public:
 	Limelight ll;
 	Climb climb;
 	autoValue autoPose[4] = {
-		{complex<float>(15, 0), 0, INTAKING, 75},
 		{complex<float>(0, 0), 0, AIMING, 75}};
 	frc::Timer posWaitTimer;
 	frc::Timer timer;
