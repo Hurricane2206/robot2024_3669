@@ -87,6 +87,7 @@ void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic(){
 	float tROffset = 0;
 	lastRobotState = robotState;
+	frc::SmartDashboard::PutNumber("Pitch: ", pitch);
 	// this switch case runs for each state
 	switch (robotState) {
 		case AIMING:
@@ -101,9 +102,13 @@ void Robot::TeleopPeriodic(){
 			if (!key_pad.GetRawButton(11)) {
 				robotState = DEFAULT;
 			}
+			tROffset = -ll.getSpeakerYaw() / 35.0;
+			ty = ll.getSpeakerPitch();
+			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
+			intakeShooter.SetAngle(pitch);
 			break;
 		case RAMPING:
-			if (timer.HasElapsed(1_s)){
+			if (timer.HasElapsed(1.1_s)){
 				robotState = SHOOTING;
 			}
 			break;
@@ -175,21 +180,44 @@ void Robot::TeleopPeriodic(){
 			}
 			break;
 		case INTAKING:
-			if (intakeShooter.eye2.Get() || key_pad.GetRawButtonPressed(10)){
+			if (key_pad.GetRawButtonPressed(10)) {
+				robotState = DEFAULT;
+			} else if (intakeShooter.eye0.Get()) {
+				robotState = NOTEALIGN1;
+			}
+			break;
+		case NOTEALIGN1:
+			if (intakeShooter.eye2.Get()) {
+				intakeShooter.SetIntakeSpeed(-50);
+				intakeShooter.SetShooter(-10);
+			} else {
+				robotState = NOTEALIGN2;
+			}
+			break;
+		case NOTEALIGN2:
+			if (!intakeShooter.eye2.Get()) {
+				intakeShooter.SetIntakeSpeed(50);
+				intakeShooter.SetShooter(0);
+			} else {
+				robotState = NOTEALIGN3;
+			}
+			break;
+		case NOTEALIGN3:
+			if (intakeShooter.GetNotePresent()) {
 				robotState = DEFAULT;
 			}
 			break;
 		case DEFAULT:
-			if (key_pad.GetRawButtonPressed(10) && !intakeShooter.GetNotePresent()){
+			if (key_pad.GetRawButtonPressed(10) && !intakeShooter.GetNotePresent()) {
 				robotState = INTAKING;
 			}
-			if (key_pad.GetRawButton(11)){
+			if (key_pad.GetRawButton(11)) {
 				robotState = AIMING;
 			}
 			if (key_pad.GetRawButtonPressed(2)) {
 				robotState = AMPTRANSFER;
 			}
-			if (key_pad.GetRawButtonPressed(3)){
+			if (key_pad.GetRawButtonPressed(3)) {
 				robotState = TRAPTRANSFER;
 			}
 			break;
@@ -198,18 +226,23 @@ void Robot::TeleopPeriodic(){
 	// this switch case only runs when the robot state changes
 	if (robotState != lastRobotState) {
 		switch (robotState) {
-			case AIMING:
-			
-				break;
+			// case AIMING:
+			// 	intakeShooter.SetP(0.01);
+			// 	intakeShooter.SetOutputRange(-0.6, 0.7);
+			// 	break;
 			case RAMPING:
-				intakeShooter.SetShooter(55);
+				intakeShooter.SetShooter(60);
 				break;
 			case SHOOTING:
 				intakeShooter.SetIntake(100);
 				break;
 			case INTAKING:
-				intakeShooter.SetAngle(91);
-				intakeShooter.SetIntake(70);
+				intakeShooter.SetAngle(94);
+				intakeShooter.SetIntake(80);
+				break;
+			case NOTEALIGN1:
+				intakeShooter.SetAngle(15);
+				intakeShooter.SetIntakeSpeed(50);
 				break;
 			// amp procedure:
 			case AMPTRANSFER:
@@ -254,7 +287,7 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetAngle(60);
 				intakeShooter.SetIntakeSpeed(0);
 				intakeShooter.SetShooter(0);
-			break;
+				break;
 			case TRAPCLIMBUP:
 				intakeShooter.SetAngle(60);
 				arm.SetAngle(90);
@@ -302,7 +335,7 @@ void Robot::TeleopPeriodic(){
 				break;
 			case DEFAULT:
 				intakeShooter.SetAngle(15);
-				intakeShooter.SetIntake(0);
+				intakeShooter.SetIntakeSpeed(0);
 				intakeShooter.SetShooter(0);
 				arm.SetAngle(0);
 				arm.SetHeight(0);
@@ -313,7 +346,8 @@ void Robot::TeleopPeriodic(){
 	float x = -controller.GetLeftY();
 	float y = -controller.GetLeftX();
 	float tR = -controller.GetRightX() + tROffset;
-	complex<float> velocity = complex<float>(x ,y);
+	float rt = (controller.GetRightTriggerAxis()*0.5)+0.5;
+	complex<float> velocity = complex<float>(x*rt, y*rt);
 	float turnRate = tR*0.3;
 	swerve.set(velocity, turnRate);
 	intakeShooter.RunAnglePID();

@@ -15,17 +15,44 @@ public:
 	frc::DigitalInput eye1{1};
     frc::DigitalInput eye2{2};
  	void SetAngle(float angle) {
-		this->angle = angle;
+		this->angleSetpoint = angle;
  	}
+	void SetP(float P = 0.0125) {
+		this->P = P;
+	}
+	void SetI(float I = 0) {
+		this->I = I;
+	}
+	
+	void SetD(float D = 0) {
+		this->D = D;
+	}
+
+	void SetF(float F = 0) {
+		this->F = F;
+	}
+	void SetOutputRange(float min = -0.25, float max = 0.3) {
+		this->max = max;
+		this->min = min;
+	}
  	void RunAnglePID() {
-		float error = angle - GetAngle();
-		am::limitDeg(error);
-		float output = error/80;
-		if (abs(output) > 0.4) {
-			output *= 0.4/abs(output);
+		float currentAngle = GetAngle();
+		angleError = angleSetpoint - currentAngle;
+		am::limitDeg(angleError);
+		float output = angleError*P;
+		accumulator += angleError*I;
+		output += accumulator;
+		float angleChange = currentAngle - lastAngle;
+		am::limitDeg(angleChange);
+		output -= angleChange*D;
+		output += F;
+		if (output > max) {
+			output = max;
+		}
+		if (output < min) {
+			output = min;
 		}
 		m_angle.Set(output);
- 		// anglePID.SetReference(angle, rev::CANSparkMax::ControlType::kPosition);
  	}
 	void SetIntakeSpeed(float inPerSec) {
 		intakePID.SetReference(inPerSec*60, rev::CANSparkMax::ControlType::kVelocity);
@@ -62,15 +89,16 @@ public:
  		m_angle.RestoreFactoryDefaults();
         m_angle.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
  		m_angle.SetInverted(true);
- 		anglePID.SetP(0.1/angleDPR);
- 		anglePID.SetI(0);
- 		anglePID.SetD(6/angleDPR);
- 		anglePID.SetFF(-0.05);
-        anglePID.SetOutputRange(-0.25, 0.4);
- 		e_angle.SetPositionConversionFactor(angleDPR);
+ 		// anglePID.SetP(0.1/angleDPR);
+ 		// anglePID.SetI(0);
+ 		// anglePID.SetD(6/angleDPR);
+ 		// anglePID.SetFF(-0.05);
+   //      anglePID.SetOutputRange(-0.25, 0.4);
+ 	// 	e_angle.SetPositionConversionFactor(angleDPR);
 		e_abs_angle.SetDistancePerRotation(360.0);
 		e_abs_angle.SetPositionOffset(351);
  		m_angle.BurnFlash();
+		lastAngle = GetAngle();
 
         m1_shooter.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
         m2_shooter.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
@@ -89,7 +117,16 @@ public:
  	}
 	
 private:
-	float angle = 15;
+	float angleSetpoint = 15;
+	float angleError;
+	float lastAngle;
+	float accumulator = 0;
+	float P = 0.008;
+	float I = 0;
+	float D = 0;
+	float F = -0.015;
+	float max = 0.25;
+	float min = -0.15;
 	rev::CANSparkMax m_intake{42, rev::CANSparkMax::MotorType::kBrushless};
 	rev::SparkPIDController intakePID = m_intake.GetPIDController();
 	rev::SparkRelativeEncoder e_intake = m_intake.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
@@ -99,8 +136,8 @@ private:
 	ctre::phoenix6::hardware::TalonFX m2_shooter{44, "CTREdevices"};
 
  	rev::CANSparkMax m_angle{41, rev::CANSparkMax::MotorType::kBrushless};
- 	rev::SparkPIDController anglePID = m_angle.GetPIDController();
- 	rev::SparkRelativeEncoder e_angle = m_angle.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+ 	// rev::SparkPIDController anglePID = m_angle.GetPIDController();
+ 	// rev::SparkRelativeEncoder e_angle = m_angle.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
 	frc::DutyCycleEncoder e_abs_angle{9};
 	
