@@ -47,45 +47,34 @@ public:
     void SetPosition(complex<float> position){
         posSetpoint = position;
     }
-    void SetAngle(float angle) {
-        angleSetpoint = angle;
-    }
     bool GetPositionReached(float tolerance = 1) {
         return abs(posError) < tolerance;
     }
-    bool GetAngleReached(float tolerance = 3) {
-        return abs(angleError) < tolerance;
-    }
-    void RunPID() {
+    void RunPID(double tx) {
         // calculate PID Response
         angle = gyro.GetYaw()*-(M_PI/180);
         posError = posSetpoint-pos;
-        angleError = angleSetpoint-angle;
-        am::limit(angleError);
         complex<float> posPIDoutput = posError*polar<float>(0.025, 1);
-        float anglePIDoutput = angleError*0.2;
         if (abs(posPIDoutput) > 0.3) {
             posPIDoutput *= 0.3 / abs(posPIDoutput);
         }
-        if (abs(anglePIDoutput) > 0.5) {
-            anglePIDoutput *= 0.5 * abs(anglePIDoutput);
-        }
         // robot orient the velocity
         posPIDoutput *= polar<float>(1, -angle);
+        float turnRate = -tx / 35.0;
         // find fastest module speed
         float fastest = 1;
         for (Module module : modules){
-            float speed = abs(module.getVelocity(posPIDoutput, anglePIDoutput));
+            float speed = abs(module.getVelocity(posPIDoutput, turnRate));
             if (speed > fastest){
                 fastest = speed;
             }
         }
         posPIDoutput /= fastest;
-        anglePIDoutput /= fastest;
+        turnRate /= fastest;
         // calculate odometry and set modules
         complex<float> posChange = complex<float>(0, 0);
         for (Module module : modules){
-            module.set(targetVelocity, currentTurnRate, true);
+            module.set(posPIDoutput, turnRate, true);
             posChange += module.getPositionChange();
         }
         pos += posChange * polar<float>(0.25, angle);
@@ -110,8 +99,7 @@ private:
 
     complex<float> posSetpoint;
     complex<float> posError;
-    float angleSetpoint;
-    float angleError;
+    // float angleSetpoint;
 
     complex<float> currentVelocity;
     float currentTurnRate = 0;

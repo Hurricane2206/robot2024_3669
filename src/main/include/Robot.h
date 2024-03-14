@@ -53,8 +53,7 @@ public:
 	{
 		complex<float> pos;
 		float angle = 0;
-		enum State setpointState = DEFAULT;
-		float shooterPitch = 75;
+		enum State startingState = DEFAULT;
 	};
 	frc::XboxController controller{0};
 	frc::Joystick key_pad{1};
@@ -64,7 +63,7 @@ public:
 	Limelight ll;
 	Climb climb;
 	autoValue autoPose[4] = {
-		{complex<float>(0, 0), 0, AIMING, 75}};
+		{complex<float>(0, 0), 0, AIMING}};
 	frc::Timer posWaitTimer;
 	frc::Timer timer;
 	void RobotInit() override;
