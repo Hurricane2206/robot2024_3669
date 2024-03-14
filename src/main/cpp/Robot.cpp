@@ -23,7 +23,7 @@ void Robot::AutonomousPeriodic()
 	// this switch case runs for each state
 	switch (robotState) {
 		case DEFAULT:
-			if (swerve.GetPosReached() && Swerve.GetAngleReached() && x < size(autoPos)-1) {
+			if (swerve.GetPositionReached() && swerve.GetAngleReached() && x < size(autoPose)-1) {
 				x++;
 				swerve.SetPosition(autoPose[x].pos);
 				swerve.SetAngle(autoPose[x].angle);
@@ -36,7 +36,7 @@ void Robot::AutonomousPeriodic()
 			}
 			break;
 		case AIMING:
-			if (IntakeShooter.GetAngleReached(3) && swerve.GetAngleReached()) {
+			if (intakeShooter.GetAngleReached(3) && swerve.GetAngleReached()) {
 				robotState = RAMPING;
 			}
 			break;
@@ -62,7 +62,7 @@ void Robot::AutonomousPeriodic()
 				intakeShooter.SetIntake(70);
 				break;
 			case AIMING:
-				IntakeShooter.SetAngle(autoPos[x].shooterPitch);
+				intakeShooter.SetAngle(autoPose[x].shooterPitch);
 				break;
 			case RAMPING:
 				timer.Restart();

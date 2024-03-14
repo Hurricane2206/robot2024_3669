@@ -54,6 +54,9 @@ public:
 		}
 		m_angle.Set(output);
  	}
+	bool GetAngleReached(float tolerance = 2) {
+		return abs(angleError) < tolerance;
+	}
 	void SetIntakeSpeed(float inPerSec) {
 		intakePID.SetReference(inPerSec*60, rev::CANSparkMax::ControlType::kVelocity);
 	}
