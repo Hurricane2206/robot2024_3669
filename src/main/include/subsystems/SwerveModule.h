@@ -54,7 +54,7 @@ public:
     }
     complex<float> getPositionChange() {
         float motorPosChg = dMotor->GetPosition().GetValue().value() - motorPosOld;
-        complex<float> modPosChange = polar<float>(motorPosChg*3.9*M_PI/6.12, angle);
+        complex<float> modPosChange = polar<float>(motorPosChg*3.9*M_PI/6.75, angle);
         motorPosOld = dMotor->GetPosition().GetValue().value();
         return modPosChange;
     }
