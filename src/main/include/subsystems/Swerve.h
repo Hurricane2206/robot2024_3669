@@ -39,17 +39,28 @@ public:
         currentTurnRate += turnRateError;
         targetVelocity = currentVelocity * polar<float>(1, -angle);
 
-        // calculate odometry and set modules
-        complex<float> posChange = complex<float>(0, 0);
+        // set modules
         for (Module module : modules){
             module.set(targetVelocity, currentTurnRate);
-            posChange += module.getPositionChange();
         }
-        pos += posChange * polar<float>(0.25, angle);
     }
-    bool setPos(complex<float> inputPos, float inputAngle){
-        complex<float> posError = inputPos-pos;
-        float angleError = inputAngle-angle;
+    void SetPosition(complex<float> position){
+        posSetpoint = position;
+    }
+    void SetAngle(float angle) {
+        angleSetpoint = angle;
+    }
+    bool GetPositionReached(float tolerance = 1) {
+        return abs(posError) < tolerance;
+    }
+    bool GetAngleReached(float tolerance = 3) {
+        return abs(angleError) < tolerance;
+    }
+    void RunPID() {
+        // calculate PID Response
+        angle = gyro.GetYaw()*-(M_PI/180);
+        posError = posSetpoint-pos;
+        angleError = angleSetpoint-angle;
         am::limit(angleError);
         complex<float> posPIDoutput = posError*polar<float>(0.025, 1);
         float anglePIDoutput = angleError*0.2;
@@ -59,8 +70,25 @@ public:
         if (abs(anglePIDoutput) > 0.5) {
             anglePIDoutput *= 0.5 * abs(anglePIDoutput);
         }
-        set(posPIDoutput, angleError);
-        return abs(posError) < 1;
+        // robot orient the velocity
+        posPIDoutput *= polar<float>(1, -angle);
+        // find fastest module speed
+        float fastest = 1;
+        for (Module module : modules){
+            float speed = abs(module.getVelocity(posPIDoutput, anglePIDoutput));
+            if (speed > fastest){
+                fastest = speed;
+            }
+        }
+        posPIDoutput /= fastest;
+        anglePIDoutput /= fastest;
+        // calculate odometry and set modules
+        complex<float> posChange = complex<float>(0, 0);
+        for (Module module : modules){
+            module.set(targetVelocity, currentTurnRate, true);
+            posChange += module.getPositionChange();
+        }
+        pos += posChange * polar<float>(0.25, angle);
     }
 
     void init(){
@@ -79,6 +107,11 @@ private:
 
     complex<float> pos = complex<float>(0, 0);
     float angle;
+
+    complex<float> posSetpoint;
+    complex<float> posError;
+    float angleSetpoint;
+    float angleError;
 
     complex<float> currentVelocity;
     float currentTurnRate = 0;

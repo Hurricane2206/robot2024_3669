@@ -19,15 +19,68 @@ void Robot::RobotPeriodic() {}
 void Robot::AutonomousInit() {}
 void Robot::AutonomousPeriodic()
 {
-	// if (swerve.setPos(autoPos[x].pos, autoPos[x].angle) && x < size(autoPos)-1){
-	//   if (i == x) {
-	//     posWaitTimer.Restart();
-	//     i++;
-	//   }
-	//   if (posWaitTimer.HasElapsed(autoPos[x].time)) {
-	//     x++;
-	//   }
-	// }
+
+	// this switch case runs for each state
+	switch (robotState) {
+		case DEFAULT:
+			if (swerve.GetPosReached() && Swerve.GetAngleReached() && x < size(autoPos)-1) {
+				x++;
+				swerve.SetPosition(autoPose[x].pos);
+				swerve.SetAngle(autoPose[x].angle);
+				robotState = autoPose[x].setpointState;
+			}
+			break;
+		case INTAKING:
+			if (intakeShooter.eye2.Get()){
+				robotState = DEFAULT;
+			}
+			break;
+		case AIMING:
+			if (IntakeShooter.GetAngleReached(3) && swerve.GetAngleReached()) {
+				robotState = RAMPING;
+			}
+			break;
+		case RAMPING:
+			if (timer.HasElapsed(1_s)){
+				robotState = SHOOTING;
+			}
+			break;
+		case SHOOTING:
+			if (timer.HasElapsed(1.3_s)){
+				robotState = DEFAULT;
+			}
+			break;
+	}
+	swerve.RunPID();
+	intakeShooter.RunAnglePID();
+
+	// this switch case only runs when the robot state changes
+	if (robotState != lastRobotState) {
+		switch (robotState) {
+			case INTAKING:
+				intakeShooter.SetAngle(91);
+				intakeShooter.SetIntake(70);
+				break;
+			case AIMING:
+				IntakeShooter.SetAngle(autoPos[x].shooterPitch);
+				break;
+			case RAMPING:
+				timer.Restart();
+				intakeShooter.SetShooter(55);
+				break;
+			case SHOOTING:
+				intakeShooter.SetIntake(100);
+				break;
+			case DEFAULT:
+				intakeShooter.SetAngle(15);
+				intakeShooter.SetIntake(0);
+				intakeShooter.SetShooter(0);
+				arm.SetAngle(0);
+				arm.SetHeight(0);
+				arm.SetRollerSpeed(0);
+				break;
+		}
+	}
 }
 
 void Robot::TeleopInit() {}
@@ -38,6 +91,10 @@ void Robot::TeleopPeriodic(){
 	// this switch case runs for each state
 	switch (robotState) {
 		case AIMING:
+			tROffset = -ll.getSpeakerYaw() / 35.0;
+			ty = ll.getSpeakerPitch();
+			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
+			intakeShooter.SetAngle(pitch);
 			if (key_pad.GetRawButton(12) && intakeShooter.GetNotePresent()){
 				timer.Restart();
 				robotState = RAMPING;
