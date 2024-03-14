@@ -16,7 +16,10 @@ void Robot::RobotInit()
 }
 void Robot::RobotPeriodic() {}
 
-void Robot::AutonomousInit() {}
+void Robot::AutonomousInit() {
+	swerve.SetPosition(autoPose[0].pos);
+	swerve.SetAngle(autoPose[0].angle);
+}
 void Robot::AutonomousPeriodic()
 {
 
