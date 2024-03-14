@@ -24,9 +24,12 @@ public:
 	float ty;
 
 	enum State {
-		IDLE,
+		DEFAULT,
 		ARMDEFAULT,
 		INTAKING,
+		NOTEALIGN1,
+		NOTEALIGN2,
+		NOTEALIGN3,
 		AIMING,
 		RAMPING,
 		SHOOTING,
@@ -44,8 +47,8 @@ public:
 		AMPOS,
 		WAITFORCLIMB
 	};
-	enum State robotState = IDLE;
-	enum State lastRobotState = IDLE;
+	enum State robotState = DEFAULT;
+	enum State lastRobotState = DEFAULT;
 	
 	struct autoValue
 	{

@@ -121,12 +121,12 @@ private:
 	float angleError;
 	float lastAngle;
 	float accumulator = 0;
-	float P = 0.0125;
-	float I = 0.0001;
-	float D = 0.01;
-	float F = 0;
-	float max = 0.4;
-	float min = -0.4;
+	float P = 0.008;
+	float I = 0;
+	float D = 0;
+	float F = -0.015;
+	float max = 0.25;
+	float min = -0.15;
 	rev::CANSparkMax m_intake{42, rev::CANSparkMax::MotorType::kBrushless};
 	rev::SparkPIDController intakePID = m_intake.GetPIDController();
 	rev::SparkRelativeEncoder e_intake = m_intake.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
