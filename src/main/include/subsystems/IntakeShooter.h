@@ -102,21 +102,20 @@ public:
 		e_abs_angle.SetPositionOffset(351);
  		m_angle.BurnFlash();
 		lastAngle = GetAngle();
+        // m1_shooter.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+        // m2_shooter.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+        // ctre::phoenix6::configs::TalonFXConfiguration configs{};
+        // configs.CurrentLimits.StatorCurrentLimit = 150;
+		// /* Torque-based velocity does not require a feed forward, as torque will accelerate the rotor up to the desired velocity by itself */
+		// configs.Slot1.kP = 7; // An error of 1 rotation per second results in 5 amps output
+		// configs.Slot1.kI = 0.1; // An error of 1 rotation per second increases output by 0.1 amps every second
+		// configs.Slot1.kD = 0.001; // A change of 1000 rotation per second squared results in 1 amp output
 
-        m1_shooter.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
-        m2_shooter.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
-        ctre::phoenix6::configs::TalonFXConfiguration configs{};
-        configs.CurrentLimits.StatorCurrentLimit = 150;
-		/* Torque-based velocity does not require a feed forward, as torque will accelerate the rotor up to the desired velocity by itself */
-		configs.Slot1.kP = 7; // An error of 1 rotation per second results in 5 amps output
-		configs.Slot1.kI = 0.1; // An error of 1 rotation per second increases output by 0.1 amps every second
-		configs.Slot1.kD = 0.001; // A change of 1000 rotation per second squared results in 1 amp output
+		// configs.TorqueCurrent.PeakForwardTorqueCurrent = 100;  // Peak output of 40 amps
+		// configs.TorqueCurrent.PeakReverseTorqueCurrent = -100; // Peak output of 40 amps
 
-		configs.TorqueCurrent.PeakForwardTorqueCurrent = 100;  // Peak output of 40 amps
-		configs.TorqueCurrent.PeakReverseTorqueCurrent = -100; // Peak output of 40 amps
-
-        m1_shooter.GetConfigurator().Apply(configs);
-        m2_shooter.GetConfigurator().Apply(configs);
+        // m1_shooter.GetConfigurator().Apply(configs);
+        // m2_shooter.GetConfigurator().Apply(configs);
  	}
 	
 private:
