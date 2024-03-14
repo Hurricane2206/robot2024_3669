@@ -20,8 +20,7 @@ void Robot::AutonomousInit() {
 	swerve.SetPosition(autoPose[0].pos);
 	robotState = autoPose[0].startingState;
 }
-void Robot::AutonomousPeriodic()
-{
+void Robot::AutonomousPeriodic() {
 	float tx = ll.getSpeakerYaw();
 	// this switch case runs for each state
 	switch (robotState) {
