@@ -75,7 +75,7 @@ void Robot::AutonomousPeriodic() {
 				break;
 			case RAMPING:
 				timer.Restart();
-				intakeShooter.SetShooter(55);
+				intakeShooter.SetShooter(60);
 				break;
 			case SHOOTING:
 				intakeShooter.SetIntake(100);
