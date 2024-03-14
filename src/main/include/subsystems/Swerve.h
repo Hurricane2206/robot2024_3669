@@ -54,13 +54,16 @@ public:
         // calculate PID Response
         angle = gyro.GetYaw()*-(M_PI/180);
         posError = posSetpoint-pos;
-        complex<float> posPIDoutput = posError*polar<float>(0.025, 1);
+        complex<float> posPIDoutput = posError*0.025f;
+        float turnRate = -tx / 35.0;
         if (abs(posPIDoutput) > 0.3) {
             posPIDoutput *= 0.3 / abs(posPIDoutput);
         }
+        if (abs(turnRate) > 0.3) {
+            turnRate *= 0.3 / abs(turnRate);
+        }
         // robot orient the velocity
         posPIDoutput *= polar<float>(1, -angle);
-        float turnRate = -tx / 35.0;
         // find fastest module speed
         float fastest = 1;
         for (Module module : modules){

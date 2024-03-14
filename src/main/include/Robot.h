@@ -47,7 +47,9 @@ public:
 		WAITFORCLIMB
 	};
 	enum State robotState = DEFAULT;
+	enum State autoState = DEFAULT;
 	enum State lastRobotState = DEFAULT;
+	enum State lastAutoState = DEFAULT;
 	
 	struct autoValue
 	{

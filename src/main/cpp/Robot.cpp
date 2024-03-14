@@ -18,22 +18,22 @@ void Robot::RobotPeriodic() {}
 
 void Robot::AutonomousInit() {
 	swerve.SetPosition(autoPose[0].pos);
-	robotState = autoPose[0].startingState;
+	autoState = autoPose[0].startingState;
 }
 void Robot::AutonomousPeriodic() {
 	float tx = ll.getSpeakerYaw();
 	// this switch case runs for each state
-	switch (robotState) {
+	switch (autoState) {
 		case DEFAULT:
 			if (swerve.GetPositionReached() && x < size(autoPose)-1) {
 				x++;
 				swerve.SetPosition(autoPose[x].pos);
-				robotState = autoPose[x].startingState;
+				autoState = autoPose[x].startingState;
 			}
 			break;
 		case INTAKING:
 			if (intakeShooter.eye2.Get()){
-				robotState = DEFAULT;
+				autoState = DEFAULT;
 			}
 			break;
 		case AIMING:
@@ -41,7 +41,7 @@ void Robot::AutonomousPeriodic() {
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
 			intakeShooter.SetAngle(pitch);
 			if (swerve.GetPositionReached() && intakeShooter.GetAngleReached(3) && abs(tx) < 3) {
-				robotState = RAMPING;
+				autoState = RAMPING;
 			}
 			break;
 		case RAMPING:
@@ -49,7 +49,7 @@ void Robot::AutonomousPeriodic() {
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
 			intakeShooter.SetAngle(pitch);
 			if (timer.HasElapsed(1_s)){
-				robotState = SHOOTING;
+				autoState = SHOOTING;
 			}
 			break;
 		case SHOOTING:
@@ -57,7 +57,7 @@ void Robot::AutonomousPeriodic() {
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
 			intakeShooter.SetAngle(pitch);
 			if (timer.HasElapsed(1.3_s)){
-				robotState = DEFAULT;
+				autoState = DEFAULT;
 			}
 			break;
 	}
@@ -65,8 +65,8 @@ void Robot::AutonomousPeriodic() {
 	intakeShooter.RunAnglePID();
 
 	// this switch case only runs when the robot state changes
-	if (robotState != lastRobotState) {
-		switch (robotState) {
+	if (autoState != lastAutoState) {
+		switch (autoState) {
 			case INTAKING:
 				intakeShooter.SetAngle(91);
 				intakeShooter.SetIntake(70);
@@ -90,7 +90,7 @@ void Robot::AutonomousPeriodic() {
 				break;
 		}
 	}
-	lastRobotState = robotState;
+	lastAutoState = autoState;
 }
 
 void Robot::TeleopInit() {}
