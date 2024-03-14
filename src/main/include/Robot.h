@@ -19,7 +19,7 @@ using namespace std;
 class Robot : public frc::TimedRobot{
 public:
 	unsigned int x = 0; // current autoPos setpoint index
-	float pitch = 40;
+	float pitch;
 	float ty;
 
 	enum State {
