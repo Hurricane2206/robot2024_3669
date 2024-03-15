@@ -55,7 +55,7 @@ public:
         angle = gyro.GetYaw()*-(M_PI/180);
         // posError = posSetpoint-pos;
         // complex<float> posPIDoutput = posError*0.025f;
-        float turnRate = -tx / 45.0;
+        float turnRate = -tx / 80.0;
         // if (abs(posPIDoutput) > 0.3) {
         //     posPIDoutput *= 0.3 / abs(posPIDoutput);
         // }

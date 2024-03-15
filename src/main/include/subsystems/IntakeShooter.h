@@ -23,11 +23,9 @@ public:
 	void SetI(float I = 0) {
 		this->I = I;
 	}
-	
 	void SetD(float D = 0) {
 		this->D = D;
 	}
-
 	void SetF(float F = 0) {
 		this->F = F;
 	}
