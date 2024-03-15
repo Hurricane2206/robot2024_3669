@@ -44,17 +44,12 @@ enum AutoState {
     AAIMING,
     ARAMPING,
     ASHOOTING,
-    ADRIVING,
-    AINTAKING,
-    AAIMING,
-    ARAMPING,
-    ASHOOTING,
 
     ANUM_OF_STATES // the number of states: do not remove
 };
 
 enum AutoState autoState = AutoState::ADRIVING;
-enum AutoState lastAutoState = AutoState::ANUM_OF_STATES;
+enum AutoState lastAutoState = AutoState::ADRIVING;
 
 // Array of function pointers for state initialization code
 // // void (*init[AutoState::NUM_OF_STATES])();
