@@ -94,4 +94,4 @@ private:
 
 	const float rollerGearboxReduction = 25;
 	const float rollerIPR = 1.225*M_PI/rollerGearboxReduction;
-};
+} arm;

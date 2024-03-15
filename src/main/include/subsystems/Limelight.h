@@ -24,4 +24,4 @@ public:
         std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
         return table->GetBoolean("tv", 0.0);
     }
-};
+} ll;

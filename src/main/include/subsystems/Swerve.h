@@ -109,4 +109,4 @@ private:
     complex<float> targetVelocity;
 
     const float slewRate = 0.04;
-};
+} swerve;

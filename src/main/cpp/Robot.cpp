@@ -92,13 +92,22 @@ void Robot::AutonomousPeriodic() {
 	lastAutoState = autoState;
 }
 
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() {
+	init[DEFAULT] = []() {
+		intakeShooter.SetAngle(15);
+		intakeShooter.SetIntakeSpeed(0);
+		intakeShooter.SetShooter(0);
+		arm.SetAngle(0);
+		arm.SetHeight(0);
+		arm.SetRollerSpeed(0);
+	};
+}
 void Robot::TeleopPeriodic(){
-	float tROffset = 0;
-	lastRobotState = robotState;
+	tROffset = 0;
+	lastTeleopState = teleopState;
 	frc::SmartDashboard::PutNumber("Pitch: ", pitch);
 	// this switch case runs for each state
-	switch (robotState) {
+	switch (teleopState) {
 		case AIMING:
 			tROffset = -ll.getSpeakerYaw() / 35.0;
 			ty = ll.getSpeakerPitch();
@@ -106,10 +115,10 @@ void Robot::TeleopPeriodic(){
 			intakeShooter.SetAngle(pitch);
 			if (key_pad.GetRawButton(12) && intakeShooter.GetNotePresent()){
 				timer.Restart();
-				robotState = RAMPING;
+				teleopState = RAMPING;
 			}
 			if (!key_pad.GetRawButton(11)) {
-				robotState = DEFAULT;
+				teleopState = DEFAULT;
 			}
 			tROffset = -ll.getSpeakerYaw() / 35.0;
 			ty = ll.getSpeakerPitch();
@@ -118,69 +127,69 @@ void Robot::TeleopPeriodic(){
 			break;
 		case RAMPING:
 			if (timer.HasElapsed(1.1_s)){
-				robotState = SHOOTING;
+				teleopState = SHOOTING;
 			}
 			break;
 		case SHOOTING:
 			if (timer.HasElapsed(1.3_s)){
-				robotState = DEFAULT;
+				teleopState = DEFAULT;
 			}
 			break;
 		// Amp procedure
 		case AMPTRANSFER:
 			if (!intakeShooter.GetNotePresent()) {
-				robotState = AMPOS;
+				teleopState = AMPOS;
 			}
 			break;
 		case AMPOS:
 			if (key_pad.GetRawButtonPressed(2)) {
-				robotState = AMPSCORE;
+				teleopState = AMPSCORE;
 			}
 			break;
 		case AMPSCORE:
 			if (timer.HasElapsed(0.5_s)) {
-				robotState = ARMDEFAULT;
+				teleopState = ARMDEFAULT;
 			}
 			break;
 		case ARMDEFAULT:
 			if (timer.HasElapsed(0.7_s)) {
-				robotState = DEFAULT;
+				teleopState = DEFAULT;
 			}
 			break;
 		// climb procedure
 		case TRAPTRANSFER:
 			if (!intakeShooter.GetNotePresent()){
-				robotState = INTAKECLEAR;
+				teleopState = INTAKECLEAR;
 			}
 			break;
 		case INTAKECLEAR:
 			if (intakeShooter.GetAngle() > 50) {
-				robotState = TRAPCLIMBUP;
+				teleopState = TRAPCLIMBUP;
 			}
 			break;
 		case TRAPCLIMBUP:
 			if (key_pad.GetRawButtonPressed(3)){
-				robotState = TRAPCLIMBDOWN;
+				teleopState = TRAPCLIMBDOWN;
 			}
 			break;
 		case TRAPCLIMBDOWN:
 			if (climb.GetHeightReached(0)) {
-				robotState = WAITFORCLIMB;
+				teleopState = WAITFORCLIMB;
 			}
 			break;
 		case WAITFORCLIMB:
 			if (timer.HasElapsed(1_s)) {
-				robotState = TRAPSCOREREADY;
+				teleopState = TRAPSCOREREADY;
 			}
 			break;
 		case TRAPSCOREREADY:
 			if (timer.HasElapsed(0.4_s)) {
-				robotState = WAITINGTOSCORE;
+				teleopState = WAITINGTOSCORE;
 			}
 			break;
 		case WAITINGTOSCORE:
 			if (timer.HasElapsed(1.5_s)) {
-				robotState = TRAPSCORE;
+				teleopState = TRAPSCORE;
 			}
 			break;
 		case TRAPSCORE:
@@ -190,9 +199,9 @@ void Robot::TeleopPeriodic(){
 			break;
 		case INTAKING:
 			if (key_pad.GetRawButtonPressed(10)) {
-				robotState = DEFAULT;
+				teleopState = DEFAULT;
 			} else if (intakeShooter.eye0.Get()) {
-				robotState = NOTEALIGN1;
+				teleopState = NOTEALIGN1;
 			}
 			break;
 		case NOTEALIGN1:
@@ -200,7 +209,7 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetIntakeSpeed(-50);
 				intakeShooter.SetShooter(-10);
 			} else {
-				robotState = NOTEALIGN2;
+				teleopState = NOTEALIGN2;
 			}
 			break;
 		case NOTEALIGN2:
@@ -208,33 +217,33 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetIntakeSpeed(50);
 				intakeShooter.SetShooter(0);
 			} else {
-				robotState = NOTEALIGN3;
+				teleopState = NOTEALIGN3;
 			}
 			break;
 		case NOTEALIGN3:
 			if (intakeShooter.GetNotePresent()) {
-				robotState = DEFAULT;
+				teleopState = DEFAULT;
 			}
 			break;
 		case DEFAULT:
 			if (key_pad.GetRawButtonPressed(10) && !intakeShooter.GetNotePresent()) {
-				robotState = INTAKING;
+				teleopState = INTAKING;
 			}
 			if (key_pad.GetRawButton(11)) {
-				robotState = AIMING;
+				teleopState = AIMING;
 			}
 			if (key_pad.GetRawButtonPressed(2)) {
-				robotState = AMPTRANSFER;
+				teleopState = AMPTRANSFER;
 			}
 			if (key_pad.GetRawButtonPressed(3)) {
-				robotState = TRAPTRANSFER;
+				teleopState = TRAPTRANSFER;
 			}
 			break;
 	}
 
 	// this switch case only runs when the robot state changes
-	if (robotState != lastRobotState) {
-		switch (robotState) {
+	if (teleopState != lastTeleopState) {
+		switch (teleopState) {
 			// case AIMING:
 			// 	intakeShooter.SetP(0.01);
 			// 	intakeShooter.SetOutputRange(-0.6, 0.7);
@@ -362,7 +371,7 @@ void Robot::TeleopPeriodic(){
 	intakeShooter.RunAnglePID();
 
 	frc::SmartDashboard::PutNumber("angle", intakeShooter.GetAngle());
-	frc::SmartDashboard::PutNumber("robot state", robotState);
+	frc::SmartDashboard::PutNumber("robot state", teleopState);
 	frc::SmartDashboard::PutBoolean("note detected", intakeShooter.eye2.Get());
 }
 
@@ -374,6 +383,38 @@ void Robot::TestPeriodic() {}
 
 void Robot::SimulationInit() {}
 void Robot::SimulationPeriodic() {}
+void Robot::defineTeleopStateFunctions() {
+	
+	periodic[DEFAULT] = []() {
+		if (key_pad.GetRawButtonPressed(10) && !intakeShooter.GetNotePresent()) {
+				teleopState = INTAKING;
+			} else if (key_pad.GetRawButton(11)) {
+				teleopState = AIMING;
+			} else if (key_pad.GetRawButtonPressed(2)) {
+				teleopState = AMPTRANSFER;
+			} else if (key_pad.GetRawButtonPressed(3)) {
+				teleopState = TRAPTRANSFER;
+			}
+	};
+	periodic[AIMING] = []() {
+		tROffset = -ll.getSpeakerYaw() / 35.0;
+		ty = ll.getSpeakerPitch();
+		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
+		intakeShooter.SetAngle(pitch);
+		if (key_pad.GetRawButton(12) && intakeShooter.GetNotePresent()){
+			timer.Restart();
+			teleopState = RAMPING;
+		}
+		if (!key_pad.GetRawButton(11)) {
+			teleopState = DEFAULT;
+		}
+		tROffset = -ll.getSpeakerYaw() / 35.0;
+		ty = ll.getSpeakerPitch();
+		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
+		intakeShooter.SetAngle(pitch);
+	};
+
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main()

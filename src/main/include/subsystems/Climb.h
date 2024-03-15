@@ -49,4 +49,4 @@ private:
 	const float elevatorGearboxReduction = 36;
 	// inches per rotation of the motor
 	const float elevatorIPR = 9/2.54/elevatorGearboxReduction;
-};
+} climb;

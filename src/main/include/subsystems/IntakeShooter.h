@@ -150,4 +150,4 @@ private:
 const float angleGearboxReduction = 60;
 // degrees per rotation of the angle motor
 const float angleDPR = 360/angleGearboxReduction;
-};
+} intakeShooter;

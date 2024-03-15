@@ -9,6 +9,7 @@
 #include <frc/Timer.h>
 #include <string.h>
 
+#include "states.h"
 #include "subsystems/Swerve.h"
 #include "subsystems/IntakeShooter.h"
 #include "subsystems/NoteHandler.h"
@@ -16,58 +17,33 @@
 #include "subsystems/Limelight.h"
 using namespace std;
 
+unsigned int x = 0; // current autoPos setpoint index
+float pitch;
+float ty;
+float tROffset = 0;
+
+struct autoValue
+{
+	complex<float> pos;
+	float angle = 0;
+	enum TeleopState startingState = TeleopState::DEFAULT;
+};
+
+frc::XboxController controller{0};
+frc::Joystick key_pad{1};
+
+frc::Timer timer;
+
+autoValue autoPose[4] = {
+	{complex<float>(0, 0), 0, TeleopState::AIMING}};
+
+
+
 class Robot : public frc::TimedRobot{
 public:
-	unsigned int x = 0; // current autoPos setpoint index
-	float pitch;
-	float ty;
-
-	enum State {
-		DEFAULT,
-		ARMDEFAULT,
-		INTAKING,
-		NOTEALIGN1,
-		NOTEALIGN2,
-		NOTEALIGN3,
-		AIMING,
-		RAMPING,
-		SHOOTING,
-		AMPTRANSFER,
-		TRAPTRANSFER,
-		INTAKECLEAR,
-		TRAPCLIMBUP,
-		TRAPCLIMBDOWN,
-		TRAPSCOREREADY,
-		WAITINGTOSCORE,
-		TRAPSCORE,
-		CLIMBUP,
-		CLIMBDOWN,
-		AMPSCORE,
-		AMPOS,
-		WAITFORCLIMB
-	};
-	enum State robotState = DEFAULT;
-	enum State autoState = DEFAULT;
-	enum State lastRobotState = DEFAULT;
-	enum State lastAutoState = DEFAULT;
 	
-	struct autoValue
-	{
-		complex<float> pos;
-		float angle = 0;
-		enum State startingState = DEFAULT;
-	};
-	frc::XboxController controller{0};
-	frc::Joystick key_pad{1};
-	Swerve swerve;
-	NoteHandler arm;
-	IntakeShooter intakeShooter;
-	Limelight ll;
-	Climb climb;
-	autoValue autoPose[4] = {
-		{complex<float>(0, 0), 0, AIMING}};
-	frc::Timer posWaitTimer;
-	frc::Timer timer;
+	void defineTeleopStateFunctions();
+
 	void RobotInit() override;
 	void RobotPeriodic() override;
 
@@ -85,4 +61,5 @@ public:
 
 	void SimulationInit() override;
 	void SimulationPeriodic() override;
+
 };
