@@ -26,37 +26,37 @@ void Robot::AutonomousPeriodic() {
 	bool targetValid = ll.getTargetValid();
 	// this switch case runs for each state
 	switch (autoState) {
-		case AutoState::DRIVING:
+		case AutoState::ADRIVING:
 			if (swerve.GetPositionReached() && x < size(autoPose)-1) {
 				x++;
 				swerve.SetPosition(autoPose[x].pos);
 				autoState = autoPose[x].startingState;
 			}
 			break;
-		case AutoState::INTAKING:
+		case AutoState::AINTAKING:
 			if (intakeShooter.eye2.Get()){
-				autoState = AutoState::DRIVING;
+				autoState = AutoState::ADRIVING;
 			}
 			break;
-		case AutoState::AIMING:
+		case AutoState::AAIMING:
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
 			intakeShooter.SetAngle(pitch);
 			if (swerve.GetPositionReached() && intakeShooter.GetAngleReached(3) && abs(tx) < 5 && targetValid) {
-				autoState = AutoState::RAMPING;
+				autoState = AutoState::ARAMPING;
 			}
 			break;
-		case AutoState::RAMPING:
+		case AutoState::ARAMPING:
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
 			intakeShooter.SetAngle(pitch);
 			if (timer.HasElapsed(1_s)){
-				autoState = AutoState::SHOOTING;
+				autoState = AutoState::ASHOOTING;
 			}
 			break;
-		case AutoState::SHOOTING:
+		case AutoState::ASHOOTING:
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
 			intakeShooter.SetAngle(pitch);
 			if (timer.HasElapsed(1.3_s)){
-				autoState = AutoState::DRIVING;
+				autoState = AutoState::ADRIVING;
 			}
 			break;
 	}
@@ -66,20 +66,20 @@ void Robot::AutonomousPeriodic() {
 	// this switch case only runs when the robot state changes
 	if (autoState != lastAutoState) {
 		switch (autoState) {
-			case AutoState::INTAKING:
+			case AutoState::AINTAKING:
 				intakeShooter.SetAngle(91);
 				intakeShooter.SetIntake(70);
 				break;
-			case AutoState::AIMING:
+			case AutoState::AAIMING:
 				break;
-			case AutoState::RAMPING:
+			case AutoState::ARAMPING:
 				timer.Restart();
 				intakeShooter.SetShooter(60);
 				break;
-			case AutoState::SHOOTING:
+			case AutoState::ASHOOTING:
 				intakeShooter.SetIntake(100);
 				break;
-			case AutoState::DRIVING:
+			case AutoState::ADRIVING:
 				intakeShooter.SetAngle(15);
 				intakeShooter.SetIntake(0);
 				intakeShooter.SetShooter(0);

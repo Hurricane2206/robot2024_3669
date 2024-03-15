@@ -39,21 +39,21 @@ void defineTeleopStateFunctions();
 
 
 enum AutoState {
-    DRIVING,
-    INTAKING,
-    AIMING,
-    RAMPING,
-    SHOOTING,
+    ADRIVING,
+    AINTAKING,
+    AAIMING,
+    ARAMPING,
+    ASHOOTING,
 
-    NUM_OF_STATES // the number of states: do not remove
+    ANUM_OF_STATES // the number of states: do not remove
 };
 
-enum AutoState autoState = AutoState::DRIVING;
-enum AutoState lastAutoState = AutoState::DRIVING;
+enum AutoState autoState = AutoState::ADRIVING;
+enum AutoState lastAutoState = AutoState::ANUM_OF_STATES;
 
 // Array of function pointers for state initialization code
-void (*init[AutoState::NUM_OF_STATES])();
+// void (*init[AutoState::NUM_OF_STATES])();
 // Array of function pointers for the state periodic code
-void (*periodic[AutoState::NUM_OF_STATES])();
+// void (*periodic[AutoState::NUM_OF_STATES])();
 
 void defineAutoStateFunctions();

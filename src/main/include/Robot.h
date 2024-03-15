@@ -26,7 +26,7 @@ struct autoValue
 {
 	complex<float> pos;
 	float angle = 0;
-	enum AutoState startingState = AutoState::DRIVING;
+	enum AutoState startingState = AutoState::ADRIVING;
 };
 
 frc::XboxController controller{0};
@@ -35,8 +35,8 @@ frc::Joystick key_pad{1};
 frc::Timer timer;
 
 autoValue autoPose[4] = {
-	{complex<float>(0, 0), 0, AutoState::AIMING},
-	{complex<float>(20,0), 0, AutoState::DRIVING}};
+	{complex<float>(0, 0), 0, AutoState::AAIMING},
+	{complex<float>(20,0), 0, AutoState::ADRIVING}};
 
 
 
