@@ -22,6 +22,8 @@ void Robot::AutonomousInit() {
 }
 void Robot::AutonomousPeriodic() {
 	float tx = ll.getSpeakerYaw();
+	ty = ll.getSpeakerPitch();
+	bool targetValid = ll.getTargetValid();
 	// this switch case runs for each state
 	switch (autoState) {
 		case DEFAULT:
@@ -37,15 +39,13 @@ void Robot::AutonomousPeriodic() {
 			}
 			break;
 		case AIMING:
-			ty = ll.getSpeakerPitch();
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
 			intakeShooter.SetAngle(pitch);
-			if (swerve.GetPositionReached() && intakeShooter.GetAngleReached(3) && abs(tx) < 3) {
+			if (swerve.GetPositionReached() && intakeShooter.GetAngleReached(3) && abs(tx) < 3 && targetValid) {
 				autoState = RAMPING;
 			}
 			break;
 		case RAMPING:
-			ty = ll.getSpeakerPitch();
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
 			intakeShooter.SetAngle(pitch);
 			if (timer.HasElapsed(1_s)){
@@ -53,7 +53,6 @@ void Robot::AutonomousPeriodic() {
 			}
 			break;
 		case SHOOTING:
-			ty = ll.getSpeakerPitch();
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
 			intakeShooter.SetAngle(pitch);
 			if (timer.HasElapsed(1.3_s)){

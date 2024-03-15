@@ -20,11 +20,8 @@ public:
         return table->GetNumber("ty",0.0);
     }
 
-    // get the position of the robot in inches
-    // complex<double> getPosition() {
-    //     LimelightHelpers::setPipelineIndex("", 0);
-    //     return complex<float>(LimelightHelpers::getBotpose_TargetSpace()[0], LimelightHelpers::getBotpose_TargetSpace()[1]) * 39.37f;
-    // }
-
-    // 
+    bool getTargetValid() {
+        std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+        return table->GetBoolean("tv", 0.0);
+    }
 };
