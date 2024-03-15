@@ -22,6 +22,10 @@ public:
 
     bool getTargetValid() {
         std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-        return table->GetBoolean("tv", 0.0);
+        bool targetValid = false;
+        if (abs(table->GetNumber("tx", 0.0) < 0.2)) {
+            targetValid = true;
+        }
+        return targetValid;
     }
 } ll;

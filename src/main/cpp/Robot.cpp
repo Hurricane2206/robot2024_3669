@@ -39,9 +39,9 @@ void Robot::AutonomousPeriodic() {
 			}
 			break;
 		case AIMING:
-			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
+			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
 			intakeShooter.SetAngle(pitch);
-			if (swerve.GetPositionReached() && intakeShooter.GetAngleReached(3) && abs(tx) < 3 && targetValid) {
+			if (swerve.GetPositionReached() && intakeShooter.GetAngleReached(3) && abs(tx) < 5 && targetValid) {
 				autoState = RAMPING;
 			}
 			break;
@@ -151,6 +151,11 @@ void Robot::TeleopPeriodic(){
 				teleopState = ARMDEFAULT;
 			}
 			break;
+		case DEFENDING:
+			if (key_pad.GetRawButtonPressed(1)) {
+				robotState = ARMDEFAULT;
+			}
+			break;
 		case ARMDEFAULT:
 			if (timer.HasElapsed(0.7_s)) {
 				teleopState = DEFAULT;
@@ -232,6 +237,9 @@ void Robot::TeleopPeriodic(){
 			if (key_pad.GetRawButton(11)) {
 				teleopState = AIMING;
 			}
+			if (key_pad.GetRawButtonPressed(1)) {
+				robotState = DEFENDING;
+			}
 			if (key_pad.GetRawButtonPressed(2)) {
 				teleopState = AMPTRANSFER;
 			}
@@ -282,6 +290,10 @@ void Robot::TeleopPeriodic(){
 			case AMPSCORE:
 				timer.Restart();
 				arm.SetRollerSpeed(-100);
+				break;
+			case DEFENDING:
+				arm.SetHeight(20);
+				arm.SetAngle(180);
 				break;
 			case ARMDEFAULT:
 				timer.Restart();
