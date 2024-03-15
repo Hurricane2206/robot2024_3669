@@ -1,6 +1,7 @@
 #pragma once;
 enum TeleopState {
     DEFAULT,
+    DEFENDING,
     ARMDEFAULT,
     INTAKING,
     NOTEALIGN1,

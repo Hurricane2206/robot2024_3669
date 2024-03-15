@@ -153,7 +153,7 @@ void Robot::TeleopPeriodic(){
 			break;
 		case DEFENDING:
 			if (key_pad.GetRawButtonPressed(1)) {
-				robotState = ARMDEFAULT;
+				teleopState = ARMDEFAULT;
 			}
 			break;
 		case ARMDEFAULT:
@@ -238,7 +238,7 @@ void Robot::TeleopPeriodic(){
 				teleopState = AIMING;
 			}
 			if (key_pad.GetRawButtonPressed(1)) {
-				robotState = DEFENDING;
+				teleopState = DEFENDING;
 			}
 			if (key_pad.GetRawButtonPressed(2)) {
 				teleopState = AMPTRANSFER;
