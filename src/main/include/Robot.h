@@ -24,6 +24,7 @@ public:
 
 	enum State {
 		DEFAULT,
+		DEFENDING,
 		ARMDEFAULT,
 		INTAKING,
 		NOTEALIGN1,
