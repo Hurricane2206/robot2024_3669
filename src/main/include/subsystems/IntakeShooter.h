@@ -127,8 +127,8 @@ private:
 	float I = 0;
 	float D = 0;
 	float F = -0.015;
-	float max = 0.25;
-	float min = -0.15;
+	float max = 0.3;
+	float min = -0.3;
 	rev::CANSparkMax m_intake{42, rev::CANSparkMax::MotorType::kBrushless};
 	rev::SparkPIDController intakePID = m_intake.GetPIDController();
 	rev::SparkRelativeEncoder e_intake = m_intake.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
