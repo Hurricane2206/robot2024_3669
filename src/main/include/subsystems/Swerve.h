@@ -55,7 +55,7 @@ public:
         angle = gyro.GetYaw()*-(M_PI/180);
         // posError = posSetpoint-pos;
         // complex<float> posPIDoutput = posError*0.025f;
-        float turnRate = -tx / 50.0;
+        float turnRate = -tx / 45.0;
         // if (abs(posPIDoutput) > 0.3) {
         //     posPIDoutput *= 0.3 / abs(posPIDoutput);
         // }
@@ -77,7 +77,7 @@ public:
         // calculate odometry and set modules
         complex<float> posChange = complex<float>(0, 0);
         for (Module module : modules){
-            module.set(0, turnRate, true);
+            module.set(0, turnRate);
             posChange += module.getPositionChange();
         }
         pos += posChange * polar<float>(0.25, angle);
