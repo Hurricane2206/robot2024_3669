@@ -26,37 +26,37 @@ void Robot::AutonomousPeriodic() {
 	bool targetValid = ll.getTargetValid();
 	// this switch case runs for each state
 	switch (autoState) {
-		case DEFAULT:
+		case AutoState::DRIVING:
 			if (swerve.GetPositionReached() && x < size(autoPose)-1) {
 				x++;
 				swerve.SetPosition(autoPose[x].pos);
 				autoState = autoPose[x].startingState;
 			}
 			break;
-		case INTAKING:
+		case AutoState::INTAKING:
 			if (intakeShooter.eye2.Get()){
-				autoState = DEFAULT;
+				autoState = AutoState::DRIVING;
 			}
 			break;
-		case AIMING:
+		case AutoState::AIMING:
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
 			intakeShooter.SetAngle(pitch);
 			if (swerve.GetPositionReached() && intakeShooter.GetAngleReached(3) && abs(tx) < 5 && targetValid) {
-				autoState = RAMPING;
+				autoState = AutoState::RAMPING;
 			}
 			break;
-		case RAMPING:
+		case AutoState::RAMPING:
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
 			intakeShooter.SetAngle(pitch);
 			if (timer.HasElapsed(1_s)){
-				autoState = SHOOTING;
+				autoState = AutoState::SHOOTING;
 			}
 			break;
-		case SHOOTING:
+		case AutoState::SHOOTING:
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
 			intakeShooter.SetAngle(pitch);
 			if (timer.HasElapsed(1.3_s)){
-				autoState = DEFAULT;
+				autoState = AutoState::DRIVING;
 			}
 			break;
 	}
@@ -66,20 +66,20 @@ void Robot::AutonomousPeriodic() {
 	// this switch case only runs when the robot state changes
 	if (autoState != lastAutoState) {
 		switch (autoState) {
-			case INTAKING:
+			case AutoState::INTAKING:
 				intakeShooter.SetAngle(91);
 				intakeShooter.SetIntake(70);
 				break;
-			case AIMING:
+			case AutoState::AIMING:
 				break;
-			case RAMPING:
+			case AutoState::RAMPING:
 				timer.Restart();
 				intakeShooter.SetShooter(60);
 				break;
-			case SHOOTING:
+			case AutoState::SHOOTING:
 				intakeShooter.SetIntake(100);
 				break;
-			case DEFAULT:
+			case AutoState::DRIVING:
 				intakeShooter.SetAngle(15);
 				intakeShooter.SetIntake(0);
 				intakeShooter.SetShooter(0);
@@ -108,143 +108,143 @@ void Robot::TeleopPeriodic(){
 	frc::SmartDashboard::PutNumber("Pitch: ", pitch);
 	// this switch case runs for each state
 	switch (teleopState) {
-		case AIMING:
+		case TeleopState::AIMING:
 			tROffset = -ll.getSpeakerYaw() / 35.0;
 			ty = ll.getSpeakerPitch();
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
 			intakeShooter.SetAngle(pitch);
 			if (key_pad.GetRawButton(12) && intakeShooter.GetNotePresent()){
 				timer.Restart();
-				teleopState = RAMPING;
+				teleopState = TeleopState::RAMPING;
 			}
 			if (!key_pad.GetRawButton(11)) {
-				teleopState = DEFAULT;
+				teleopState = TeleopState::DEFAULT;
 			}
 			tROffset = -ll.getSpeakerYaw() / 35.0;
 			ty = ll.getSpeakerPitch();
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
 			intakeShooter.SetAngle(pitch);
 			break;
-		case RAMPING:
+		case TeleopState::RAMPING:
 			if (timer.HasElapsed(1.1_s)){
-				teleopState = SHOOTING;
+				teleopState = TeleopState::SHOOTING;
 			}
 			break;
-		case SHOOTING:
+		case TeleopState::SHOOTING:
 			if (timer.HasElapsed(1.3_s)){
-				teleopState = DEFAULT;
+				teleopState = TeleopState::DEFAULT;
 			}
 			break;
 		// Amp procedure
-		case AMPTRANSFER:
+		case TeleopState::AMPTRANSFER:
 			if (!intakeShooter.GetNotePresent()) {
-				teleopState = AMPOS;
+				teleopState = TeleopState::AMPOS;
 			}
 			break;
-		case AMPOS:
+		case TeleopState::AMPOS:
 			if (key_pad.GetRawButtonPressed(2)) {
-				teleopState = AMPSCORE;
+				teleopState = TeleopState::AMPSCORE;
 			}
 			break;
-		case AMPSCORE:
+		case TeleopState::AMPSCORE:
 			if (timer.HasElapsed(0.5_s)) {
-				teleopState = ARMDEFAULT;
+				teleopState = TeleopState::ARMDEFAULT;
 			}
 			break;
-		case DEFENDING:
+		case TeleopState::DEFENDING:
 			if (key_pad.GetRawButtonPressed(1)) {
-				teleopState = ARMDEFAULT;
+				teleopState = TeleopState::ARMDEFAULT;
 			}
 			break;
-		case ARMDEFAULT:
+		case TeleopState::ARMDEFAULT:
 			if (timer.HasElapsed(0.7_s)) {
-				teleopState = DEFAULT;
+				teleopState = TeleopState::DEFAULT;
 			}
 			break;
 		// climb procedure
-		case TRAPTRANSFER:
+		case TeleopState::TRAPTRANSFER:
 			if (!intakeShooter.GetNotePresent()){
-				teleopState = INTAKECLEAR;
+				teleopState = TeleopState::INTAKECLEAR;
 			}
 			break;
-		case INTAKECLEAR:
+		case TeleopState::INTAKECLEAR:
 			if (intakeShooter.GetAngle() > 50) {
-				teleopState = TRAPCLIMBUP;
+				teleopState = TeleopState::TRAPCLIMBUP;
 			}
 			break;
-		case TRAPCLIMBUP:
+		case TeleopState::TRAPCLIMBUP:
 			if (key_pad.GetRawButtonPressed(3)){
-				teleopState = TRAPCLIMBDOWN;
+				teleopState = TeleopState::TRAPCLIMBDOWN;
 			}
 			break;
-		case TRAPCLIMBDOWN:
+		case TeleopState::TRAPCLIMBDOWN:
 			if (climb.GetHeightReached(0)) {
-				teleopState = WAITFORCLIMB;
+				teleopState = TeleopState::WAITFORCLIMB;
 			}
 			break;
-		case WAITFORCLIMB:
+		case TeleopState::WAITFORCLIMB:
 			if (timer.HasElapsed(1_s)) {
-				teleopState = TRAPSCOREREADY;
+				teleopState = TeleopState::TRAPSCOREREADY;
 			}
 			break;
-		case TRAPSCOREREADY:
+		case TeleopState::TRAPSCOREREADY:
 			if (timer.HasElapsed(0.4_s)) {
-				teleopState = WAITINGTOSCORE;
+				teleopState = TeleopState::WAITINGTOSCORE;
 			}
 			break;
-		case WAITINGTOSCORE:
+		case TeleopState::WAITINGTOSCORE:
 			if (timer.HasElapsed(1.5_s)) {
-				teleopState = TRAPSCORE;
+				teleopState = TeleopState::TRAPSCORE;
 			}
 			break;
-		case TRAPSCORE:
+		case TeleopState::TRAPSCORE:
 			if (timer.HasElapsed(1.5_s)) {
 				arm.SetRollerSpeed(0);
 			}
 			break;
-		case INTAKING:
+		case TeleopState::INTAKING:
 			if (key_pad.GetRawButtonPressed(10)) {
-				teleopState = DEFAULT;
+				teleopState = TeleopState::DEFAULT;
 			} else if (intakeShooter.eye0.Get()) {
-				teleopState = NOTEALIGN1;
+				teleopState = TeleopState::NOTEALIGN1;
 			}
 			break;
-		case NOTEALIGN1:
+		case TeleopState::NOTEALIGN1:
 			if (intakeShooter.eye2.Get()) {
 				intakeShooter.SetIntakeSpeed(-50);
 				intakeShooter.SetShooter(-10);
 			} else {
-				teleopState = NOTEALIGN2;
+				teleopState = TeleopState::NOTEALIGN2;
 			}
 			break;
-		case NOTEALIGN2:
+		case TeleopState::NOTEALIGN2:
 			if (!intakeShooter.eye2.Get()) {
 				intakeShooter.SetIntakeSpeed(50);
 				intakeShooter.SetShooter(0);
 			} else {
-				teleopState = NOTEALIGN3;
+				teleopState = TeleopState::NOTEALIGN3;
 			}
 			break;
-		case NOTEALIGN3:
+		case TeleopState::NOTEALIGN3:
 			if (intakeShooter.GetNotePresent()) {
-				teleopState = DEFAULT;
+				teleopState = TeleopState::DEFAULT;
 			}
 			break;
-		case DEFAULT:
+		case TeleopState::DEFAULT:
 			if (key_pad.GetRawButtonPressed(10) && !intakeShooter.GetNotePresent()) {
-				teleopState = INTAKING;
+				teleopState = TeleopState::INTAKING;
 			}
 			if (key_pad.GetRawButton(11)) {
-				teleopState = AIMING;
+				teleopState = TeleopState::AIMING;
 			}
 			if (key_pad.GetRawButtonPressed(1)) {
-				teleopState = DEFENDING;
+				teleopState = TeleopState::DEFENDING;
 			}
 			if (key_pad.GetRawButtonPressed(2)) {
-				teleopState = AMPTRANSFER;
+				teleopState = TeleopState::AMPTRANSFER;
 			}
 			if (key_pad.GetRawButtonPressed(3)) {
-				teleopState = TRAPTRANSFER;
+				teleopState = TeleopState::TRAPTRANSFER;
 			}
 			break;
 	}
@@ -256,22 +256,22 @@ void Robot::TeleopPeriodic(){
 			// 	intakeShooter.SetP(0.01);
 			// 	intakeShooter.SetOutputRange(-0.6, 0.7);
 			// 	break;
-			case RAMPING:
+			case TeleopState::RAMPING:
 				intakeShooter.SetShooter(60);
 				break;
-			case SHOOTING:
+			case TeleopState::SHOOTING:
 				intakeShooter.SetIntake(100);
 				break;
-			case INTAKING:
+			case TeleopState::INTAKING:
 				intakeShooter.SetAngle(94);
 				intakeShooter.SetIntake(80);
 				break;
-			case NOTEALIGN1:
+			case TeleopState::NOTEALIGN1:
 				intakeShooter.SetAngle(15);
 				intakeShooter.SetIntakeSpeed(50);
 				break;
 			// amp procedure:
-			case AMPTRANSFER:
+			case TeleopState::AMPTRANSFER:
 				arm.SetAngle(20);
 				arm.SetHeight(0);
 				arm.SetRollerSpeed(130);
@@ -279,7 +279,7 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetIntakeSpeed(100);
 				intakeShooter.SetShooter(10);
 				break;
-			case AMPOS:
+			case TeleopState::AMPOS:
 				intakeShooter.SetAngle(40);
 				intakeShooter.SetShooter(0);
 				intakeShooter.SetIntake(0);
@@ -287,22 +287,22 @@ void Robot::TeleopPeriodic(){
 				arm.SetHeight(15);
 				arm.SetAngle(225);
 				break;
-			case AMPSCORE:
+			case TeleopState::AMPSCORE:
 				timer.Restart();
 				arm.SetRollerSpeed(-100);
 				break;
-			case DEFENDING:
+			case TeleopState::DEFENDING:
 				arm.SetHeight(20);
 				arm.SetAngle(180);
 				break;
-			case ARMDEFAULT:
+			case TeleopState::ARMDEFAULT:
 				timer.Restart();
 				intakeShooter.SetAngle(40);
 				arm.SetHeight(0);
 				arm.SetAngle(0);
 				break;
 			// trap procedure:
-			case TRAPTRANSFER:
+			case TeleopState::TRAPTRANSFER:
 				arm.SetAngle(20);
 				arm.SetHeight(0);
 				arm.SetRollerSpeed(130);
@@ -310,7 +310,7 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetIntakeSpeed(100);
 				intakeShooter.SetShooter(10);
 				break;
-			case INTAKECLEAR:
+			case TeleopState::INTAKECLEAR:
 				arm.SetAngle(90);
 				arm.SetHeight(0);
 				arm.SetRollerSpeed(0);
@@ -318,7 +318,7 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetIntakeSpeed(0);
 				intakeShooter.SetShooter(0);
 				break;
-			case TRAPCLIMBUP:
+			case TeleopState::TRAPCLIMBUP:
 				intakeShooter.SetAngle(60);
 				arm.SetAngle(90);
 				arm.SetHeight(0);
@@ -327,7 +327,7 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetShooter(0);
 				climb.SetHeight(20);
 				break;
-			case TRAPCLIMBDOWN:
+			case TeleopState::TRAPCLIMBDOWN:
 				intakeShooter.SetAngle(60);
 				arm.SetAngle(90);
 				arm.SetHeight(20.5);
@@ -336,10 +336,10 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetShooter(0);
 				climb.SetHeight(0);
 				break;
-			case WAITFORCLIMB:
+			case TeleopState::WAITFORCLIMB:
 				timer.Restart();
 				break;
-			case TRAPSCOREREADY:
+			case TeleopState::TRAPSCOREREADY:
 				timer.Restart();
 				intakeShooter.SetAngle(15);
 				arm.SetAngle(235);
@@ -349,11 +349,11 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetShooter(0);
 				climb.SetHeight(0);
 				break;
-			case WAITINGTOSCORE:
+			case TeleopState::WAITINGTOSCORE:
 				timer.Restart();
 				arm.SetRollerSpeed(0);
 				break;
-			case TRAPSCORE:
+			case TeleopState::TRAPSCORE:
 				timer.Restart();
 				intakeShooter.SetAngle(15);
 				arm.SetAngle(235);
@@ -363,7 +363,7 @@ void Robot::TeleopPeriodic(){
 				intakeShooter.SetShooter(0);
 				climb.SetHeight(0);
 				break;
-			case DEFAULT:
+			case TeleopState::DEFAULT:
 				intakeShooter.SetAngle(15);
 				intakeShooter.SetIntakeSpeed(0);
 				intakeShooter.SetShooter(0);
