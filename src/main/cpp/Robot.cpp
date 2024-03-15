@@ -383,38 +383,7 @@ void Robot::TestPeriodic() {}
 
 void Robot::SimulationInit() {}
 void Robot::SimulationPeriodic() {}
-void Robot::defineTeleopStateFunctions() {
-	
-	periodic[DEFAULT] = []() {
-		if (key_pad.GetRawButtonPressed(10) && !intakeShooter.GetNotePresent()) {
-				teleopState = INTAKING;
-			} else if (key_pad.GetRawButton(11)) {
-				teleopState = AIMING;
-			} else if (key_pad.GetRawButtonPressed(2)) {
-				teleopState = AMPTRANSFER;
-			} else if (key_pad.GetRawButtonPressed(3)) {
-				teleopState = TRAPTRANSFER;
-			}
-	};
-	periodic[AIMING] = []() {
-		tROffset = -ll.getSpeakerYaw() / 35.0;
-		ty = ll.getSpeakerPitch();
-		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
-		intakeShooter.SetAngle(pitch);
-		if (key_pad.GetRawButton(12) && intakeShooter.GetNotePresent()){
-			timer.Restart();
-			teleopState = RAMPING;
-		}
-		if (!key_pad.GetRawButton(11)) {
-			teleopState = DEFAULT;
-		}
-		tROffset = -ll.getSpeakerYaw() / 35.0;
-		ty = ll.getSpeakerPitch();
-		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
-		intakeShooter.SetAngle(pitch);
-	};
-
-}
+void Robot::defineTeleopStateFunctions() {}
 
 #ifndef RUNNING_FRC_TESTS
 int main()
