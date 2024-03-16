@@ -50,7 +50,7 @@ public:
     }
     complex<float> getPositionChange() {
         float motorPos = dMotor->GetPosition().GetValue().value();
-        float motorPosChg = motorPos - motorPosOld;
+        motorPosChg = motorPos - motorPosOld;
         complex<float> modPosChange = polar<float>(motorPosChg*3.9*M_PI/6.75, angle);
         motorPosOld = motorPos;
         return modPosChange;
@@ -65,6 +65,10 @@ public:
         return dMotor->GetPosition().GetValue().value();
     }
 
+    float getMotorPosChange() {
+        return motorPosChg;
+    }
+
     complex<float> getVelocity(complex<float> rVector, float turnRate){
         return rVector+turnVector*turnRate;
     }
@@ -76,6 +80,7 @@ private:
     rev::CANSparkMax *sMotor;
     complex<float> turnVector;
     complex<float> modPosChange;
+    float motorPosChg = 0;
     float motorPosOld = 0;
     float angle;
 };

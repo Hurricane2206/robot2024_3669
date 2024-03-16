@@ -109,6 +109,14 @@ public:
         return modules[i].getPositionChange();
     }
 
+    float GetMotorPosChange(int i) {
+        return modules[i].getMotorPosChange();
+    }
+
+    float GetMotorPos(int i) {
+        return modules[i].getMotorPos();
+    }
+
 private:
     AHRS gyro{frc::SPI::Port::kMXP};
     Module modules[4] = {
