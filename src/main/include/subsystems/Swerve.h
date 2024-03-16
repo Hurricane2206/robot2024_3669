@@ -82,6 +82,9 @@ public:
         if (abs(turnRate) > 0.3) {
             turnRate *= 0.3 / abs(turnRate);
         }
+        if (abs(posError) < 0.5) {
+            posPIDoutput = complex<float>(0,0);
+        }
         posPIDoutput *= polar<float>(1, -angle);
         // calculate odometry
         posChange = complex<float>(0, 0);
