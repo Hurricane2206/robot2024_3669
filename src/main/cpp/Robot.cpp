@@ -31,6 +31,11 @@ void Robot::AutonomousPeriodic() {
 		AutoInit[autoState]();
 	}
 	swerve.RunPID(tx);
+	frc::SmartDashboard::PutNumber("posx", swerve.pos.real());
+	frc::SmartDashboard::PutNumber("posy", swerve.pos.imag());
+	frc::SmartDashboard::PutNumber("posErrorx", swerve.posError.real());
+	frc::SmartDashboard::PutNumber("posErrory", swerve.posError.imag());
+
 	intakeShooter.RunAnglePID();
 	lastAutoState = autoState;
 }

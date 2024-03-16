@@ -8,6 +8,19 @@ using namespace std;
 
 class Swerve{
 public:
+    complex<float> pos = complex<float>(0, 0);
+    float angle;
+
+    complex<float> posSetpoint = complex<float>(0, 0);
+    complex<float> posError = complex<float>(0, 0);
+    float posP = 0.01;
+    // float angleSetpoint;
+
+    complex<float> currentVelocity;
+    float currentTurnRate = 0;
+    complex<float> targetVelocity;
+
+    const float slewRate = 0.04;
     void set(complex<float> velocity, float turnRate, bool noAcceleration = false){
         angle = -gyro.GetYaw()*(M_PI/180);
         targetVelocity = velocity;
@@ -43,7 +56,7 @@ public:
             module.set(targetVelocity, currentTurnRate);
         }
     }
-    
+
     void SetPosition(complex<float> position){
         posSetpoint = position;
     }
@@ -89,17 +102,4 @@ private:
         Module{4, complex<float>(-1, -1)}
     };
 
-    complex<float> pos = complex<float>(0, 0);
-    float angle;
-
-    complex<float> posSetpoint = complex<float>(0, 0);
-    complex<float> posError = complex<float>(0, 0);
-    float posP = 0.01;
-    // float angleSetpoint;
-
-    complex<float> currentVelocity;
-    float currentTurnRate = 0;
-    complex<float> targetVelocity;
-
-    const float slewRate = 0.04;
 } swerve;
