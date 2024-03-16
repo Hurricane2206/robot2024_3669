@@ -51,10 +51,13 @@ public:
         currentTurnRate += turnRateError;
         targetVelocity = currentVelocity * polar<float>(1, -angle);
 
-        // set modules
-        for (Module module : modules){
+        // calculate odometry
+        complex<float> posChange = complex<float>(0, 0);
+        for (Module module : modules) {
             module.set(targetVelocity, currentTurnRate);
+            posChange += module.getPositionChange();
         }
+        pos += posChange * polar<float>(0.25, angle);
     }
 
     void SetPosition(complex<float> position){
@@ -99,6 +102,7 @@ public:
             module.resetEncoders();
         }
     }
+    
 private:
     AHRS gyro{frc::SPI::Port::kMXP};
     Module modules[4] = {
