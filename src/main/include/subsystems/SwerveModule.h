@@ -26,6 +26,7 @@ public:
 		configs.Slot1.kD = 0.001; // A change of 1000 rotation per second squared results in 1 amp output
 		configs.TorqueCurrent.PeakForwardTorqueCurrent = 40;  // Peak output of 40 amps
 		configs.TorqueCurrent.PeakReverseTorqueCurrent = -40; // Peak output of 40 amps
+        configs.CurrentLimits.StatorCurrentLimit = 40;
 
         dMotor->GetConfigurator().Apply(configs);
     }
