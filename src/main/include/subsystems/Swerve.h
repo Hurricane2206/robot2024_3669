@@ -102,6 +102,11 @@ public:
         for (Module module : modules) {
             module.resetEncoders();
         }
+        pos = complex<float>(0,0);
+    }
+
+    complex<float> GetModulePosChange(int i) {
+        return modules[i].getPositionChange();
     }
 
 private:

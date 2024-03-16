@@ -49,9 +49,10 @@ public:
         dMotor->SetControl(m_velocity.WithVelocity(throttle*90_tps).WithFeedForward(friction_torque));
     }
     complex<float> getPositionChange() {
-        float motorPosChg = dMotor->GetPosition().GetValue().value() - motorPosOld;
+        float motorPos = dMotor->GetPosition().GetValue().value();
+        float motorPosChg = motorPos - motorPosOld;
         complex<float> modPosChange = polar<float>(motorPosChg*3.9*M_PI/6.75, angle);
-        motorPosOld = dMotor->GetPosition().GetValue().value();
+        motorPosOld = motorPos;
         return modPosChange;
     }
 
