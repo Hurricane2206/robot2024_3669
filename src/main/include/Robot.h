@@ -36,7 +36,7 @@ frc::Joystick key_pad{1};
 
 frc::Timer timer;
 
-autoValue autoPose[2] = {
+autoValue autoPose[3] = {
 	{complex<float>(0, 0), 0, AutoState::AAIMING},
 	{complex<float>(90,0), 0, AutoState::AINTAKING},
 	{complex<float>(90,0), 0, AutoState::AAIMING}};
