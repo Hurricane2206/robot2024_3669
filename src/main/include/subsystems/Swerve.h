@@ -9,6 +9,7 @@ using namespace std;
 class Swerve{
 public:
     complex<float> pos = complex<float>(0, 0);
+    complex<float> posChange = complex<float>(0, 0);
     float angle;
 
     complex<float> posSetpoint = complex<float>(0, 0);
@@ -52,7 +53,7 @@ public:
         targetVelocity = currentVelocity * polar<float>(1, -angle);
 
         // calculate odometry
-        complex<float> posChange = complex<float>(0, 0);
+        posChange = complex<float>(0, 0);
         for (Module module : modules) {
             module.set(targetVelocity, currentTurnRate);
             posChange += module.getPositionChange();
@@ -83,7 +84,7 @@ public:
         }
         posPIDoutput *= polar<float>(1, -angle);
         // calculate odometry
-        complex<float> posChange = complex<float>(0, 0);
+        posChange = complex<float>(0, 0);
         for (Module module : modules){
             module.set(posPIDoutput, turnRate);
             posChange += module.getPositionChange();
@@ -102,7 +103,7 @@ public:
             module.resetEncoders();
         }
     }
-    
+
 private:
     AHRS gyro{frc::SPI::Port::kMXP};
     Module modules[4] = {

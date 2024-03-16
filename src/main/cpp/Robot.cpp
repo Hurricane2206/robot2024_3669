@@ -327,6 +327,8 @@ void Robot::TeleopPeriodic(){
 	frc::SmartDashboard::PutNumber("posy", swerve.pos.imag());
 	frc::SmartDashboard::PutNumber("posErrorx", swerve.posError.real());
 	frc::SmartDashboard::PutNumber("posErrory", swerve.posError.imag());
+	frc::SmartDashboard::PutNumber("posChangex", swerve.posChange.real());
+	frc::SmartDashboard::PutNumber("posChangy", swerve.posChange.imag());
 }
 
 void Robot::DisabledInit() {}
