@@ -12,20 +12,16 @@ class Limelight {
 public:
     double getSpeakerYaw() {
         std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-        return table->GetNumber("tx",0.0);
+        return table->GetNumber("tx", 0.0);
     }
 
     double getSpeakerPitch() {
         std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-        return table->GetNumber("ty",0.0);
+        return table->GetNumber("ty", 0.0);
     }
 
     bool getTargetValid() {
         std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-        bool targetValid = false;
-        if (abs(table->GetNumber("tx", 0.0) < 0.2)) {
-            targetValid = true;
-        }
-        return targetValid;
+        return table->GetNumber("tx", 0.0) != 0;
     }
 } ll;
