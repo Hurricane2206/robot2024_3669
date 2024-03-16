@@ -14,7 +14,7 @@ public:
 
     complex<float> posSetpoint = complex<float>(0, 0);
     complex<float> posError = complex<float>(0, 0);
-    float posP = 0.003;
+    float posP = 0.02;
     // float angleSetpoint;
 
     complex<float> currentVelocity;
@@ -57,8 +57,6 @@ public:
         for (Module module : modules) {
             module.set(targetVelocity, currentTurnRate);
             posChange += module.getPositionChange();
-            // module.getPositionChange();
-            // module.getPositionChange();
         }
         pos += posChange * polar<float>(0.25, angle);
     }
@@ -90,8 +88,6 @@ public:
         for (Module module : modules){
             module.set(posPIDoutput, turnRate);
             posChange += module.getPositionChange();
-            // module.getPositionChange();
-            // module.getPositionChange();
         }
         pos += posChange * polar<float>(0.25, angle);
     }
