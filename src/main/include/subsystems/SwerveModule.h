@@ -55,6 +55,11 @@ public:
         return modPosChange;
     }
 
+    void resetEncoders() {
+        motorPosOld = 0;
+        dMotor->SetPosition(0_tr);
+    }
+
     float getMotorPos() {
         return dMotor->GetPosition().GetValue().value();
     }

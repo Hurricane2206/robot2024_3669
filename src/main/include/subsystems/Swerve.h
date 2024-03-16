@@ -93,6 +93,12 @@ public:
             module.init();
         }
     }
+
+    void resetPos() {
+        for (Module module : modules) {
+            module.resetEncoders();
+        }
+    }
 private:
     AHRS gyro{frc::SPI::Port::kMXP};
     Module modules[4] = {

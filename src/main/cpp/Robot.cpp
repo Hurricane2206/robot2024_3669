@@ -316,6 +316,9 @@ void Robot::TeleopPeriodic(){
 	float turnRate = tR*0.3;
 	swerve.set(velocity, turnRate);
 	intakeShooter.RunAnglePID();
+	if (controller.GetAButtonPressed()) {
+		swerve.resetPos();
+	}
 
 	frc::SmartDashboard::PutNumber("angle", intakeShooter.GetAngle());
 	frc::SmartDashboard::PutNumber("robot state", teleopState);
