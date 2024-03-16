@@ -38,7 +38,9 @@ frc::Timer timer;
 
 autoValue autoPose[2] = {
 	{complex<float>(0, 0), 0, AutoState::AAIMING},
-	{complex<float>(20,0), 0, AutoState::ADRIVING}};
+	{complex<float>(90,0), 0, AutoState::AINTAKING}
+	{complex<float>(90,0), 0, AutoState::AAIMING}};
+
 
 class Robot : public frc::TimedRobot{
 public:
