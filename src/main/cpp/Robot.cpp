@@ -23,6 +23,8 @@ void Robot::AutonomousInit() {
 	lastAutoState = autoPose[0].startingState;
 }
 void Robot::AutonomousPeriodic() {
+	intakeShooter.RunAnglePID();
+	swerve.RunPID(tx);
 	tx = ll.getSpeakerYaw();
 	ty = ll.getSpeakerPitch();
 	targetValid = ll.getTargetValid();
@@ -30,13 +32,11 @@ void Robot::AutonomousPeriodic() {
 	if (autoState != lastAutoState) {
 		AutoInit[autoState]();
 	}
-	swerve.RunPID(tx);
 	frc::SmartDashboard::PutNumber("posx", swerve.pos.real());
 	frc::SmartDashboard::PutNumber("posy", swerve.pos.imag());
 	frc::SmartDashboard::PutNumber("posErrorx", swerve.posError.real());
 	frc::SmartDashboard::PutNumber("posErrory", swerve.posError.imag());
 
-	intakeShooter.RunAnglePID();
 	lastAutoState = autoState;
 }
 
