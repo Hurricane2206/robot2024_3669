@@ -27,7 +27,6 @@ public:
 		configs.TorqueCurrent.PeakForwardTorqueCurrent = 40;  // Peak output of 40 amps
 		configs.TorqueCurrent.PeakReverseTorqueCurrent = -40; // Peak output of 40 amps
         configs.CurrentLimits.StatorCurrentLimit = 40;
-        configs.CurrentLimits.StatorCurrentLimit = 40;
         configs.CurrentLimits.StatorCurrentLimitEnable = true;
         dMotor->GetConfigurator().Apply(configs);
     }
