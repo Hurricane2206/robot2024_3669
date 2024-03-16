@@ -57,8 +57,8 @@ public:
         for (Module module : modules) {
             module.set(targetVelocity, currentTurnRate);
             posChange += module.getPositionChange();
-            module.getPositionChange();
-            module.getPositionChange();
+            // module.getPositionChange();
+            // module.getPositionChange();
         }
         pos += posChange * polar<float>(0.25, angle);
     }
@@ -90,8 +90,8 @@ public:
         for (Module module : modules){
             module.set(posPIDoutput, turnRate);
             posChange += module.getPositionChange();
-            module.getPositionChange();
-            module.getPositionChange();
+            // module.getPositionChange();
+            // module.getPositionChange();
         }
         pos += posChange * polar<float>(0.25, angle);
     }
