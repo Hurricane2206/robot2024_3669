@@ -26,22 +26,17 @@ public:
         // move current velocity toward target
         targetVelocity /= fastest;
         turnRate /= fastest;
-        if (noAcceleration) {
-            targetVelocity *= polar<float>(1, -angle);
-            currentTurnRate = turnRate;
-        } else {
-            complex<float> velError = targetVelocity-currentVelocity;
-            float turnRateError = turnRate - currentTurnRate;
-            if (abs(velError) > slewRate) {
-                velError *= slewRate/abs(velError);
-            }
-            if (abs(turnRateError) > slewRate) {
-                turnRateError *= slewRate/abs(turnRateError);
-            }
-            currentVelocity += velError;
-            currentTurnRate += turnRateError;
-            targetVelocity = currentVelocity * polar<float>(1, -angle);
+        complex<float> velError = targetVelocity-currentVelocity;
+        float turnRateError = turnRate - currentTurnRate;
+        if (abs(velError) > slewRate) {
+            velError *= slewRate/abs(velError);
         }
+        if (abs(turnRateError) > slewRate) {
+            turnRateError *= slewRate/abs(turnRateError);
+        }
+        currentVelocity += velError;
+        currentTurnRate += turnRateError;
+        targetVelocity = currentVelocity * polar<float>(1, -angle);
 
         // set modules
         for (Module module : modules){
@@ -56,7 +51,7 @@ public:
     }
     void RunPID(double tx) {
         // calculate PID Response
-        angle = gyro.GetYaw()*-(M_PI/180);
+        angle = -gyro.GetYaw()*(M_PI/180);
         posError = posSetpoint-pos;
         complex<float> posPIDoutput = posError*(0.01f);
         float turnRate = -tx / 100.0;
@@ -66,10 +61,11 @@ public:
         if (abs(turnRate) > 0.3) {
             turnRate *= 0.3 / abs(turnRate);
         }
-        set(posPIDoutput, turnRate);
+        posPIDoutput *= polar<float>(1, -angle);
         // calculate odometry
         complex<float> posChange = complex<float>(0, 0);
         for (Module module : modules){
+            module.set(posPIDoutput, turnRate);
             posChange += module.getPositionChange();
         }
         pos += posChange * polar<float>(0.25, angle);
