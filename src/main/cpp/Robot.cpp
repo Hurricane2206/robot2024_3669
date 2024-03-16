@@ -106,10 +106,6 @@ void Robot::TeleopPeriodic(){
 	// this switch case runs for each state
 	switch (teleopState) {
 		case TeleopState::AIMING:
-			tROffset = -ll.getSpeakerYaw() / 35.0;
-			ty = ll.getSpeakerPitch();
-			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
-			intakeShooter.SetAngle(pitch);
 			if (key_pad.GetRawButton(12) && intakeShooter.GetNotePresent()){
 				timer.Restart();
 				teleopState = TeleopState::RAMPING;
@@ -402,6 +398,7 @@ void defineTeleopStateFunctions() {
 		arm.SetRollerSpeed(0);
 	};
 }
+
 void defineAutoStateFunctions() {
 	AutoInit[ADRIVING] = []() {
 		intakeShooter.SetAngle(15);
