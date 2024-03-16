@@ -9,7 +9,7 @@ using namespace std;
 class Swerve{
 public:
     void set(complex<float> velocity, float turnRate, bool noAcceleration = false){
-        angle = gyro.GetYaw()*-(M_PI/180);
+        angle = -gyro.GetYaw()*(M_PI/180);
         targetVelocity = velocity;
 
         // robot orient the velocity
@@ -53,7 +53,7 @@ public:
         // calculate PID Response
         angle = -gyro.GetYaw()*(M_PI/180);
         posError = posSetpoint-pos;
-        complex<float> posPIDoutput = posError*(0.01f);
+        complex<float> posPIDoutput = posP*posError;
         float turnRate = -tx / 100.0;
         if (abs(posPIDoutput) > 0.3) {
             posPIDoutput *= 0.3 / abs(posPIDoutput);
@@ -90,6 +90,7 @@ private:
 
     complex<float> posSetpoint;
     complex<float> posError = 0;
+    float posP = 0.01;
     // float angleSetpoint;
 
     complex<float> currentVelocity;
