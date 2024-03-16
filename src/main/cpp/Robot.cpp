@@ -92,16 +92,7 @@ void Robot::AutonomousPeriodic() {
 	lastAutoState = autoState;
 }
 
-void Robot::TeleopInit() {
-	init[DEFAULT] = []() {
-		intakeShooter.SetAngle(15);
-		intakeShooter.SetIntakeSpeed(0);
-		intakeShooter.SetShooter(0);
-		arm.SetAngle(0);
-		arm.SetHeight(0);
-		arm.SetRollerSpeed(0);
-	};
-}
+void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic(){
 	tROffset = 0;
 	lastTeleopState = teleopState;
@@ -395,7 +386,16 @@ void Robot::TestPeriodic() {}
 
 void Robot::SimulationInit() {}
 void Robot::SimulationPeriodic() {}
-void Robot::defineTeleopStateFunctions() {}
+void Robot::defineTeleopStateFunctions() {
+	init[DEFAULT] = []() {
+		intakeShooter.SetAngle(15);
+		intakeShooter.SetIntakeSpeed(0);
+		intakeShooter.SetShooter(0);
+		arm.SetAngle(0);
+		arm.SetHeight(0);
+		arm.SetRollerSpeed(0);
+	};
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main()

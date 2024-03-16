@@ -8,7 +8,7 @@ using namespace std;
 
 class Swerve{
 public:
-    void set(complex<float> velocity, float turnRate){
+    void set(complex<float> velocity, float turnRate, bool noAcceleration = false){
         angle = gyro.GetYaw()*-(M_PI/180);
         targetVelocity = velocity;
 
@@ -23,21 +23,25 @@ public:
                 fastest = speed;
             }
         }
-
         // move current velocity toward target
         targetVelocity /= fastest;
         turnRate /= fastest;
-        complex<float> velError = targetVelocity-currentVelocity;
-        float turnRateError = turnRate - currentTurnRate;
-        if (abs(velError) > slewRate) {
-            velError *= slewRate/abs(velError);
+        if (noAcceleration) {
+            targetVelocity *= polar<float>(1, -angle);
+            currentTurnRate = turnRate;
+        } else {
+            complex<float> velError = targetVelocity-currentVelocity;
+            float turnRateError = turnRate - currentTurnRate;
+            if (abs(velError) > slewRate) {
+                velError *= slewRate/abs(velError);
+            }
+            if (abs(turnRateError) > slewRate) {
+                turnRateError *= slewRate/abs(turnRateError);
+            }
+            currentVelocity += velError;
+            currentTurnRate += turnRateError;
+            targetVelocity = currentVelocity * polar<float>(1, -angle);
         }
-        if (abs(turnRateError) > slewRate) {
-            turnRateError *= slewRate/abs(turnRateError);
-        }
-        currentVelocity += velError;
-        currentTurnRate += turnRateError;
-        targetVelocity = currentVelocity * polar<float>(1, -angle);
 
         // set modules
         for (Module module : modules){
@@ -54,7 +58,7 @@ public:
         // calculate PID Response
         angle = gyro.GetYaw()*-(M_PI/180);
         posError = posSetpoint-pos;
-        complex<float> posPIDoutput = posError*0.012f;
+        complex<float> posPIDoutput = posError*(0.01f);
         float turnRate = -tx / 100.0;
         if (abs(posPIDoutput) > 0.3) {
             posPIDoutput *= 0.3 / abs(posPIDoutput);
@@ -62,22 +66,10 @@ public:
         if (abs(turnRate) > 0.3) {
             turnRate *= 0.3 / abs(turnRate);
         }
-        // robot orient the velocity
-        posPIDoutput *= polar<float>(1, -angle);
-        // find fastest module speed
-        float fastest = 1;
-        for (Module module : modules){
-            float speed = abs(module.getVelocity(posPIDoutput, turnRate));
-            if (speed > fastest){
-                fastest = speed;
-            }
-        }
-        posPIDoutput /= fastest;
-        turnRate /= fastest;
-        // calculate odometry and set modules
+        set(posPIDoutput, turnRate);
+        // calculate odometry
         complex<float> posChange = complex<float>(0, 0);
         for (Module module : modules){
-            module.set(posPIDoutput, turnRate);
             posChange += module.getPositionChange();
         }
         pos += posChange * polar<float>(0.25, angle);
