@@ -13,7 +13,7 @@ public:
 
     complex<float> posSetpoint = complex<float>(0, 0);
     complex<float> posError = complex<float>(0, 0);
-    float posP = 0.01;
+    float posP = 0.003;
     // float angleSetpoint;
 
     complex<float> currentVelocity;
