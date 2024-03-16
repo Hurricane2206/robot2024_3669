@@ -323,6 +323,10 @@ void Robot::TeleopPeriodic(){
 	frc::SmartDashboard::PutNumber("angle", intakeShooter.GetAngle());
 	frc::SmartDashboard::PutNumber("robot state", teleopState);
 	frc::SmartDashboard::PutBoolean("note detected", intakeShooter.eye2.Get());
+	frc::SmartDashboard::PutNumber("posx", swerve.pos.real());
+	frc::SmartDashboard::PutNumber("posy", swerve.pos.imag());
+	frc::SmartDashboard::PutNumber("posErrorx", swerve.posError.real());
+	frc::SmartDashboard::PutNumber("posErrory", swerve.posError.imag());
 }
 
 void Robot::DisabledInit() {}
