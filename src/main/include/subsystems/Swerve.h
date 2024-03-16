@@ -75,7 +75,8 @@ public:
         angle = -gyro.GetYaw()*(M_PI/180);
         posError = posSetpoint-pos;
         complex<float> posPIDoutput = posP*posError;
-        float turnRate = -tx / 100.0;
+        float turnRate = -tx / 35;
+        // limit output
         if (abs(posPIDoutput) > 0.3) {
             posPIDoutput *= 0.3 / abs(posPIDoutput);
         }
@@ -86,10 +87,16 @@ public:
             posPIDoutput = complex<float>(0,0);
         }
         posPIDoutput *= polar<float>(1, -angle);
+        // applyAcceleration
+        float turnRateError = turnRate - currentTurnRate;
+        if (abs(turnRateError) > slewRate) {
+            turnRateError *= slewRate/abs(turnRateError);
+        }
+        currentTurnRate += turnRateError;
         // calculate odometry
         posChange = complex<float>(0, 0);
         for (Module module : modules){
-            module.set(posPIDoutput, turnRate);
+            module.set(posPIDoutput, currentTurnRate);
             posChange += module.getPositionChange();
         }
         pos += posChange * polar<float>(0.25, angle);
