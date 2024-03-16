@@ -43,12 +43,16 @@ public:
             module.set(targetVelocity, currentTurnRate);
         }
     }
+    
     void SetPosition(complex<float> position){
         posSetpoint = position;
     }
+
     bool GetPositionReached(float tolerance = 1) {
         return abs(posError) < tolerance;
     }
+
+    // drive toward the position setpoint
     void RunPID(double tx) {
         // calculate PID Response
         angle = -gyro.GetYaw()*(M_PI/180);
@@ -88,8 +92,8 @@ private:
     complex<float> pos = complex<float>(0, 0);
     float angle;
 
-    complex<float> posSetpoint;
-    complex<float> posError = 0;
+    complex<float> posSetpoint = complex<float>(0, 0);
+    complex<float> posError = complex<float>(0, 0);
     float posP = 0.01;
     // float angleSetpoint;
 
