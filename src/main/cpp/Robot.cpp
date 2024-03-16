@@ -57,7 +57,7 @@ void Robot::AutonomousPeriodic() {
 	frc::SmartDashboard::PutNumber("motor1Pos", swerve.GetMotorPos(1));
 	frc::SmartDashboard::PutNumber("motor2Pos", swerve.GetMotorPos(2));
 	frc::SmartDashboard::PutNumber("motor3Pos", swerve.GetMotorPos(3));
-	
+
 	lastAutoState = autoState;
 }
 
