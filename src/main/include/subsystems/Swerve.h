@@ -101,9 +101,7 @@ public:
     void resetPos() {
         for (Module module : modules) {
             module.resetEncoders();
-            module.resetEncoders();
         }
-        pos = complex<float>(0,0);
         pos = complex<float>(0,0);
     }
 
