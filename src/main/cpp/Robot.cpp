@@ -19,76 +19,81 @@ void Robot::RobotPeriodic() {}
 void Robot::AutonomousInit() {
 	swerve.SetPosition(autoPose[0].pos);
 	autoState = autoPose[0].startingState;
+	lastAutoState = autoPose[0].startingState;
 }
 void Robot::AutonomousPeriodic() {
-	float tx = ll.getSpeakerYaw();
+	tx = ll.getSpeakerYaw();
 	ty = ll.getSpeakerPitch();
-	bool targetValid = ll.getTargetValid();
-	// this switch case runs for each state
-	switch (autoState) {
-		case AutoState::ADRIVING:
-			if (swerve.GetPositionReached() && x < size(autoPose)-1) {
-				x++;
-				swerve.SetPosition(autoPose[x].pos);
-				autoState = autoPose[x].startingState;
-			}
-			break;
-		case AutoState::AINTAKING:
-			if (intakeShooter.eye2.Get()){
-				autoState = AutoState::ADRIVING;
-			}
-			break;
-		case AutoState::AAIMING:
-			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
-			intakeShooter.SetAngle(pitch);
-			if (swerve.GetPositionReached() && intakeShooter.GetAngleReached(3) && abs(tx) < 5 && targetValid) {
-				autoState = AutoState::ARAMPING;
-			}
-			break;
-		case AutoState::ARAMPING:
-			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
-			intakeShooter.SetAngle(pitch);
-			if (timer.HasElapsed(1_s)){
-				autoState = AutoState::ASHOOTING;
-			}
-			break;
-		case AutoState::ASHOOTING:
-			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
-			intakeShooter.SetAngle(pitch);
-			if (timer.HasElapsed(1.3_s)){
-				autoState = AutoState::ADRIVING;
-			}
-			break;
+	targetValid = ll.getTargetValid();
+	AutoPeriodic[autoState]();
+	if (autoState != lastAutoState) {
+		AutoInit[autoState]();
 	}
+	// this switch case runs for each state
+	// switch (autoState) {
+	// 	case AutoState::ADRIVING:
+	// 		if (swerve.GetPositionReached() && x < size(autoPose)-1) {
+	// 			x++;
+	// 			swerve.SetPosition(autoPose[x].pos);
+	// 			autoState = autoPose[x].startingState;
+	// 		}
+	// 		break;
+	// 	case AutoState::AINTAKING:
+	// 		if (intakeShooter.eye2.Get()){
+	// 			autoState = AutoState::ADRIVING;
+	// 		}
+	// 		break;
+	// 	case AutoState::AAIMING:
+	// 		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
+	// 		intakeShooter.SetAngle(pitch);
+	// 		if (swerve.GetPositionReached() && intakeShooter.GetAngleReached(3) && abs(tx) < 5 && targetValid) {
+	// 			autoState = AutoState::ARAMPING;
+	// 		}
+	// 		break;
+	// 	case AutoState::ARAMPING:
+	// 		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
+	// 		intakeShooter.SetAngle(pitch);
+	// 		if (timer.HasElapsed(1_s)){
+	// 			autoState = AutoState::ASHOOTING;
+	// 		}
+	// 		break;
+	// 	case AutoState::ASHOOTING:
+	// 		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.2899;
+	// 		intakeShooter.SetAngle(pitch);
+	// 		if (timer.HasElapsed(1.3_s)){
+	// 			autoState = AutoState::ADRIVING;
+	// 		}
+	// 		break;
+	// }
 	swerve.RunPID(tx);
 	intakeShooter.RunAnglePID();
 
 	// this switch case only runs when the robot state changes
-	if (autoState != lastAutoState) {
-		switch (autoState) {
-			case AutoState::AINTAKING:
-				intakeShooter.SetAngle(91);
-				intakeShooter.SetIntake(70);
-				break;
-			case AutoState::AAIMING:
-				break;
-			case AutoState::ARAMPING:
-				timer.Restart();
-				intakeShooter.SetShooter(60);
-				break;
-			case AutoState::ASHOOTING:
-				intakeShooter.SetIntake(100);
-				break;
-			case AutoState::ADRIVING:
-				intakeShooter.SetAngle(15);
-				intakeShooter.SetIntake(0);
-				intakeShooter.SetShooter(0);
-				arm.SetAngle(0);
-				arm.SetHeight(0);
-				arm.SetRollerSpeed(0);
-				break;
-		}
-	}
+	// if (autoState != lastAutoState) {
+	// 	switch (autoState) {
+	// 		case AutoState::AINTAKING:
+	// 			intakeShooter.SetAngle(91);
+	// 			intakeShooter.SetIntake(70);
+	// 			break;
+	// 		case AutoState::AAIMING:
+	// 			break;
+	// 		case AutoState::ARAMPING:
+	// 			timer.Restart();
+	// 			intakeShooter.SetShooter(60);
+	// 			break;
+	// 		case AutoState::ASHOOTING:
+	// 			intakeShooter.SetIntake(100);
+	// 			break;
+	// 		case AutoState::ADRIVING:
+	// 			intakeShooter.SetAngle(15);
+	// 			intakeShooter.SetIntake(0);
+	// 			intakeShooter.SetShooter(0);
+	// 			arm.SetAngle(0);
+	// 			arm.SetHeight(0);
+	// 			arm.SetRollerSpeed(0);
+	// 			break;
+	// 	}
+	// }
 	lastAutoState = autoState;
 }
 
@@ -386,14 +391,73 @@ void Robot::TestPeriodic() {}
 
 void Robot::SimulationInit() {}
 void Robot::SimulationPeriodic() {}
-void Robot::defineTeleopStateFunctions() {
-	init[DEFAULT] = []() {
+void defineTeleopStateFunctions() {
+	TelInit[DEFAULT] = []() {
 		intakeShooter.SetAngle(15);
 		intakeShooter.SetIntakeSpeed(0);
 		intakeShooter.SetShooter(0);
 		arm.SetAngle(0);
 		arm.SetHeight(0);
 		arm.SetRollerSpeed(0);
+	};
+}
+void defineAutoStateFunctions() {
+	AutoInit[ADRIVING] = []() {
+		intakeShooter.SetAngle(15);
+		intakeShooter.SetIntake(0);
+		intakeShooter.SetShooter(0);
+		arm.SetAngle(0);
+		arm.SetHeight(0);
+		arm.SetRollerSpeed(0);
+	};
+	AutoPeriodic[ADRIVING] = []() {
+		if (swerve.GetPositionReached() && x < size(autoPose)-1) {
+			x++;
+			swerve.SetPosition(autoPose[x].pos);
+			autoState = autoPose[x].startingState;
+		}
+	};
+
+	AutoInit[AINTAKING] = []() {
+		intakeShooter.SetAngle(91);
+		intakeShooter.SetIntake(70);
+	};
+	AutoPeriodic[AINTAKING] = []() {
+		if (intakeShooter.eye2.Get()){
+			autoState = AutoState::ADRIVING;
+		}
+	};
+
+	AutoInit[AAIMING] = []() {};
+	AutoPeriodic[AAIMING] = []() {
+		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
+		intakeShooter.SetAngle(pitch);
+		if (swerve.GetPositionReached() && intakeShooter.GetAngleReached(3) && abs(tx) < 5 && targetValid) {
+			autoState = AutoState::ARAMPING;
+		}
+	};
+
+	AutoInit[ARAMPING] = []() {
+		timer.Restart();
+		intakeShooter.SetShooter(60);
+	};
+	AutoPeriodic[ARAMPING] = []() {
+		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
+		intakeShooter.SetAngle(pitch);
+		if (timer.HasElapsed(1_s)){
+			autoState = AutoState::ASHOOTING;
+		}
+	};
+
+	AutoInit[ASHOOTING] = []() {
+		intakeShooter.SetIntake(100);
+	};
+	AutoPeriodic[ASHOOTING] = []() {
+		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
+			intakeShooter.SetAngle(pitch);
+			if (timer.HasElapsed(1.3_s)){
+				autoState = AutoState::ADRIVING;
+			}
 	};
 }
 

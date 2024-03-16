@@ -31,9 +31,9 @@ enum TeleopState teleopState = TeleopState::DEFAULT;
 enum TeleopState lastTeleopState = TeleopState::DEFAULT;
 
 // Array of function pointers for state initialization code
-void (*init[TeleopState::NUM_OF_STATES])();
+void (*TelInit[TeleopState::NUM_OF_STATES])();
 // Array of function pointers for the state periodic code
-void (*periodic[TeleopState::NUM_OF_STATES])();
+void (*TelPeriodic[TeleopState::NUM_OF_STATES])();
 
 void defineTeleopStateFunctions();
 
@@ -52,8 +52,8 @@ enum AutoState autoState = AutoState::ADRIVING;
 enum AutoState lastAutoState = AutoState::ADRIVING;
 
 // Array of function pointers for state initialization code
-// // void (*init[AutoState::NUM_OF_STATES])();
+void (*AutoInit[AutoState::ANUM_OF_STATES])();
 // Array of function pointers for the state periodic code
-// // void (*periodic[AutoState::NUM_OF_STATES])();
+void (*AutoPeriodic[AutoState::ANUM_OF_STATES])();
 
 void defineAutoStateFunctions();

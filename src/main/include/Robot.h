@@ -19,7 +19,9 @@ using namespace std;
 
 unsigned int x = 0; // current autoPos setpoint index
 float pitch;
+float tx;
 float ty;
+bool targetValid;
 float tROffset = 0;
 
 struct autoValue
@@ -38,12 +40,9 @@ autoValue autoPose[4] = {
 	{complex<float>(0, 0), 0, AutoState::AAIMING},
 	{complex<float>(20,0), 0, AutoState::ADRIVING}};
 
-
-
 class Robot : public frc::TimedRobot{
 public:
 	
-	void defineTeleopStateFunctions();
 
 	void RobotInit() override;
 	void RobotPeriodic() override;
