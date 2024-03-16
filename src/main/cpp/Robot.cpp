@@ -13,6 +13,7 @@ void Robot::RobotInit()
 	swerve.init();
 	arm.init();
 	climb.init();
+	defineAutoStateFunctions();
 }
 void Robot::RobotPeriodic() {}
 
