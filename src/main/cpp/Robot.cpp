@@ -23,10 +23,10 @@ void Robot::AutonomousInit() {
 	lastAutoState = autoPose[0].startingState;
 }
 void Robot::AutonomousPeriodic() {
-	intakeShooter.RunAnglePID();
-	swerve.RunPID(tx);
 	tx = ll.getSpeakerYaw();
 	ty = ll.getSpeakerPitch();
+	intakeShooter.RunAnglePID();
+	swerve.RunPID(tx);
 	targetValid = ll.getTargetValid();
 	AutoPeriodic[autoState]();
 	if (autoState != lastAutoState) {
