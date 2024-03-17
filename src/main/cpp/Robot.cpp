@@ -41,14 +41,14 @@ void Robot::AutonomousPeriodic() {
 	frc::SmartDashboard::PutNumber("posErrory", swerve.posError.imag());
 	frc::SmartDashboard::PutNumber("posChangex", swerve.posChange.real());
 	frc::SmartDashboard::PutNumber("posChangy", swerve.posChange.imag());
-	// frc::SmartDashboard::PutNumber("mod0Changex", swerve.GetModulePosChange(0).real());
-	// frc::SmartDashboard::PutNumber("mod0Changey", swerve.GetModulePosChange(0).imag());
-	// frc::SmartDashboard::PutNumber("mod1Changex", swerve.GetModulePosChange(1).real());
-	// frc::SmartDashboard::PutNumber("mod1Changey", swerve.GetModulePosChange(1).imag());
-	// frc::SmartDashboard::PutNumber("mod2Changex", swerve.GetModulePosChange(2).real());
-	// frc::SmartDashboard::PutNumber("mod2Changey", swerve.GetModulePosChange(2).imag());
-	// frc::SmartDashboard::PutNumber("mod3Changex", swerve.GetModulePosChange(3).real());
-	// frc::SmartDashboard::PutNumber("mod3Changey", swerve.GetModulePosChange(3).imag());
+	frc::SmartDashboard::PutNumber("mod0Changex", swerve.GetModulePosChange(0).real());
+	frc::SmartDashboard::PutNumber("mod0Changey", swerve.GetModulePosChange(0).imag());
+	frc::SmartDashboard::PutNumber("mod1Changex", swerve.GetModulePosChange(1).real());
+	frc::SmartDashboard::PutNumber("mod1Changey", swerve.GetModulePosChange(1).imag());
+	frc::SmartDashboard::PutNumber("mod2Changex", swerve.GetModulePosChange(2).real());
+	frc::SmartDashboard::PutNumber("mod2Changey", swerve.GetModulePosChange(2).imag());
+	frc::SmartDashboard::PutNumber("mod3Changex", swerve.GetModulePosChange(3).real());
+	frc::SmartDashboard::PutNumber("mod3Changey", swerve.GetModulePosChange(3).imag());
 	frc::SmartDashboard::PutNumber("motor0Change", swerve.GetMotorPosChange(0));
 	frc::SmartDashboard::PutNumber("motor1Change", swerve.GetMotorPosChange(1));
 	frc::SmartDashboard::PutNumber("motor2Change", swerve.GetMotorPosChange(2));
@@ -419,7 +419,7 @@ void defineAutoStateFunctions() {
 	AutoPeriodic[AAIMING] = []() {
 		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
 		intakeShooter.SetAngle(pitch);
-		if (swerve.GetPositionReached() && intakeShooter.GetAngleReached(3) && abs(tx) < 5 && targetValid) {
+		if (swerve.GetPositionReached() && intakeShooter.GetAngleReached(1.2) && abs(tx) < 5 && targetValid) {
 			autoState = AutoState::ARAMPING;
 		}
 	};
