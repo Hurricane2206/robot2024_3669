@@ -41,14 +41,14 @@ void Robot::AutonomousPeriodic() {
 	frc::SmartDashboard::PutNumber("posErrory", swerve.posError.imag());
 	frc::SmartDashboard::PutNumber("posChangex", swerve.posChange.real());
 	frc::SmartDashboard::PutNumber("posChangy", swerve.posChange.imag());
-	// frc::SmartDashboard::PutNumber("mod0Changex", swerve.GetModulePosChange(0).real());
-	// frc::SmartDashboard::PutNumber("mod0Changey", swerve.GetModulePosChange(0).imag());
-	// frc::SmartDashboard::PutNumber("mod1Changex", swerve.GetModulePosChange(1).real());
-	// frc::SmartDashboard::PutNumber("mod1Changey", swerve.GetModulePosChange(1).imag());
-	// frc::SmartDashboard::PutNumber("mod2Changex", swerve.GetModulePosChange(2).real());
-	// frc::SmartDashboard::PutNumber("mod2Changey", swerve.GetModulePosChange(2).imag());
-	// frc::SmartDashboard::PutNumber("mod3Changex", swerve.GetModulePosChange(3).real());
-	// frc::SmartDashboard::PutNumber("mod3Changey", swerve.GetModulePosChange(3).imag());
+	frc::SmartDashboard::PutNumber("mod0Changex", swerve.GetModulePosChange(0).real());
+	frc::SmartDashboard::PutNumber("mod0Changey", swerve.GetModulePosChange(0).imag());
+	frc::SmartDashboard::PutNumber("mod1Changex", swerve.GetModulePosChange(1).real());
+	frc::SmartDashboard::PutNumber("mod1Changey", swerve.GetModulePosChange(1).imag());
+	frc::SmartDashboard::PutNumber("mod2Changex", swerve.GetModulePosChange(2).real());
+	frc::SmartDashboard::PutNumber("mod2Changey", swerve.GetModulePosChange(2).imag());
+	frc::SmartDashboard::PutNumber("mod3Changex", swerve.GetModulePosChange(3).real());
+	frc::SmartDashboard::PutNumber("mod3Changey", swerve.GetModulePosChange(3).imag());
 	frc::SmartDashboard::PutNumber("motor0Change", swerve.GetMotorPosChange(0));
 	frc::SmartDashboard::PutNumber("motor1Change", swerve.GetMotorPosChange(1));
 	frc::SmartDashboard::PutNumber("motor2Change", swerve.GetMotorPosChange(2));
@@ -439,12 +439,40 @@ void defineAutoStateFunctions() {
 	AutoInit[ASHOOTING] = []() {
 		intakeShooter.SetIntake(100);
 	};
+	
 	AutoPeriodic[ASHOOTING] = []() {
 		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
 			intakeShooter.SetAngle(pitch);
 			if (timer.HasElapsed(1.3_s)){
 				autoState = AutoState::ADRIVING;
 			}
+	};
+
+	AutoInit[NOTEALIGN1] = []() {};
+	AutoPeriodic[NOTEALIGN1] = []() {
+		if (intakeShooter.eye2.Get()) {
+			intakeShooter.SetIntakeSpeed(-50);
+			intakeShooter.SetShooter(-10);
+		} else {
+			teleopState = TeleopState::NOTEALIGN2;
+		}
+	};
+
+	AutoInit[NOTEALIGN2] = []() {};
+	AutoPeriodic[NOTEALIGN2] = []() {
+		if (!intakeShooter.eye2.Get()) {
+			intakeShooter.SetIntakeSpeed(50);
+			intakeShooter.SetShooter(0);
+		} else {
+			teleopState = TeleopState::NOTEALIGN3;
+		}
+	};
+
+	AutoInit[NOTEALIGN3] = []() {};
+	AutoPeriodic[NOTEALIGN3] = []() {
+		if (intakeShooter.GetNotePresent()) {
+			teleopState = TeleopState::DEFAULT;
+		}
 	};
 }
 
