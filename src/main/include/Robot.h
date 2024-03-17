@@ -39,7 +39,7 @@ frc::Timer timer;
 autoValue autoPose[3] = {
 	{complex<float>(0, 0), 0, AutoState::AAIMING},
 	{complex<float>(60,0), 0, AutoState::AINTAKING},
-	{complex<float>(30,0), 0, AutoState::AAIMING}
+	{complex<float>(25,0), 0, AutoState::AAIMING}
 };
 
 
