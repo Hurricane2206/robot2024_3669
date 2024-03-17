@@ -25,6 +25,10 @@ void Robot::AutonomousInit() {
 void Robot::AutonomousPeriodic() {
 	tx = ll.getSpeakerYaw();
 	ty = ll.getSpeakerPitch();
+	if (autoState != AutoState::AINTAKING) {
+		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
+		intakeShooter.SetAngle(pitch);
+	}
 	intakeShooter.RunAnglePID();
 	swerve.RunPID(tx);
 	targetValid = ll.getTargetValid();
@@ -366,7 +370,6 @@ void Robot::TeleopPeriodic(){
 	frc::SmartDashboard::PutNumber("motor1Pos", swerve.GetMotorPos(1));
 	frc::SmartDashboard::PutNumber("motor2Pos", swerve.GetMotorPos(2));
 	frc::SmartDashboard::PutNumber("motor3Pos", swerve.GetMotorPos(3));
-
 }
 
 void Robot::DisabledInit() {}
@@ -410,15 +413,13 @@ void defineAutoStateFunctions() {
 		intakeShooter.SetIntake(70);
 	};
 	AutoPeriodic[AINTAKING] = []() {
-		if (intakeShooter.eye2.Get()){
-			autoState = AutoState::ADRIVING;
+		if (intakeShooter.eye0.Get()) {
+			autoState = AutoState::NOTEALIGN1;
 		}
 	};
 
 	AutoInit[AAIMING] = []() {};
 	AutoPeriodic[AAIMING] = []() {
-		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
-		intakeShooter.SetAngle(pitch);
 		if (swerve.GetPositionReached() && intakeShooter.GetAngleReached(3) && abs(tx) < 5 && targetValid) {
 			autoState = AutoState::ARAMPING;
 		}
@@ -429,8 +430,6 @@ void defineAutoStateFunctions() {
 		intakeShooter.SetShooter(60);
 	};
 	AutoPeriodic[ARAMPING] = []() {
-		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
-		intakeShooter.SetAngle(pitch);
 		if (timer.HasElapsed(1_s)){
 			autoState = AutoState::ASHOOTING;
 		}
@@ -439,39 +438,37 @@ void defineAutoStateFunctions() {
 	AutoInit[ASHOOTING] = []() {
 		intakeShooter.SetIntake(100);
 	};
-	
+
 	AutoPeriodic[ASHOOTING] = []() {
-		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
-			intakeShooter.SetAngle(pitch);
-			if (timer.HasElapsed(1.3_s)){
-				autoState = AutoState::ADRIVING;
-			}
+		if (timer.HasElapsed(1.3_s)){
+			autoState = AutoState::ADRIVING;
+		}
 	};
 
-	AutoInit[NOTEALIGN1] = []() {};
-	AutoPeriodic[NOTEALIGN1] = []() {
+	AutoInit[AutoState::NOTEALIGN1] = []() {};
+	AutoPeriodic[AutoState::NOTEALIGN1] = []() {
 		if (intakeShooter.eye2.Get()) {
 			intakeShooter.SetIntakeSpeed(-50);
 			intakeShooter.SetShooter(-10);
 		} else {
-			teleopState = TeleopState::NOTEALIGN2;
+			autoState = AutoState::NOTEALIGN2;
 		}
 	};
 
-	AutoInit[NOTEALIGN2] = []() {};
-	AutoPeriodic[NOTEALIGN2] = []() {
+	AutoInit[AutoState::NOTEALIGN2] = []() {};
+	AutoPeriodic[AutoState::NOTEALIGN2] = []() {
 		if (!intakeShooter.eye2.Get()) {
 			intakeShooter.SetIntakeSpeed(50);
 			intakeShooter.SetShooter(0);
 		} else {
-			teleopState = TeleopState::NOTEALIGN3;
+			autoState = AutoState::NOTEALIGN3;
 		}
 	};
 
 	AutoInit[NOTEALIGN3] = []() {};
 	AutoPeriodic[NOTEALIGN3] = []() {
 		if (intakeShooter.GetNotePresent()) {
-			teleopState = TeleopState::DEFAULT;
+			autoState = AutoState::ADRIVING;
 		}
 	};
 }
