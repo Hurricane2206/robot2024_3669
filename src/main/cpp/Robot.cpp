@@ -414,7 +414,7 @@ void defineAutoStateFunctions() {
 	};
 	AutoPeriodic[AINTAKING] = []() {
 		if (intakeShooter.eye0.Get()) {
-			autoState = AutoState::NOTEALIGN1;
+			autoState = AutoState::ANOTEALIGN1;
 		}
 	};
 
@@ -445,28 +445,28 @@ void defineAutoStateFunctions() {
 		}
 	};
 
-	AutoInit[AutoState::NOTEALIGN1] = []() {};
-	AutoPeriodic[AutoState::NOTEALIGN1] = []() {
+	AutoInit[AutoState::ANOTEALIGN1] = []() {};
+	AutoPeriodic[AutoState::ANOTEALIGN1] = []() {
 		if (intakeShooter.eye2.Get()) {
 			intakeShooter.SetIntakeSpeed(-50);
 			intakeShooter.SetShooter(-10);
 		} else {
-			autoState = AutoState::NOTEALIGN2;
+			autoState = AutoState::ANOTEALIGN2;
 		}
 	};
 
-	AutoInit[AutoState::NOTEALIGN2] = []() {};
-	AutoPeriodic[AutoState::NOTEALIGN2] = []() {
+	AutoInit[AutoState::ANOTEALIGN2] = []() {};
+	AutoPeriodic[AutoState::ANOTEALIGN2] = []() {
 		if (!intakeShooter.eye2.Get()) {
 			intakeShooter.SetIntakeSpeed(50);
 			intakeShooter.SetShooter(0);
 		} else {
-			autoState = AutoState::NOTEALIGN3;
+			autoState = AutoState::ANOTEALIGN3;
 		}
 	};
 
-	AutoInit[NOTEALIGN3] = []() {};
-	AutoPeriodic[NOTEALIGN3] = []() {
+	AutoInit[ANOTEALIGN3] = []() {};
+	AutoPeriodic[ANOTEALIGN3] = []() {
 		if (intakeShooter.GetNotePresent()) {
 			autoState = AutoState::ADRIVING;
 		}

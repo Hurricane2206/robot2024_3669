@@ -44,9 +44,9 @@ enum AutoState {
     AAIMING,
     ARAMPING,
     ASHOOTING,
-    NOTEALIGN1,
-    NOTEALIGN2,
-    NOTEALIGN3,
+    ANOTEALIGN1,
+    ANOTEALIGN2,
+    ANOTEALIGN3,
 
     ANUM_OF_STATES // the number of states: do not remove
 };
