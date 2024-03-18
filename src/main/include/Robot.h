@@ -1,20 +1,8 @@
 #pragma once
 
 #include <frc/TimedRobot.h>
-#include <frc/XboxController.h>
-#include <frc/Joystick.h>
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/DigitalInput.h>
-#include <complex.h>
-#include <frc/Timer.h>
-#include <string.h>
-
 #include "states.h"
-#include "subsystems/Swerve.h"
-#include "subsystems/IntakeShooter.h"
-#include "subsystems/NoteHandler.h"
-#include "subsystems/Climb.h"
-#include "subsystems/Limelight.h"
+
 using namespace std;
 
 unsigned int x = 0; // current autoPos setpoint index
@@ -45,8 +33,6 @@ autoValue autoPose[3] = {
 
 class Robot : public frc::TimedRobot{
 public:
-	
-
 	void RobotInit() override;
 	void RobotPeriodic() override;
 
