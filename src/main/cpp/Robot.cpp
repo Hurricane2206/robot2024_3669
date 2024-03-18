@@ -73,7 +73,7 @@ void Robot::TeleopPeriodic(){
 	// this switch case runs for each state
 	switch (teleopState) {
 		case TeleopState::AIMING:
-			if (key_pad.GetRawButton(12) && intakeShooter.GetNotePresent()){
+			if (key_pad.GetRawButton(12) && intakeShooter.GetNotePresent()) {
 				timer.Restart();
 				teleopState = TeleopState::RAMPING;
 			}
@@ -84,6 +84,15 @@ void Robot::TeleopPeriodic(){
 			ty = ll.getSpeakerPitch();
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
 			intakeShooter.SetAngle(pitch);
+			break;
+		case TeleopState::DISTAIM:
+			if (key_pad.GetRawButton(12) && intakeShooter.GetNotePresent()) {
+				timer.Restart();
+				teleopState = TeleopState::RAMPING;
+			}
+			if (!key_pad.GetRawButton(9)) {
+				teleopState = TeleopState::DEFAULT;
+			}
 			break;
 		case TeleopState::RAMPING:
 			if (timer.HasElapsed(1.1_s)){
@@ -191,6 +200,9 @@ void Robot::TeleopPeriodic(){
 			}
 			break;
 		case TeleopState::DEFAULT:
+			if (key_pad.GetRawButton(9)) {
+				teleopState = TeleopState::DISTAIM;
+			}
 			if (key_pad.GetRawButtonPressed(10) && !intakeShooter.GetNotePresent()) {
 				teleopState = TeleopState::INTAKING;
 			}
@@ -212,10 +224,9 @@ void Robot::TeleopPeriodic(){
 	// this switch case only runs when the robot state changes
 	if (teleopState != lastTeleopState) {
 		switch (teleopState) {
-			// case AIMING:
-			// 	intakeShooter.SetP(0.01);
-			// 	intakeShooter.SetOutputRange(-0.6, 0.7);
-			// 	break;
+			case TeleopState::DISTAIM:
+				intakeShooter.SetAngle(55);
+				break;
 			case TeleopState::RAMPING:
 				intakeShooter.SetShooter(60);
 				break;
