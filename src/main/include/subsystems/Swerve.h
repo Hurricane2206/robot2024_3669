@@ -70,7 +70,7 @@ public:
     }
 
     // drive toward the position setpoint
-    void RunPID(double tx) {
+    void RunPID(float tx) {
         // calculate PID Response
         angle = -gyro.GetYaw()*(M_PI/180);
         posError = posSetpoint-pos;
