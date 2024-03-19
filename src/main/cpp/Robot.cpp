@@ -496,7 +496,7 @@ void defineTeleopStateFunctions() {
 		if (key_pad.GetRawButtonPressed(2)) {
 			teleopState = TeleopState::AMPTRANSFER;
 		}
-		if (key_pad.GetRawButtonPressed(3)) {
+		if (key_pad.GetRawButtonPressed(3) && key_pad.GetRawButton(4) && key_pad.GetRawButton(7)) {
 			teleopState = TeleopState::TRAPTRANSFER;
 		}
 	};
