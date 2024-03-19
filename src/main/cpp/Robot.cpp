@@ -93,7 +93,7 @@ void Robot::TeleopPeriodic(){
 			if (!key_pad.GetRawButton(9)) {
 				teleopState = TeleopState::DEFAULT;
 			}
-			break;1
+			break;
 		case TeleopState::RAMPING:
 			if (timer.HasElapsed(1.1_s)){
 				teleopState = TeleopState::SHOOTING;
