@@ -501,6 +501,13 @@ void defineTeleopStateFunctions() {
 		}
 	};
 
+	TelInit[DISTAIM] = []() {
+		intakeShooter.SetAngle(55);
+	};
+	TelPeriodic[DISTAIM] = []() {
+		
+	};
+
 	TelInit[AIMING] = []() {};
 	TelPeriodic[AIMING] = []() {
 		if (key_pad.GetRawButton(12) && intakeShooter.GetNotePresent()){
