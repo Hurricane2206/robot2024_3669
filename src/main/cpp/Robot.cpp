@@ -501,6 +501,19 @@ void defineTeleopStateFunctions() {
 		}
 	};
 
+	TelInit[DISTAIM] = []() {
+		intakeShooter.SetAngle(55);
+	};
+	TelPeriodic[DISTAIM] = []() {
+		if (key_pad.GetRawButton(12) && intakeShooter.GetNotePresent()) {
+			timer.Restart();
+			teleopState = TeleopState::RAMPING;
+		}
+		if (!key_pad.GetRawButton(9)) {
+			teleopState = TeleopState::DEFAULT;
+		}
+	};
+
 	TelInit[AIMING] = []() {};
 	TelPeriodic[AIMING] = []() {
 		if (key_pad.GetRawButton(12) && intakeShooter.GetNotePresent()){
