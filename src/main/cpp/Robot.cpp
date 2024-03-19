@@ -23,15 +23,15 @@ void Robot::AutonomousInit() {
 	lastAutoState = autoPose[0].startingState;
 }
 void Robot::AutonomousPeriodic() {
-	tx = ll.tx;
-	ty = ll.ty;
+	tx = ll.getSpeakerYaw();
+	ty = ll.getSpeakerPitch();
 	if (autoState != AutoState::AINTAKING) {
 		pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
 		intakeShooter.SetAngle(pitch);
 	}
 	intakeShooter.RunAnglePID();
 	swerve.RunPID(tx);
-	targetValid = ll.targetValid;
+	targetValid = ll.getTargetValid();
 	AutoPeriodic[autoState]();
 	if (autoState != lastAutoState) {
 		AutoInit[autoState]();
@@ -80,8 +80,8 @@ void Robot::TeleopPeriodic(){
 			if (!key_pad.GetRawButton(11)) {
 				teleopState = TeleopState::DEFAULT;
 			}
-			tROffset = -ll.tx / 35.0;
-			ty = ll.ty;
+			tROffset = -ll.getSpeakerYaw() / 35.0;
+			ty = ll.getSpeakerPitch();
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
 			intakeShooter.SetAngle(pitch);
 			break;

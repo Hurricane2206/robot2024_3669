@@ -10,19 +10,18 @@ using namespace std;
 
 class Limelight {
 public:
-    float tx;
-    float ty;
-    float pitch;
-    bool targetValid;
-
-    void update() {
-        table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-        tx = table->GetNumber("tx", 0.0);
-        ty = table->GetNumber("ty", 0.0);
-        targetValid = table->GetNumber("tx", 0.0) != 0;
-        pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
+    double getSpeakerYaw() {
+        std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+        return table->GetNumber("tx", 0.0);
     }
 
-private:
-    std::shared_ptr<nt::NetworkTable> table;
+    double getSpeakerPitch() {
+        std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+        return table->GetNumber("ty", 0.0);
+    }
+
+    bool getTargetValid() {
+        std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+        return table->GetNumber("tx", 0.0) != 0;
+    }
 } ll;
