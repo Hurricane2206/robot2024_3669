@@ -8,6 +8,7 @@
 #include <complex.h>
 #include <frc/Timer.h>
 #include <string.h>
+#include "cameraserver/CameraServer.h"
 
 #include "states.h"
 #include "subsystems/Swerve.h"
@@ -65,4 +66,7 @@ public:
 	void SimulationInit() override;
 	void SimulationPeriodic() override;
 
+private:
+	// Get the USB camera from CameraServer
+    cs::UsbCamera camera = frc::CameraServer::StartAutomaticCapture();
 };

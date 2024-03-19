@@ -14,6 +14,9 @@ void Robot::RobotInit()
 	arm.init();
 	climb.init();
 	defineAutoStateFunctions();
+	// Set the resolution
+    camera.SetResolution(800, 600);
+	frc::CameraServer::StartAutomaticCapture();
 }
 void Robot::RobotPeriodic() {}
 
