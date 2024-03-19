@@ -67,6 +67,5 @@ public:
 	void SimulationPeriodic() override;
 
 private:
-	// Get the USB camera from CameraServer
-    cs::UsbCamera camera = frc::CameraServer::StartAutomaticCapture();
+	
 };
