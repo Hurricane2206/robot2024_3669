@@ -35,6 +35,7 @@ enum TeleopState {
     NOTEALIGN2,
     NOTEALIGN3,
     AIMING,
+    DISTAIM,
     RAMPING,
     SHOOTING,
     AMPTRANSFER,
