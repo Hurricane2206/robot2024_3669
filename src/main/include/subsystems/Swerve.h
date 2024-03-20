@@ -15,7 +15,9 @@ public:
     complex<float> posSetpoint = complex<float>(0, 0);
     complex<float> posError = complex<float>(0, 0);
     float posP = 0.02;
-    // float angleSetpoint;
+
+    // uncomment if you want automating target seeking:
+    // float seekingTurnRate = 0.1;
 
     complex<float> currentVelocity;
     float currentTurnRate = 0;
@@ -76,6 +78,14 @@ public:
         posError = posSetpoint-pos;
         complex<float> posPIDoutput = posP*posError;
         float turnRate = -tx / 100;
+
+        // uncomment if you want automating target seeking
+        /**
+        if (tx == 0) {
+            turnRate = seekingTurnRate;
+        }
+        */
+
         // limit output
         if (abs(posPIDoutput) > 0.3) {
             posPIDoutput *= 0.3 / abs(posPIDoutput);

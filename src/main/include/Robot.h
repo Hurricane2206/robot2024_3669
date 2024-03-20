@@ -37,6 +37,15 @@ frc::Joystick key_pad{1};
 
 frc::Timer timer;
 
+/** useful information:
+ADRIVING means drive to position and move to next when position is reached
+
+AINTAKING means drive to position while intaking
+and move to next position when note detected
+
+AAIMING means drive to position while aiming and shoot when position is reached
+and aiming is accurate, then move to next position when shooting is complete
+*/
 autoValue autoPose[3] = {
 	{complex<float>(0, 0), 0, AutoState::AAIMING},
 	{complex<float>(60,0), 0, AutoState::AINTAKING},
