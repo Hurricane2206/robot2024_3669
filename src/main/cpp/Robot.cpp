@@ -82,7 +82,7 @@ void Robot::TeleopPeriodic(){
 			if (!key_pad.GetRawButton(11)) {
 				teleopState = TeleopState::DEFAULT;
 			}
-			tROffset = -ll.getSpeakerYaw() / 35.0;
+			tROffset = -ll.getSpeakerYaw() / 117;
 			ty = ll.getSpeakerPitch();
 			pitch = 0.0038*pow(ty, 2)+0.6508*ty+65.3899;
 			intakeShooter.SetAngle(pitch);
@@ -346,12 +346,17 @@ void Robot::TeleopPeriodic(){
 				break;
 		}
 	}
-	float x = -controller.GetLeftY();
-	float y = -controller.GetLeftX();
-	float tR = -controller.GetRightX() + tROffset;
-	float rt = (controller.GetRightTriggerAxis()*0.5)+0.5;
-	complex<float> velocity = complex<float>(x*rt, y*rt);
-	float turnRate = tR*0.3;
+	float dB = 0.03;
+	complex<float> v = complex<float>(-controller.GetLeftY(), -controller.GetLeftX());
+	float tR = -controller.GetRightX();
+	float rateMultiplier = (controller.GetRightTriggerAxis()*0.5)+0.5;
+	// apply smooth deadband
+	complex<float> velocity = (abs(v)>dB) ? v*(1 - dB/abs(v))/(1-dB) : 0;
+	float turnRate = (abs(tR)>dB) ? tR*(1 - dB/abs(tR))/(1-dB) : 0;
+	// limit rates
+	velociy *= rateMultiplier;
+	turnRate *= 0.3;
+	float turnRate += tROffset;
 	swerve.set(velocity, turnRate);
 	intakeShooter.RunAnglePID();
 	if (controller.GetAButtonPressed()) {
