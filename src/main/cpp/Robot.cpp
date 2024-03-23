@@ -356,7 +356,7 @@ void Robot::TeleopPeriodic(){
 	// limit rates
 	velociy *= rateMultiplier;
 	turnRate *= 0.3;
-	float turnRate += tROffset;
+	turnRate += tROffset;
 	swerve.set(velocity, turnRate);
 	intakeShooter.RunAnglePID();
 	if (controller.GetAButtonPressed()) {
