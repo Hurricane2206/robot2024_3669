@@ -354,7 +354,7 @@ void Robot::TeleopPeriodic(){
 	complex<float> velocity = (abs(v)>dB) ? v*(1 - dB/abs(v))/(1-dB) : 0;
 	float turnRate = (abs(tR)>dB) ? tR*(1 - dB/abs(tR))/(1-dB) : 0;
 	// limit rates
-	velociy *= rateMultiplier;
+	velocity *= rateMultiplier;
 	turnRate *= 0.3;
 	turnRate += tROffset;
 	swerve.set(velocity, turnRate);
