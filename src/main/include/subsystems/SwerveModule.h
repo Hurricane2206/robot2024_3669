@@ -24,10 +24,12 @@ public:
 		configs.Slot1.kP = 5; // An error of 1 rotation per second results in 5 amps output
 		configs.Slot1.kI = 0.1; // An error of 1 rotation per second increases output by 0.1 amps every second
 		configs.Slot1.kD = 0.001; // A change of 1000 rotation per second squared results in 1 amp output
-		configs.TorqueCurrent.PeakForwardTorqueCurrent = 40;  // Peak output of 40 amps
-		configs.TorqueCurrent.PeakReverseTorqueCurrent = -40; // Peak output of 40 amps
-        configs.CurrentLimits.StatorCurrentLimit = 40;
+		configs.TorqueCurrent.PeakForwardTorqueCurrent = 50;  // Peak output of 40 amps
+		configs.TorqueCurrent.PeakReverseTorqueCurrent = -50; // Peak output of 40 amps
+        configs.CurrentLimits.StatorCurrentLimit = 60;
+        configs.CurrentLimits.SupplyCurrentLimit = 40;
         configs.CurrentLimits.StatorCurrentLimitEnable = true;
+        configs.CurrentLimits.SupplyCurrentLimitEnable = true;
         dMotor->GetConfigurator().Apply(configs);
     }
     void set(complex<float> rVector, float turnRate){
